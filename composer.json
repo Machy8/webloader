@@ -1,0 +1,17 @@
+{
+	"name": "machy8/webloader",
+	"description": "",
+	"keywords": [],
+	"license": "New BSD License",
+	"require": {
+		"php": ">=7.0",
+		"nette/neon": "^2.4"
+	},
+	"require-dev": {
+		"tracy/tracy": "^2.4",
+		"nette/tester": "^2.0"
+	},
+	"autoload": {
+		"classmap": [""]
+	}
+}

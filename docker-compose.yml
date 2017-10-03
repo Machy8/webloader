@@ -1,0 +1,10 @@
+version: "3"
+services:
+    webloader:
+        container_name: webloader
+        working_dir: /var/www/html
+        build: .
+        volumes:
+            - .:/var/www/html:delegated
+        ports:
+            - "84:82"
