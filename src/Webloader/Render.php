@@ -69,8 +69,8 @@ class Render
 
 	private function generateElement(
 		string $collectionName,
-		string $element, array
-		$attributes,
+		string $element,
+		array $attributes,
 		bool $content,
 		string $fileExtension
 	): string {
