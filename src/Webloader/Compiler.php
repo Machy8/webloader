@@ -30,9 +30,10 @@ class Compiler
 	 * @internal
 	 */
 	const
-		CONFIG_SECTION_CSS = self::CSS,
-		CONFIG_SECTION_JS = self::JS,
-		CONFIG_SECTION_FILTERS = 'filters';
+		CONFIG_SECTION_CSS = self::CSS . 'Files',
+		CONFIG_SECTION_JS = self::JS . 'Files',
+		CONFIG_SECTION_CSS_FILTERS = self::CSS . 'Filters',
+		CONFIG_SECTION_JS_FILTERS = self::JS . 'Filters';
 
 	/**
 	 * @var FilesCollection[]
@@ -53,7 +54,7 @@ class Compiler
 	private $outputDir;
 
 	/**
-	 * @var int
+	 * @var string
 	 */
 	private $version;
 
@@ -62,24 +63,85 @@ class Compiler
 	 */
 	private $pathsPlaceholders = [];
 
+	/**
+	 * @var bool
+	 */
+	private $cacheEnabled = TRUE;
 
-	public function setPathsPlaceholders(array $placeholders): Compiler
+
+	public function addPathsPlaceholders(array $placeholders): Compiler
 	{
-		$this->pathsPlaceholders = array_merge($this->pathsPlaceholders, $placeholders);
+		foreach ($placeholders as $placeholder => $path) {
+			if (array_key_exists($placeholder, $this->pathsPlaceholders)) {
+				throw new SetupException('Placeholder "' . $placeholder .'" already exists.');
+			}
+
+			$this->pathsPlaceholders[$placeholder] = $path;
+		}
+		return $this;
+	}
+
+
+	public function getPathsPlaceholders(): array
+	{
+		return $this->pathsPlaceholders;
+	}
+
+
+	public function disableCache(): Compiler
+	{
+		$this->cacheEnabled = FALSE;
 		return $this;
 	}
 
 
 	public function createCollectionsFromConfig(string $file): Compiler
 	{
+		$file = $this->replacePathsPlaceholders($file);
 		$fileContent = file_get_contents($file);
 		$collections = Neon::decode($fileContent);
+		$cssCollection = NULL;
+		$jsCollection = NULL;
+		$cssFilters = NULL;
+		$jsFilters = NULL;
 
-		foreach ($collections as $collectionSections) {
-			if (isset($collectionSections['filters'])) {
-				if (isset($collectionSections['filters']['css'])) {
-
+		foreach ($collections as $collectionName => $sections) {
+			foreach($sections as $sectionName => $values) {
+				if ( ! $values) {
+					continue;
 				}
+
+				if ($sectionName === self::CONFIG_SECTION_CSS) {
+					$cssCollection = $this->createCssFilesCollection($collectionName)->setFiles($values);
+
+				} elseif ($sectionName === self::CONFIG_SECTION_JS) {
+					$jsCollection = $this->createJsFilesCollection($collectionName)->setFiles($values);
+
+				} elseif ($sectionName === self::CONFIG_SECTION_CSS_FILTERS) {
+					$cssFilters = $values;
+
+				} elseif ($sectionName === self::CONFIG_SECTION_JS_FILTERS) {
+					$jsFilters = $values;
+
+				} else {
+					throw new SetupException('Unknown configuration section "' . $sectionName . '".');
+				}
+			}
+
+			if ($cssCollection) {
+				if ($cssFilters) {
+					$cssCollection->setFilters($cssFilters);
+				}
+
+				$this->filesCollections[] = $cssCollection;
+			}
+
+			if ($jsCollection) {
+				if ($jsFilters) {
+					$jsCollection->setFilters($jsFilters);
+				}
+
+				$this->filesCollections[] = $jsCollection;
 			}
 		}
 
@@ -99,37 +161,38 @@ class Compiler
 	}
 
 
-	public function compile()
+	public function render(): Render
 	{
-		$this->version = $this->getVersion($cached);
-
-		if ($cached) {
-			return;
+		if ( ! $this->outputDir) {
+			throw new CompileException('Output dir is not set.');
 		}
 
 		foreach ($this->filesCollections as $filesCollection) {
 			$file = $this->outputDir . '/' . $filesCollection->getName() . '.' . $filesCollection->getType();
-			$output = $this->loadFiles($filesCollection->getFiles());
 
-			foreach ($filesCollection->getFilters() as $filter) {
-				$output = $this->filters[$filesCollection->getType()][$filter]();
+			if (file_exists($file) && $this->cacheEnabled) {
+				continue;
 			}
 
-			file_put_contents($file, $output);
+			$code = $this->loadFiles($filesCollection->getFiles());
+
+			foreach ($filesCollection->getFilters() as $filter) {
+				if ( ! array_key_exists($filter, $this->filters[$filesCollection->getType()])) {
+					throw new CompileException('Undefined filter "' . $filter . '"');
+				}
+				$code = $this->filters[$filesCollection->getType()][$filter]($code);
+			}
+
+			file_put_contents($file, $code);
 		}
-	}
-
-
-	public function getRender(): Render
-	{
-		return new Render($this->outputDir, $this->version);
+		return new Render($this->outputDir, $this->getVersion());
 	}
 
 
 	public function addCssFilter(string $name, callable $filter): Compiler
 	{
-		if (in_array($name, $this->filters[Compiler::CSS])) {
-			throw new SetupException("Css filter with name \"{$name}\" already exists.");
+		if (array_key_exists($name, $this->filters[Compiler::CSS])) {
+			throw new SetupException("Css filter \"{$name}\" already exists.");
 		}
 
 		$this->filters[Compiler::CSS][$name] = $filter;
@@ -137,10 +200,16 @@ class Compiler
 	}
 
 
+	public function getFilters(): array
+	{
+		return $this->filters;
+	}
+
+
 	public function addJsFilter(string $name, callable $filter): Compiler
 	{
-		if (in_array($name, $this->filters[Compiler::JS])) {
-			throw new SetupException("Js filter with name \"{$name}\" already exists.");
+		if (array_key_exists($name, $this->filters[Compiler::JS])) {
+			throw new SetupException("Js filter \"{$name}\" already exists.");
 		}
 
 		$this->filters[Compiler::JS][$name] = $filter;
@@ -159,29 +228,44 @@ class Compiler
 	{
 		$output = '';
 
-		foreach ($files as $file) {
-			$file = $this->replacePathsPlaceholders($file);
+		$filesCount = count($files);
+		for ($i = 0; $i < $filesCount; $i++) {
+			$file = $this->replacePathsPlaceholders($files[$i]);
+
+			if ( ! file_exists($file)) {
+				throw new CompileException('File "' . $file . '" not found.');
+			}
+
 			$output .= file_get_contents($file);
+
+			if (($i + 1) < $filesCount) {
+				$output .= "\n";
+			}
 		}
 
 		return $output;
 	}
 
 
-	private function getVersion(bool &$cached = NULL): int
+	public function getVersion(): string
 	{
-		$lock = $this->outputDir . '/webloader.lock';
+		if ( ! $this->version) {
+			$lock = $this->outputDir . '/webloader.lock';
 
-		if (file_exists($lock)) {
-			$cached = TRUE;
-			$time = file_get_contents($lock);
+			if (file_exists($lock)) {
+				$time = file_get_contents($lock);
 
-		} else {
-			$time = time();
-			file_put_contents($this->outputDir . '/webloader.lock', $time);
+			} else {
+				$time = time();
+
+				if ($this->cacheEnabled) {
+					file_put_contents($lock, $time);
+				}
+			}
+			$this->version = (string) $time;
 		}
 
-		return $time;
+		return $this->version;
 	}
 
 
