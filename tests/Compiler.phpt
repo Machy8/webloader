@@ -24,11 +24,11 @@ use Tester\Assert;
 final class Compiler extends AbstractTestCase
 {
 
-	public function testCollectionsFromConfig()
+	public function testFilesCollectionsFromConfig()
 	{
-		$collectionNameA = 'test-collection-from-config-a';
-		$collectionNameB = 'test-collection-from-config-b';
-		$compiler = $this->getWebLoader()->createCollectionsFromConfig('%configsDirs%/webloader-a.neon');
+		$collectionNameA = 'test-files-collections-from-config-a';
+		$collectionNameB = 'test-files-collections-from-config-b';
+		$compiler = $this->getWebLoader()->createFilesCollectionsFromConfig('%configsDirs%/webloader-a.neon');
 		$version = $compiler->getVersion();
 		$compiler->addJsFilter('googleClosureCompiler', function (string $code) {
 			$closureCompiler = new \GoogleClosureCompiler\Compiler;
@@ -58,7 +58,7 @@ final class Compiler extends AbstractTestCase
 
 	public function testCssCollectionLinkElement()
 	{
-		$collectionName = 'test-css-collection-link-element';
+		$collectionName = 'test-css-files-collection-link-element';
 		$this->createCssCollection($collectionName)->setFilters(['empty']);
 		$compiler = $this->getWebLoader();
 		$version = $compiler->getVersion();
@@ -77,7 +77,7 @@ final class Compiler extends AbstractTestCase
 
 	public function testCssCollectionStyleElement()
 	{
-		$collectionName = 'test-css-collection-style-element';
+		$collectionName = 'test-css-files-collection-style-element';
 		$this->createCssCollection($collectionName);
 
 		file_put_contents(
@@ -91,7 +91,7 @@ final class Compiler extends AbstractTestCase
 
 	public function testJsCollectionScriptElement()
 	{
-		$collectionName = 'test-js-collection-script-element';
+		$collectionName = 'test-js-files-collection-script-element';
 		$this->createJsCollection($collectionName);
 		$compiler = $this->getWebLoader();
 		$version = $compiler->getVersion();
@@ -107,7 +107,7 @@ final class Compiler extends AbstractTestCase
 
 	public function testJsCollectionScriptElementWithContent()
 	{
-		$collectionName = 'test-js-collection-script-element-with-content';
+		$collectionName = 'test-js-files-collection-script-element-with-content';
 		$this->createJsCollection($collectionName);
 
 		file_put_contents(

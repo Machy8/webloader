@@ -101,7 +101,13 @@ class Compiler
 	}
 
 
-	public function createCollectionsFromConfig(string $file): Compiler
+	public function createCssFilesCollection(string $name): FilesCollection
+	{
+		return $this->filesCollections[] = new FilesCollection($name, Compiler::CSS);
+	}
+
+
+	public function createFilesCollectionsFromConfig(string $file): Compiler
 	{
 		$file = $this->replacePathsPlaceholders($file);
 		$fileContent = file_get_contents($file);
@@ -152,12 +158,6 @@ class Compiler
 		}
 
 		return $this;
-	}
-
-
-	public function createCssFilesCollection(string $name): FilesCollection
-	{
-		return $this->filesCollections[] = new FilesCollection($name, Compiler::CSS);
 	}
 
 

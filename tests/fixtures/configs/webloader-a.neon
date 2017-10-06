@@ -1,4 +1,4 @@
-test-collection-from-config-a:
+test-files-collections-from-config-a:
 	cssFiles:
 		- %cssFixtures%/style-a.css
 		- %cssFixtures%/style-b.css
@@ -7,7 +7,7 @@ test-collection-from-config-a:
 		- %jsFixtures%/script-a.js
 		- %jsFixtures%/script-b.js
 
-test-collection-from-config-b:
+test-files-collections-from-config-b:
 	cssFiles:
 		- %cssFixtures%/style-b.css
 		- %cssFixtures%/style-a.css
