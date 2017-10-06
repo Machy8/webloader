@@ -1,0 +1,21 @@
+<?php $tabId = $elementId . 'paths-placeholders' ?>
+
+<a href="#<?php echo $tabId; ?>" class="tracy-toggle">Paths placeholders</a>
+
+<table id="<?php echo $tabId ?>" style="width: 100%">
+	<thead>
+		<tr>
+			<td><strong>Placeholder</strong></td>
+			<td><strong>Path</strong></td>
+		</tr>
+	</thead>
+
+	<tbody>
+		<?php foreach ($pathsPlaceholders as $placeholder => $path) {; ?>
+			<tr>
+				<td><?php echo $placeholder; ?></td>
+				<td><?php echo $path; ?></td>
+			</tr>
+		<?php };?>
+	</tbody>
+</table>

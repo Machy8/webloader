@@ -19,21 +19,20 @@ use Nette\Neon\Neon;
 class Compiler
 {
 
-	/**
-	 * @internal
-	 */
-	const
-		CSS = 'css',
-		JS = 'js';
-
-	/**
-	 * @internal
-	 */
 	const
 		CONFIG_SECTION_CSS = self::CSS . 'Files',
 		CONFIG_SECTION_JS = self::JS . 'Files',
 		CONFIG_SECTION_CSS_FILTERS = self::CSS . 'Filters',
 		CONFIG_SECTION_JS_FILTERS = self::JS . 'Filters';
+
+	const
+		CSS = 'css',
+		JS = 'js';
+
+	/**
+	 * @var bool
+	 */
+	private $cacheEnabled = TRUE;
 
 	/**
 	 * @var FilesCollection[]
@@ -54,43 +53,50 @@ class Compiler
 	private $outputDir;
 
 	/**
-	 * @var string
-	 */
-	private $version;
-
-	/**
 	 * @var array
 	 */
 	private $pathsPlaceholders = [];
 
 	/**
-	 * @var bool
+	 * @var string
 	 */
-	private $cacheEnabled = TRUE;
+	private $version;
+
+
+	public function addCssFilter(string $name, callable $filter): Compiler
+	{
+		if (array_key_exists($name, $this->filters[Compiler::CSS])) {
+			throw new SetupException("Css filter \"{$name}\" already exists.");
+		}
+
+		$this->filters[Compiler::CSS][$name] = $filter;
+
+		return $this;
+	}
+
+
+	public function addJsFilter(string $name, callable $filter): Compiler
+	{
+		if (array_key_exists($name, $this->filters[Compiler::JS])) {
+			throw new SetupException("Js filter \"{$name}\" already exists.");
+		}
+
+		$this->filters[Compiler::JS][$name] = $filter;
+
+		return $this;
+	}
 
 
 	public function addPathsPlaceholders(array $placeholders): Compiler
 	{
 		foreach ($placeholders as $placeholder => $path) {
 			if (array_key_exists($placeholder, $this->pathsPlaceholders)) {
-				throw new SetupException('Placeholder "' . $placeholder .'" already exists.');
+				throw new SetupException('Placeholder "' . $placeholder . '" already exists.');
 			}
 
 			$this->pathsPlaceholders[$placeholder] = $path;
 		}
-		return $this;
-	}
 
-
-	public function getPathsPlaceholders(): array
-	{
-		return $this->pathsPlaceholders;
-	}
-
-
-	public function disableCache(): Compiler
-	{
-		$this->cacheEnabled = FALSE;
 		return $this;
 	}
 
@@ -106,7 +112,7 @@ class Compiler
 		$jsFilters = NULL;
 
 		foreach ($collections as $collectionName => $sections) {
-			foreach($sections as $sectionName => $values) {
+			foreach ($sections as $sectionName => $values) {
 				if ( ! $values) {
 					continue;
 				}
@@ -161,6 +167,68 @@ class Compiler
 	}
 
 
+	public function disableCache(): Compiler
+	{
+		$this->cacheEnabled = FALSE;
+
+		return $this;
+	}
+
+	/**
+	 * @return FilesCollection[]
+	 */
+	public function getFilesCollections(): array
+	{
+		return $this->filesCollections;
+	}
+
+
+	public function getFilters(): array
+	{
+		return $this->filters;
+	}
+
+
+	public function getOutputDir(): string
+	{
+		return $this->outputDir;
+	}
+
+
+	public function getPathsPlaceholders(): array
+	{
+		return $this->pathsPlaceholders;
+	}
+
+
+	public function getVersion(): string
+	{
+		if ( ! $this->version) {
+			$lock = $this->outputDir . '/webloader.lock';
+
+			if (file_exists($lock)) {
+				$time = file_get_contents($lock);
+
+			} else {
+				$time = time();
+
+				if ($this->cacheEnabled) {
+					file_put_contents($lock, $time);
+				}
+			}
+			$this->version = (string) $time;
+		}
+
+		return $this->version;
+	}
+
+
+	public function isCacheEnabled(): bool
+	{
+		return $this->cacheEnabled;
+	}
+
+
 	public function render(): Render
 	{
 		if ( ! $this->outputDir) {
@@ -185,41 +253,15 @@ class Compiler
 
 			file_put_contents($file, $code);
 		}
+
 		return new Render($this->outputDir, $this->getVersion());
-	}
-
-
-	public function addCssFilter(string $name, callable $filter): Compiler
-	{
-		if (array_key_exists($name, $this->filters[Compiler::CSS])) {
-			throw new SetupException("Css filter \"{$name}\" already exists.");
-		}
-
-		$this->filters[Compiler::CSS][$name] = $filter;
-		return $this;
-	}
-
-
-	public function getFilters(): array
-	{
-		return $this->filters;
-	}
-
-
-	public function addJsFilter(string $name, callable $filter): Compiler
-	{
-		if (array_key_exists($name, $this->filters[Compiler::JS])) {
-			throw new SetupException("Js filter \"{$name}\" already exists.");
-		}
-
-		$this->filters[Compiler::JS][$name] = $filter;
-		return $this;
 	}
 
 
 	public function setOutputDir(string $path): Compiler
 	{
 		$this->outputDir = $path;
+
 		return $this;
 	}
 
@@ -244,28 +286,6 @@ class Compiler
 		}
 
 		return $output;
-	}
-
-
-	public function getVersion(): string
-	{
-		if ( ! $this->version) {
-			$lock = $this->outputDir . '/webloader.lock';
-
-			if (file_exists($lock)) {
-				$time = file_get_contents($lock);
-
-			} else {
-				$time = time();
-
-				if ($this->cacheEnabled) {
-					file_put_contents($lock, $time);
-				}
-			}
-			$this->version = (string) $time;
-		}
-
-		return $this->version;
 	}
 
 

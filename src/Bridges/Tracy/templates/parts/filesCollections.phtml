@@ -1,0 +1,25 @@
+<?php $tabId = $elementId . 'filesCollections' ?>
+
+<a href="#<?php echo $tabId; ?>" class="tracy-toggle">Files collections</a>
+
+<table id="<?php echo $tabId ?>" style="width: 100%">
+	<thead>
+		<tr>
+			<td><strong>Name</strong></td>
+			<td><strong>Files</strong></td>
+			<td><strong>Filters</strong></td>
+			<td><strong>Type</strong></td>
+		</tr>
+	</thead>
+
+	<tbody>
+		<?php foreach ($filesCollections as $filesCollection) {; ?>
+			<tr>
+				<td><?php echo $filesCollection->getName(); ?></td>
+				<td><?php dump($filesCollection->getFiles()); ?></td>
+				<td><?php dump($filesCollection->getFilters()); ?></td>
+				<td><?php echo $filesCollection->getType(); ?></td>
+			</tr>
+		<?php };?>
+	</tbody>
+</table>

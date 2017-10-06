@@ -1,0 +1,27 @@
+<?php $tabId = $elementId . 'setup' ?>
+
+<a href="#<?php echo $tabId; ?>" class="tracy-toggle">Setup</a>
+
+<table id="<?php echo $tabId ?>" style="width: 100%">
+	<thead>
+		<tr>
+			<td><strong>Option</strong></td>
+			<td><strong>Value</strong></td>
+		</tr>
+	</thead>
+
+	<tbody>
+		<tr>
+			<td>Output dir</td>
+			<td><?php echo $outputDir; ?></td>
+		</tr>
+		<tr>
+			<td>Cache</td>
+			<td><?php echo $cacheEnabled ? 'Enabled' : 'Disabled' ?></td>
+		</tr>
+		<tr>
+			<td>Version</td>
+			<td><?php echo $version; ?></td>
+		</tr>
+	</tbody>
+</table>

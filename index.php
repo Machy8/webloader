@@ -2,27 +2,21 @@
 
 require_once 'vendor/autoload.php';
 
+use WebLoader\Compiler;
 use Tracy\Debugger;
 
 Debugger::$strictMode = TRUE;
 Debugger::enable(DEBUGGER::DEVELOPMENT);
 
-$webloader = new \WebLoader\Compiler;
-$webloader->setPathsPlaceholders([
-	'assetsDir' => __DIR__ . '/assets'
-]);
-$webloader->createCssFilesCollection('homepage')
-	->setFiles([
-		__DIR__ . '/assets/core.css',
-		__DIR__ . '/assets/style.css'
-	]);
-$webloader->createCollectionsFromConfig(__DIR__ . '/configs/webloader.neon');
+$webLoaderPanel = new \WebLoader\Bridges\Tracy\WebLoaderPanel;
 
-$webloader->setOutputDir(__DIR__ . '/webtemp');
-$webloader->compile();
+$webloader = new Compiler;
+$webloader->addPathsPlaceholders([
+	'cssFixtures' => __DIR__ . '/tests/fixtures/css'
+])
+	->setOutputDir('./');
+$webloader->createJsFilesCollection('test')
+	->setFiles(['%cssFixtures%/style-a.css']);
 
-$render = $webloader->getRender();
-echo $render->css('homepage', [
-	'rel' => 'stylesheet',
-	'type' => 'text/css'
-], TRUE);
+$webLoaderPanel->setWebLoader($webloader);
+echo $webloader->render()->css('test');

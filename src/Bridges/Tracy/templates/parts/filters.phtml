@@ -1,0 +1,28 @@
+<?php $tabId = $elementId . 'filters' ?>
+
+<a href="#<?php echo $tabId; ?>" class="tracy-toggle">Filters</a>
+
+<table id="<?php echo $tabId ?>" style="width: 100%">
+	<thead>
+		<tr>
+			<td><strong>Name</strong></td>
+			<td><strong>Type</strong></td>
+		</tr>
+	</thead>
+
+	<tbody>
+		<?php foreach ($filters['css'] as $name => $callback) {; ?>
+			<tr>
+				<td><?php echo $name; ?></td>
+				<td>Css</td>
+			</tr>
+		<?php };?>
+
+		<?php foreach ($filters['js'] as $name => $callback) {; ?>
+			<tr>
+				<td><?php echo $name; ?></td>
+				<td>Js</td>
+			</tr>
+		<?php };?>
+	</tbody>
+</table>
