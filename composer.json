@@ -1,6 +1,6 @@
 {
 	"name": "machy8/webloader",
-	"description": "📦 Simple, easy to use, php bundler for javascript and css.",
+	"description": "Simple, easy to use, php bundler for javascript and css.",
 	"keywords": ["webloader", "module-bundler", "javascript", "css", "frontend", "build-tool"],
 	"license": "New BSD License",
 	"require": {
