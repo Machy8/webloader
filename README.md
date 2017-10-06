@@ -1,4 +1,6 @@
 # Web loader
+📦 Simple, easy to use, php bundler for javascript and css.
+
 ## Requirements
 - PHP 7.0+
 - If you use Nette Framework - v2.3+
