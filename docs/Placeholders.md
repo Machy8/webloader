@@ -4,7 +4,7 @@
 ````php
 $webLoader->addPathPlaceholders([
     'cssDir' => 'path/to/css/files',
-    'jsDir' => 'path/to/js/files,
+    'jsDir' => 'path/to/js/files',
     'configFiles' => 'path/to/configuration/files'
 ]);
 

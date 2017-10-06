@@ -1,5 +1,6 @@
 # Tracy bridge
-- Can be added manually as in following code.
+- Can be added manually as in the following code
+- Shows information about: Files collections, filters, placeholders, output dir path, if cache is enabled and version
 
 ````php
 use WebLoader;

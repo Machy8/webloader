@@ -1,6 +1,6 @@
 # Files collections
 - Two types: **CSS** and **JS** collections
-- Two methods to create them: calling appropriate method or configure them in configuration file
+- Two ways to create them: calling appropriate method or define them in configuration file
 
 ## Calling appropriate methods
 ````php
@@ -12,16 +12,16 @@ $webLoader->createCssFilesCollection('core')
 		'path/to/anotherLibrary.js'
 	])
 	->setFilters([
-        'minifier'
+		'minifier'
 	]);
 
 $webLoader->createJsFilesCollection('core')
 	->setFiles([
-	    'path/to/grid-css-framework.css',
-    	'path/to/anotherStyle.css'
+		'path/to/grid-css-framework.css',
+		'path/to/anotherStyle.css'
 	])
 	->setFilters([
-        'minifier'
+		'minifier'
 	]);
 
 $render = $webloader->render();
@@ -45,11 +45,11 @@ echo $render->js('core');
 ````neon
 core:
 	jsFiles:
-		- 'path/to/jquery.js'
-		- 'path/to/anotherLibrary.js'
+		- path/to/jquery.js
+		- path/to/anotherLibrary.js
 	cssFiles:
-		- 'path/to/cssFramework.css'
-		- 'path/to/anotherStyle.css'
+		- path/to/cssFramework.css
+		- path/to/anotherStyle.css
 	jsFilters:
 		- minifier
 	cssFilters:

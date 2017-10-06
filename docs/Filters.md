@@ -1,5 +1,5 @@
 # Filters
-- Separated for **CSS and **JS** so they can have the same name
+- Separated for **CSS** and **JS** so they can have the same name
 - They are called after joining all files of processed collection
 
 ````php

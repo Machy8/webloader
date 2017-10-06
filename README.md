@@ -4,7 +4,7 @@
 - If you use Nette Framework - v2.3+
 
 ## Installation
-**1 - Download the Macdom using composer:**
+**1 - Download the Web loader using composer:**
 ```
  composer require machy8/webloader
 ```
