@@ -28,7 +28,7 @@ final class Compiler extends AbstractTestCase
 	{
 		$collectionNameA = 'test-collection-from-config-a';
 		$collectionNameB = 'test-collection-from-config-b';
-		$compiler = $this->getWebloader()->createCollectionsFromConfig('%configsDirs%/webloader-a.neon');
+		$compiler = $this->getWebLoader()->createCollectionsFromConfig('%configsDirs%/webloader-a.neon');
 		$version = $compiler->getVersion();
 		$compiler->addJsFilter('googleClosureCompiler', function (string $code) {
 			$closureCompiler = new \GoogleClosureCompiler\Compiler;
@@ -60,7 +60,7 @@ final class Compiler extends AbstractTestCase
 	{
 		$collectionName = 'test-css-collection-link-element';
 		$this->createCssCollection($collectionName)->setFilters(['empty']);
-		$compiler = $this->getWebloader();
+		$compiler = $this->getWebLoader();
 		$version = $compiler->getVersion();
 		$compiler->addCssFilter('empty', function (string $code) {
 			return $code;
@@ -82,7 +82,7 @@ final class Compiler extends AbstractTestCase
 
 		file_put_contents(
 			self::ACTUAL_DIR . '/' . $collectionName . '.html',
-			$this->getWebloader()->render()->css($collectionName, ['amp-custom' => TRUE], TRUE)
+			$this->getWebLoader()->render()->css($collectionName, ['amp-custom' => TRUE], TRUE)
 		);
 
 		$this->matchHtmlFile($collectionName);
@@ -93,7 +93,7 @@ final class Compiler extends AbstractTestCase
 	{
 		$collectionName = 'test-js-collection-script-element';
 		$this->createJsCollection($collectionName);
-		$compiler = $this->getWebloader();
+		$compiler = $this->getWebLoader();
 		$version = $compiler->getVersion();
 
 		Assert::equal(
@@ -112,7 +112,7 @@ final class Compiler extends AbstractTestCase
 
 		file_put_contents(
 			self::ACTUAL_DIR . '/' . $collectionName . '.html',
-			$this->getWebloader()->render()->js($collectionName, NULL, TRUE)
+			$this->getWebLoader()->render()->js($collectionName, NULL, TRUE)
 		);
 
 		$this->matchHtmlFile($collectionName);

@@ -178,7 +178,7 @@ class Compiler
 
 			foreach ($filesCollection->getFilters() as $filter) {
 				if ( ! array_key_exists($filter, $this->filters[$filesCollection->getType()])) {
-					throw new CompileException('Undefined filter "' . $filter . '"');
+					throw new CompileException('Undefined filter "' . $filter . '".');
 				}
 				$code = $this->filters[$filesCollection->getType()][$filter]($code);
 			}

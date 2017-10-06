@@ -38,7 +38,7 @@ abstract class AbstractTestCase extends TestCase
 
 	public function createCssCollection(string $name): FilesCollection
 	{
-		return $this->getWebloader()
+		return $this->getWebLoader()
 			->createCssFilesCollection($name)
 			->setFiles([
 				'%cssFixtures%/style-a.css',
@@ -49,7 +49,7 @@ abstract class AbstractTestCase extends TestCase
 
 	public function createJsCollection(string $name): FilesCollection
 	{
-		return $this->getWebloader()
+		return $this->getWebLoader()
 			->createJsFilesCollection($name)
 			->setFiles([
 				'%jsFixtures%/script-a.js',
@@ -89,7 +89,7 @@ abstract class AbstractTestCase extends TestCase
 	}
 
 
-	protected function getWebloader(): Compiler
+	protected function getWebLoader(): Compiler
 	{
 		return $this->webloader;
 	}

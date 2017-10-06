@@ -16,6 +16,7 @@ namespace WebLoader\Tests;
 require_once 'bootstrap.php';
 
 use Tester\Assert;
+use WebLoader\CompileException;
 use WebLoader\SetupException;
 
 
@@ -28,7 +29,7 @@ final class Exceptions extends AbstractTestCase
 	public function testDuplicatedCssFilterException()
 	{
 		Assert::exception(function () {
-			$this->getWebloader()
+			$this->getWebLoader()
 				->addJsFilter('Lorem', function () {
 					return '';
 				})
@@ -42,7 +43,7 @@ final class Exceptions extends AbstractTestCase
 	public function testDuplicatedJsFilterException()
 	{
 		Assert::exception(function () {
-			$this->getWebloader()
+			$this->getWebLoader()
 				->addCssFilter('Lorem', function ()
 				{
 					return '';
@@ -58,7 +59,7 @@ final class Exceptions extends AbstractTestCase
 	public function testDuplicatedPlaceholderException()
 	{
 		Assert::exception(function () {
-			$this->getWebloader()
+			$this->getWebLoader()
 				->addPathsPlaceholders([
 					'frontCssDir' => __DIR__ . '/front/css',
 				])
@@ -68,27 +69,28 @@ final class Exceptions extends AbstractTestCase
 		}, SetupException::class, 'Placeholder "frontCssDir" already exists.');
 	}
 
-	/**
-	public function testUndefinedFilterException()
-	{
-		Assert::exception(function () {
-			$this->getWebloader()
-				->createJsFilesCollection('test')
-				->setFiles(['%jsFixtures%/exceptions.js'])
-				->setFilters(['testFilter']);
-		}, CompileException::class, 'Undefined filter "test".');
-	}*/
 
-
-	/**
 	public function testFileNotFoundException()
 	{
 		Assert::exception(function () {
-			$this->getWebloader()
-				->createJsFilesCollection('test')
+			$webLoader = $this->getWebLoader();
+			$webLoader->createJsFilesCollection('test')
 				->setFiles(['somefile.js']);
+			$webLoader->render()->js('test');
+		}, CompileException::class, 'File "somefile.js" not found.');
+	}
+
+
+	public function testUndefinedFilterException()
+	{
+		Assert::exception(function () {
+			$webLoader = $this->getWebLoader();
+			$webLoader->createJsFilesCollection('test')
+					->setFiles(['%cssFixtures%/style-a.css'])
+					->setFilters(['test']);
+			$webLoader->render()->js('test');
 		}, CompileException::class, 'Undefined filter "test".');
-	}*/
+	}
 
 }
 
