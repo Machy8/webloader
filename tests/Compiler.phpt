@@ -24,6 +24,69 @@ use Tester\Assert;
 final class Compiler extends AbstractTestCase
 {
 
+	public function testCssCollectionLinkElement()
+	{
+		$collectionName = 'test-css-files-collection-link-element';
+		$this->createCssCollection($collectionName)->setFilters(['empty']);
+		$compiler = $this->getWebLoader();
+		$version = $compiler->getVersion();
+		$compiler->addCssFilter('empty', function (string $code) {
+			return $code;
+		});
+
+		Assert::equal(
+			'<link type="text/css" rel="stylesheet" href="' . self::ACTUAL_DIR . '/' . $collectionName . '.css?v=' . $version . '">',
+			$compiler->getFilesCollectionRender()->css($collectionName)
+		);
+
+		$this->matchCssFile($collectionName, 'simple');
+	}
+
+
+	public function testCssCollectionStyleElement()
+	{
+		$collectionName = 'test-css-files-collection-style-element';
+		$this->createCssCollection($collectionName);
+
+		file_put_contents(
+			self::ACTUAL_DIR . '/' . $collectionName . '.html',
+			$this->getWebLoader()->getFilesCollectionRender()->css($collectionName, ['amp-custom' => TRUE], TRUE)
+		);
+
+		$this->matchHtmlFile($collectionName);
+	}
+
+
+	public function testJsCollectionScriptElement()
+	{
+		$collectionName = 'test-js-files-collection-script-element';
+		$this->createJsCollection($collectionName);
+		$compiler = $this->getWebLoader();
+		$version = $compiler->getVersion();
+
+		Assert::equal(
+			'<script async type="text/javascript" src="' . self::ACTUAL_DIR . '/' . $collectionName . '.js?v=' . $version . '"></script>',
+			$compiler->getFilesCollectionRender()->js($collectionName, ['async' => TRUE])
+		);
+
+		$this->matchJsFile($collectionName, 'simple');
+	}
+
+
+	public function testJsCollectionScriptElementWithContent()
+	{
+		$collectionName = 'test-js-files-collection-script-element-with-content';
+		$this->createJsCollection($collectionName);
+
+		file_put_contents(
+			self::ACTUAL_DIR . '/' . $collectionName . '.html',
+			$this->getWebLoader()->getFilesCollectionRender()->js($collectionName, NULL, TRUE)
+		);
+
+		$this->matchHtmlFile($collectionName);
+	}
+
+
 	public function testFilesCollectionsFromConfig()
 	{
 		$collectionNameA = 'test-files-collections-from-config-a';
@@ -42,80 +105,17 @@ final class Compiler extends AbstractTestCase
 		});
 
 		Assert::equal(
-			'<link rel="stylesheet" type="text/css" href="' . self::ACTUAL_DIR . '/' . $collectionNameA . '.css?v=' . $version . '">',
-			$compiler->render()->css($collectionNameA)
+			'<link type="text/css" rel="stylesheet" href="' . self::ACTUAL_DIR . '/' . $collectionNameA . '.css?v=' . $version . '">',
+			$compiler->getFilesCollectionRender()->css($collectionNameA)
 		);
 
 		Assert::equal(
 			'<script async defer type="text/javascript" src="' . self::ACTUAL_DIR . '/' . $collectionNameB . '.js?v=' . $version . '"></script>',
-			$compiler->render()->js($collectionNameB, ['async' => TRUE, 'defer' => TRUE])
+			$compiler->getFilesCollectionRender()->js($collectionNameB, ['async' => TRUE, 'defer' => TRUE])
 		);
 
 		$this->matchCssFile($collectionNameA);
 		$this->matchJsFile($collectionNameB);
-	}
-
-
-	public function testCssCollectionLinkElement()
-	{
-		$collectionName = 'test-css-files-collection-link-element';
-		$this->createCssCollection($collectionName)->setFilters(['empty']);
-		$compiler = $this->getWebLoader();
-		$version = $compiler->getVersion();
-		$compiler->addCssFilter('empty', function (string $code) {
-			return $code;
-		});
-
-		Assert::equal(
-			'<link rel="stylesheet" type="text/css" href="' . self::ACTUAL_DIR . '/' . $collectionName . '.css?v=' . $version . '">',
-			$compiler->render()->css($collectionName)
-		);
-
-		$this->matchCssFile($collectionName, 'simple');
-	}
-
-
-	public function testCssCollectionStyleElement()
-	{
-		$collectionName = 'test-css-files-collection-style-element';
-		$this->createCssCollection($collectionName);
-
-		file_put_contents(
-			self::ACTUAL_DIR . '/' . $collectionName . '.html',
-			$this->getWebLoader()->render()->css($collectionName, ['amp-custom' => TRUE], TRUE)
-		);
-
-		$this->matchHtmlFile($collectionName);
-	}
-
-
-	public function testJsCollectionScriptElement()
-	{
-		$collectionName = 'test-js-files-collection-script-element';
-		$this->createJsCollection($collectionName);
-		$compiler = $this->getWebLoader();
-		$version = $compiler->getVersion();
-
-		Assert::equal(
-			'<script async type="text/javascript" src="' . self::ACTUAL_DIR . '/' . $collectionName . '.js?v=' . $version . '"></script>',
-			$compiler->render()->js($collectionName, ['async' => TRUE])
-		);
-
-		$this->matchJsFile($collectionName, 'simple');
-	}
-
-
-	public function testJsCollectionScriptElementWithContent()
-	{
-		$collectionName = 'test-js-files-collection-script-element-with-content';
-		$this->createJsCollection($collectionName);
-
-		file_put_contents(
-			self::ACTUAL_DIR . '/' . $collectionName . '.html',
-			$this->getWebLoader()->render()->js($collectionName, NULL, TRUE)
-		);
-
-		$this->matchHtmlFile($collectionName);
 	}
 
 }

@@ -43,7 +43,8 @@ class WebLoaderPanel implements IBarPanel
 		ob_start();
 
 		$cacheEnabled = $this->getWebLoader()->isCacheEnabled();
-		$filesCollections = $this->getWebLoader()->getFilesCollections();
+		$filesCollectionsByType = $this->getWebLoader()->getFilesCollections();
+		$filesCollectionsContainers = $this->getWebLoader()->getFilesCollectionsContainers();
 		$filters = $this->getWebLoader()->getFilters();
 		$outputDir = $this->getWebLoader()->getOutputDir();
 		$pathsPlaceholders = $this->getWebLoader()->getPathsPlaceholders();

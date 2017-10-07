@@ -17,10 +17,18 @@ namespace WebLoader;
 class FilesCollection
 {
 
+	const
+		CONFIG_SECTION_CSS = Compiler::CSS . 'Files',
+		CONFIG_SECTION_CSS_FILTERS = Compiler::CSS . 'Filters',
+		CONFIG_SECTION_CSS_OUTPUT_SETUP = Compiler::CSS . 'OutputSetup',
+		CONFIG_SECTION_JS = Compiler::JS . 'Files',
+		CONFIG_SECTION_JS_FILTERS = Compiler::JS . 'Filters',
+		CONFIG_SECTION_JS_OUTPUT_SETUP = Compiler::JS . 'OutputSetup';
+
 	/**
-	 * @var string
+	 * @var array
 	 */
-	private $name;
+	private $attributes = [];
 
 	/**
 	 * @var string[]
@@ -28,20 +36,44 @@ class FilesCollection
 	private $files = [];
 
 	/**
-	 * @var string
-	 */
-	private $type;
-
-	/**
 	 * @var string[]
 	 */
 	private $filters = [];
 
+	/**
+	 * @var bool
+	 */
+	private $loadContent = FALSE;
 
-	public function __construct(string $name, string $type)
+
+	public function enableContentLoading(): FilesCollection
 	{
-		$this->type = $type;
-		$this->name = $name;
+		$this->loadContent = TRUE;
+		return $this;
+	}
+
+
+	public function getAttributes(): array
+	{
+		return $this->attributes;
+	}
+
+
+	public function getFiles(): array
+	{
+		return $this->files;
+	}
+
+
+	public function getFilters(): array
+	{
+		return $this->filters;
+	}
+
+
+	public function isContentLoadingEnabled(): bool
+	{
+		return $this->loadContent;
 	}
 
 
@@ -56,30 +88,6 @@ class FilesCollection
 	{
 		$this->filters = $filters;
 		return $this;
-	}
-
-
-	public function getFilters(): array
-	{
-		return $this->filters;
-	}
-
-
-	public function getFiles(): array
-	{
-		return $this->files;
-	}
-
-
-	public function getName(): string
-	{
-		return $this->name;
-	}
-
-
-	public function getType(): string
-	{
-		return $this->type;
 	}
 
 }

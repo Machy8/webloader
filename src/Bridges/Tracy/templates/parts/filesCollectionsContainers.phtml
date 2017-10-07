@@ -1,0 +1,23 @@
+<?php $tabId = $elementId . 'filesCollectionsContainers' ?>
+
+<a href="#<?php echo $tabId; ?>" class="tracy-toggle">Files collections containers</a>
+
+<table id="<?php echo $tabId ?>" style="width: 100%">
+	<thead>
+		<tr>
+			<td><strong>Name</strong></td>
+			<td><strong>Css collections</strong></td>
+			<td><strong>Js collections</strong></td>
+		</tr>
+	</thead>
+
+	<tbody>
+		<?php foreach ($filesCollectionsContainers as $filesCollectionsContainersName => $filesCollectionsContainer) {; ?>
+			<tr>
+				<td><?php echo $filesCollectionsContainersName; ?></td>
+				<td><?php dump($filesCollectionsContainer->getCssFilesCollections()); ?></td>
+				<td><?php dump($filesCollectionsContainer->getJsFilesCollections()); ?></td>
+			</tr>
+		<?php };?>
+	</tbody>
+</table>

@@ -13,13 +13,15 @@
 	</thead>
 
 	<tbody>
-		<?php foreach ($filesCollections as $filesCollection) {; ?>
-			<tr>
-				<td><?php echo $filesCollection->getName(); ?></td>
-				<td><?php dump($filesCollection->getFiles()); ?></td>
-				<td><?php dump($filesCollection->getFilters()); ?></td>
-				<td><?php echo $filesCollection->getType(); ?></td>
-			</tr>
+		<?php foreach ($filesCollectionsByType as $filesCollectionsType => $filesCollections) {; ?>
+			<?php foreach ($filesCollections as $filesCollectionName => $filesCollection) {; ?>
+				<tr>
+					<td><?php echo $filesCollectionName; ?></td>
+					<td><?php dump($filesCollection->getFiles()); ?></td>
+					<td><?php dump($filesCollection->getFilters()); ?></td>
+					<td><?php echo $filesCollectionsType; ?></td>
+				</tr>
+			<?php };?>
 		<?php };?>
 	</tbody>
 </table>

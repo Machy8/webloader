@@ -19,11 +19,7 @@ use Nette\Neon\Neon;
 class Compiler
 {
 
-	const
-		CONFIG_SECTION_CSS = self::CSS . 'Files',
-		CONFIG_SECTION_JS = self::JS . 'Files',
-		CONFIG_SECTION_CSS_FILTERS = self::CSS . 'Filters',
-		CONFIG_SECTION_JS_FILTERS = self::JS . 'Filters';
+	const LOCK_FILE_NAME = 'webloader.lock';
 
 	const
 		CSS = 'css',
@@ -35,9 +31,27 @@ class Compiler
 	private $cacheEnabled = TRUE;
 
 	/**
-	 * @var FilesCollection[]
+	 * @var FilesCollection[][]
 	 */
-	private $filesCollections = [];
+	private $filesCollections = [
+		self::CSS => [],
+		self::JS => []
+	];
+
+	/**
+	 * @var FilesCollectionsContainerRender
+	 */
+	private $filesCollectionsContainerRender;
+
+	/**
+	 * @var FilesCollectionsContainer[][]
+	 */
+	private $filesCollectionsContainers = [];
+
+	/**
+	 * @var FilesCollectionRender
+	 */
+	private $filesCollectionRender;
 
 	/**
 	 * @var array
@@ -53,6 +67,11 @@ class Compiler
 	private $outputDir;
 
 	/**
+	 * @var string
+	 */
+	private $pathPlaceholderCharacter = '%';
+
+	/**
 	 * @var array
 	 */
 	private $pathsPlaceholders = [];
@@ -66,7 +85,7 @@ class Compiler
 	public function addCssFilter(string $name, callable $filter): Compiler
 	{
 		if (array_key_exists($name, $this->filters[Compiler::CSS])) {
-			throw new SetupException("Css filter \"{$name}\" already exists.");
+			throw new SetupException('Css filter "' . $name . '" already exists.');
 		}
 
 		$this->filters[Compiler::CSS][$name] = $filter;
@@ -78,7 +97,7 @@ class Compiler
 	public function addJsFilter(string $name, callable $filter): Compiler
 	{
 		if (array_key_exists($name, $this->filters[Compiler::JS])) {
-			throw new SetupException("Js filter \"{$name}\" already exists.");
+			throw new SetupException('Js filter "' . $name . '" already exists.');
 		}
 
 		$this->filters[Compiler::JS][$name] = $filter;
@@ -101,38 +120,128 @@ class Compiler
 	}
 
 
-	public function createCssFilesCollection(string $name): FilesCollection
+	public function compile()
 	{
-		return $this->filesCollections[] = new FilesCollection($name, Compiler::CSS);
+		if ( ! $this->outputDir) {
+			throw new CompileException('Output dir is not set.');
+		}
+
+		foreach ($this->filesCollections as $filesCollectionsType => $filesCollections) {
+			foreach ($filesCollections as $filesCollectionName => $filesCollection) {
+				$filePath = $this->outputDir . '/' . $filesCollectionName . '.' . $filesCollectionsType;
+
+				if (file_exists($filePath) && $this->cacheEnabled) {
+					continue;
+				}
+
+				$code = $this->loadFiles($filesCollection->getFiles());
+
+				foreach ($filesCollection->getFilters() as $filter) {
+					if ( ! array_key_exists($filter, $this->filters[$filesCollectionsType])) {
+						throw new CompileException('Undefined filter "' . $filter . '".');
+					}
+
+					$code = $this->filters[$filesCollectionsType][$filter]($code);
+				}
+
+				file_put_contents($filePath, $code);
+			}
+		}
 	}
 
 
-	public function createFilesCollectionsFromConfig(string $file): Compiler
+	public function createCssFilesCollection(string $name): FilesCollection
 	{
-		$file = $this->replacePathsPlaceholders($file);
-		$fileContent = file_get_contents($file);
-		$collections = Neon::decode($fileContent);
-		$cssCollection = NULL;
-		$jsCollection = NULL;
-		$cssFilters = NULL;
-		$jsFilters = NULL;
+		if (array_key_exists($name, $this->filesCollections[self::CSS])) {
+			throw new CompileException('CSS files collection "' . $name . '" already exists.');
+		}
 
-		foreach ($collections as $collectionName => $sections) {
+		return $this->filesCollections[self::CSS][$name] = new FilesCollection;
+	}
+
+
+	public function createFilesCollectionsContainer(string $name): FilesCollectionsContainer
+	{
+		if (array_key_exists($name, $this->filesCollectionsContainers)) {
+			throw new CompileException('Files collections container "' . $name . '" already exists.');
+		}
+
+		return $this->filesCollectionsContainers[$name] = new FilesCollectionsContainer;
+	}
+
+
+	public function createFilesCollectionsContainersFromConfig(string $configPath): Compiler
+	{
+		$configPath = $this->replacePathsPlaceholders($configPath);
+		$fileContent = file_get_contents($configPath);
+		$containers = Neon::decode($fileContent);
+
+		foreach ($containers as $containerName => $sections) {
+			$cssFilesCollections = NULL;
+			$jsFilesCollections = NULL;
+
 			foreach ($sections as $sectionName => $values) {
 				if ( ! $values) {
 					continue;
 				}
 
-				if ($sectionName === self::CONFIG_SECTION_CSS) {
-					$cssCollection = $this->createCssFilesCollection($collectionName)->setFiles($values);
+				if ($sectionName === FilesCollectionsContainer::CONFIG_SECTION_CSS_COLLECTIONS) {
+					$cssFilesCollections = $values;
 
-				} elseif ($sectionName === self::CONFIG_SECTION_JS) {
-					$jsCollection = $this->createJsFilesCollection($collectionName)->setFiles($values);
+				} elseif ($sectionName === FilesCollectionsContainer::CONFIG_SECTION_JS_COLLECTIONS) {
+					$jsFilesCollections = $values;
 
-				} elseif ($sectionName === self::CONFIG_SECTION_CSS_FILTERS) {
+				} else {
+					throw new SetupException('Unknown configuration section "' . $sectionName . '".');
+				}
+			}
+
+			if ( ! $cssFilesCollections && ! $jsFilesCollections) {
+				continue;
+			}
+
+			$container = $this->createFilesCollectionsContainer($containerName);
+
+			if ($cssFilesCollections) {
+				$container->setCssFilesCollections($cssFilesCollections);
+			}
+
+			if ($jsFilesCollections) {
+				$container->setJsFilesCollections($jsFilesCollections);
+			}
+		}
+
+		return $this;
+	}
+
+
+	public function createFilesCollectionsFromConfig(string $configPath): Compiler
+	{
+		$configPath = $this->replacePathsPlaceholders($configPath);
+		$fileContent = file_get_contents($configPath);
+		$collections = Neon::decode($fileContent);
+
+		foreach ($collections as $collectionName => $sections) {
+			$cssCollection = NULL;
+			$cssFilters = NULL;
+			$jsCollection = NULL;
+			$jsFilters = NULL;
+
+			foreach ($sections as $sectionName => $values) {
+				if ( ! $values) {
+					continue;
+				}
+
+				if ($sectionName === FilesCollection::CONFIG_SECTION_CSS) {
+					$cssCollection = $values;
+
+				} elseif ($sectionName === FilesCollection::CONFIG_SECTION_JS) {
+					$jsCollection = $values;
+
+				} elseif ($sectionName === FilesCollection::CONFIG_SECTION_CSS_FILTERS) {
 					$cssFilters = $values;
 
-				} elseif ($sectionName === self::CONFIG_SECTION_JS_FILTERS) {
+				} elseif ($sectionName === FilesCollection::CONFIG_SECTION_JS_FILTERS) {
 					$jsFilters = $values;
 
 				} else {
@@ -141,19 +250,19 @@ class Compiler
 			}
 
 			if ($cssCollection) {
+				$cssCollection = $this->createCssFilesCollection($collectionName)->setFiles($cssCollection);
+
 				if ($cssFilters) {
 					$cssCollection->setFilters($cssFilters);
 				}
-
-				$this->filesCollections[] = $cssCollection;
 			}
 
 			if ($jsCollection) {
+				$jsCollection = $this->createJsFilesCollection($collectionName)->setFiles($jsCollection);
+
 				if ($jsFilters) {
 					$jsCollection->setFilters($jsFilters);
 				}
-
-				$this->filesCollections[] = $jsCollection;
 			}
 		}
 
@@ -163,23 +272,30 @@ class Compiler
 
 	public function createJsFilesCollection(string $name): FilesCollection
 	{
-		return $this->filesCollections[] = new FilesCollection($name, Compiler::JS);
+		if (array_key_exists($name, $this->filesCollections[self::JS])) {
+			throw new CompileException('Javascript files collection "' . $name . '" already exists.');
+		}
+
+		return $this->filesCollections[self::JS][$name] = new FilesCollection;
 	}
 
 
 	public function disableCache(): Compiler
 	{
 		$this->cacheEnabled = FALSE;
-
 		return $this;
 	}
 
-	/**
-	 * @return FilesCollection[]
-	 */
+
 	public function getFilesCollections(): array
 	{
 		return $this->filesCollections;
+	}
+
+
+	public function getFilesCollectionsContainers(): array
+	{
+		return $this->filesCollectionsContainers;
 	}
 
 
@@ -195,16 +311,43 @@ class Compiler
 	}
 
 
+	public function getFilesCollectionsContainerRender(): FilesCollectionsContainerRender
+	{
+		if ( ! $this->filesCollectionsContainerRender) {
+			$this->filesCollectionsContainerRender = new FilesCollectionsContainerRender(
+				$this->getFilesCollectionRender(),
+				$this->filesCollectionsContainers
+			);
+		}
+
+		return $this->filesCollectionsContainerRender;
+	}
+
+
 	public function getPathsPlaceholders(): array
 	{
 		return $this->pathsPlaceholders;
 	}
 
 
+	public function getFilesCollectionRender(): FilesCollectionRender
+	{
+		if ( ! $this->filesCollectionRender) {
+			$this->filesCollectionRender = new FilesCollectionRender(
+				$this->filesCollections,
+				$this->outputDir,
+				$this->getVersion()
+			);
+		}
+
+		return $this->filesCollectionRender;
+	}
+
+
 	public function getVersion(): string
 	{
 		if ( ! $this->version) {
-			$lock = $this->outputDir . '/webloader.lock';
+			$lock = $this->outputDir . '/' . self::LOCK_FILE_NAME;
 
 			if (file_exists($lock)) {
 				$time = file_get_contents($lock);
@@ -216,6 +359,7 @@ class Compiler
 					file_put_contents($lock, $time);
 				}
 			}
+
 			$this->version = (string) $time;
 		}
 
@@ -229,39 +373,16 @@ class Compiler
 	}
 
 
-	public function render(): Render
-	{
-		if ( ! $this->outputDir) {
-			throw new CompileException('Output dir is not set.');
-		}
-
-		foreach ($this->filesCollections as $filesCollection) {
-			$file = $this->outputDir . '/' . $filesCollection->getName() . '.' . $filesCollection->getType();
-
-			if (file_exists($file) && $this->cacheEnabled) {
-				continue;
-			}
-
-			$code = $this->loadFiles($filesCollection->getFiles());
-
-			foreach ($filesCollection->getFilters() as $filter) {
-				if ( ! array_key_exists($filter, $this->filters[$filesCollection->getType()])) {
-					throw new CompileException('Undefined filter "' . $filter . '".');
-				}
-				$code = $this->filters[$filesCollection->getType()][$filter]($code);
-			}
-
-			file_put_contents($file, $code);
-		}
-
-		return new Render($this->outputDir, $this->getVersion());
-	}
-
-
 	public function setOutputDir(string $path): Compiler
 	{
 		$this->outputDir = $path;
+		return $this;
+	}
 
+
+	public function setPathPlaceholderCharacter(string $character): Compiler
+	{
+		$this->pathPlaceholderCharacter = $character;
 		return $this;
 	}
 
@@ -269,8 +390,8 @@ class Compiler
 	private function loadFiles(array $files): string
 	{
 		$output = '';
-
 		$filesCount = count($files);
+
 		for ($i = 0; $i < $filesCount; $i++) {
 			$file = $this->replacePathsPlaceholders($files[$i]);
 
@@ -289,13 +410,15 @@ class Compiler
 	}
 
 
-	private function replacePathsPlaceholders(string $file): string
+	private function replacePathsPlaceholders(string $filePath): string
 	{
-		foreach ($this->pathsPlaceholders as $pathPlaceholderKey => $path) {
-			$file = str_replace('%' . $pathPlaceholderKey . '%', $path, $file);
+		foreach ($this->pathsPlaceholders as $placeholder => $path) {
+			$filePath = str_replace(
+				$this->pathPlaceholderCharacter . $placeholder . $this->pathPlaceholderCharacter, $path, $filePath
+			);
 		}
 
-		return $file;
+		return $filePath;
 	}
 
 }

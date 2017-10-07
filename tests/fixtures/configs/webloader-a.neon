@@ -6,6 +6,9 @@ test-files-collections-from-config-a:
 	jsFiles:
 		- %jsFixtures%/script-a.js
 		- %jsFixtures%/script-b.js
+	cssOutputSetup:
+
+	jsOutputSetup:
 
 test-files-collections-from-config-b:
 	cssFiles:

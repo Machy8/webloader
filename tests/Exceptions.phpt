@@ -76,7 +76,8 @@ final class Exceptions extends AbstractTestCase
 			$webLoader = $this->getWebLoader();
 			$webLoader->createJsFilesCollection('test')
 				->setFiles(['somefile.js']);
-			$webLoader->render()->js('test');
+			$webLoader->compile();
+			$webLoader->getFilesCollectionRender()->js('test');
 		}, CompileException::class, 'File "somefile.js" not found.');
 	}
 
@@ -88,7 +89,8 @@ final class Exceptions extends AbstractTestCase
 			$webLoader->createJsFilesCollection('test')
 					->setFiles(['%cssFixtures%/style-a.css'])
 					->setFilters(['test']);
-			$webLoader->render()->js('test');
+			$webLoader->compile();
+			$webLoader->getFilesCollectionRender()->js('test');
 		}, CompileException::class, 'Undefined filter "test".');
 	}
 
