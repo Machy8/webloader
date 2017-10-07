@@ -1,0 +1,23 @@
+test-files-collections-from-config-a:
+	cssFiles:
+		- %cssFixtures%/style-a.css
+		- %cssFixtures%/style-b.css
+
+	jsFiles:
+		- %jsFixtures%/script-a.js
+		- %jsFixtures%/script-b.js
+	cssOutputSetup:
+
+	jsOutputSetup:
+
+
+test-files-collections-from-config-b:
+	cssFiles:
+		- %cssFixtures%/style-b.css
+		- %cssFixtures%/style-a.css
+
+	jsFiles:
+		- %jsFixtures%/script-b.js
+		- %jsFixtures%/script-a.js
+	jsFilters:
+		- googleClosureCompiler

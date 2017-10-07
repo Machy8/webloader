@@ -25,7 +25,7 @@ abstract class AbstractTestCase extends TestCase
 	const PATHS_PLACEHOLDERS = [
 		'cssFixtures' => './fixtures/css',
 		'jsFixtures' => './fixtures/js',
-		'configsDirs' => './fixtures/configs'
+		'configsDir' => './fixtures/configs'
 	];
 
 	const

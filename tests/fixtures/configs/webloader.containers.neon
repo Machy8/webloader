@@ -1,0 +1,7 @@
+testContainer:
+	cssCollections:
+		- test-files-collections-container-from-config-a
+		- test-files-collections-container-from-config-b
+	jsCollections:
+		- test-files-collections-container-from-config-a
+		- test-files-collections-container-from-config-b
