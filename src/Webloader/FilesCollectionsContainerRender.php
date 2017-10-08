@@ -55,7 +55,7 @@ class FilesCollectionsContainerRender
 	}
 
 
-	public function cssPrefetch(array $collectionsNames): string
+	public function cssPrefetch(array $collectionsNames = NULL): string
 	{
 		$collectionsNames = $collectionsNames ?? [];
 		$cssCollectionsFromContainer = $this->selectedContainer->getCssFilesCollections();
@@ -64,7 +64,7 @@ class FilesCollectionsContainerRender
 	}
 
 
-	public function cssPreload(array $collectionsNames): string
+	public function cssPreload(array $collectionsNames = NULL): string
 	{
 		$collectionsNames = $collectionsNames ?? [];
 		$cssCollectionsFromContainer = $this->selectedContainer->getCssFilesCollections();
@@ -94,7 +94,7 @@ class FilesCollectionsContainerRender
 	}
 
 
-	public function jsPreload(array $collectionsNames): string
+	public function jsPreload(array $collectionsNames = NULL): string
 	{
 		$collectionsNames = $collectionsNames ?? [];
 		$jsCollectionsFromContainer = $this->selectedContainer->getJsFilesCollections();
