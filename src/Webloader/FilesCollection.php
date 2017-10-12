@@ -18,10 +18,10 @@ class FilesCollection
 {
 
 	const
-		CONFIG_SECTION_CSS = Compiler::CSS . 'Files',
+		CONFIG_SECTION_CSS_FILES = Compiler::CSS . 'Files',
 		CONFIG_SECTION_CSS_FILTERS = Compiler::CSS . 'Filters',
 		CONFIG_SECTION_CSS_OUTPUT_SETUP = Compiler::CSS . 'OutputSetup',
-		CONFIG_SECTION_JS = Compiler::JS . 'Files',
+		CONFIG_SECTION_JS_FILES = Compiler::JS . 'Files',
 		CONFIG_SECTION_JS_FILTERS = Compiler::JS . 'Filters',
 		CONFIG_SECTION_JS_OUTPUT_SETUP = Compiler::JS . 'OutputSetup';
 
