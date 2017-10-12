@@ -1,6 +1,6 @@
 {
 	"name": "machy8/webloader",
-	"description": "Simple, easy to use, php bundler for javascript and css.",
+	"description": "Simple, easy to use, php bundler for javascript and css",
 	"keywords": ["webloader", "module-bundler", "javascript", "css", "frontend", "build-tool"],
 	"license": "New BSD License",
 	"require": {
@@ -12,6 +12,11 @@
 		"nette/tester": "^2.0",
 		"machy8/google-closure-compiler": "dev-master",
 		"tubalmartin/cssmin": "dev-master"
+	},
+	"suggest": {
+		"machy8/google-closure-compiler.php": "PHP client for the Google Closure Compiler API in one file",
+		"tedivm/jshrink": "Javascript Minifier built in PHP",
+		"tubalmartin/cssmin": "A PHP port of the YUI CSS compressor"
 	},
 	"autoload": {
 		"classmap": [""]
