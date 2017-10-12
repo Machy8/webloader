@@ -13,6 +13,4 @@ declare(strict_types = 1);
 
 namespace WebLoader;
 
-class SetupException extends \Exception {}
-
-class CompileException extends \Exception {}
+class Exception extends \Exception {}
