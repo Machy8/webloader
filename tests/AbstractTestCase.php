@@ -82,8 +82,8 @@ abstract class AbstractTestCase extends TestCase
 	public function setUp()
 	{
 		parent::setUp();
-		$this->webloader = new Compiler;
-		$this->webloader->setOutputDir(self::ACTUAL_DIR)
+		$this->webloader = new Compiler(self::ACTUAL_DIR);
+		$this->webloader
 			->addPathsPlaceholders(self::PATHS_PLACEHOLDERS)
 			->disableCache();
 	}

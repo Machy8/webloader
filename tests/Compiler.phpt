@@ -34,7 +34,6 @@ final class Compiler extends AbstractTestCase
 		$compiler->addCssFilter('empty', function (string $code) {
 			return $code;
 		});
-		$compiler->compile();
 
 		Assert::equal(
 			'<link type="text/css" rel="stylesheet" href="' . self::ACTUAL_DIR . '/' . $collectionName . '.css?v=' . $version . '">',
@@ -49,7 +48,6 @@ final class Compiler extends AbstractTestCase
 	{
 		$collectionName = 'test-css-files-collection-style-element';
 		$this->createCssCollection($collectionName);
-		$this->getWebLoader()->compile();
 
 		file_put_contents(
 			self::ACTUAL_DIR . '/' . $collectionName . '.html',
@@ -66,7 +64,6 @@ final class Compiler extends AbstractTestCase
 		$this->createJsCollection($collectionName);
 		$compiler = $this->getWebLoader();
 		$version = $compiler->getVersion();
-		$this->getWebLoader()->compile();
 
 		Assert::equal(
 			'<script async type="text/javascript" src="' . self::ACTUAL_DIR . '/' . $collectionName . '.js?v=' . $version . '"></script>',
@@ -81,7 +78,6 @@ final class Compiler extends AbstractTestCase
 	{
 		$collectionName = 'test-js-files-collection-script-element-with-content';
 		$this->createJsCollection($collectionName);
-		$this->getWebLoader()->compile();
 
 		file_put_contents(
 			self::ACTUAL_DIR . '/' . $collectionName . '.html',
@@ -112,16 +108,16 @@ final class Compiler extends AbstractTestCase
 			return $code;
 		});
 
-		$this->getWebLoader()->compile();
+		$render = $compiler->getFilesCollectionRender();
 
 		Assert::equal(
 			'<link type="text/css" rel="stylesheet" href="' . self::ACTUAL_DIR . '/' . $collectionNameA . '.css?v=' . $version . '">',
-			$compiler->getFilesCollectionRender()->css($collectionNameA)
+			$render->css($collectionNameA)
 		);
 
 		Assert::equal(
 			'<script async defer type="text/javascript" src="' . self::ACTUAL_DIR . '/' . $collectionNameB . '.js?v=' . $version . '"></script>',
-			$compiler->getFilesCollectionRender()->js($collectionNameB, ['async' => TRUE, 'defer' => TRUE])
+			$render->js($collectionNameB, ['async' => TRUE, 'defer' => TRUE])
 		);
 
 		$this->matchCssFile($collectionNameA);
@@ -156,7 +152,6 @@ final class Compiler extends AbstractTestCase
 			return $minifier->run($code);
 		});
 
-		$this->getWebLoader()->compile();
 		$render = $compiler->getFilesCollectionsContainerRender()->selectContainer('testContainer');
 
 		Assert::equal(

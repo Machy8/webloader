@@ -16,8 +16,7 @@ namespace WebLoader\Tests;
 require_once 'bootstrap.php';
 
 use Tester\Assert;
-use WebLoader\CompileException;
-use WebLoader\SetupException;
+use WebLoader\Exception;
 
 
 /**
@@ -36,7 +35,7 @@ final class Exceptions extends AbstractTestCase
 				->addJsFilter('Lorem', function () {
 					return '';
 				});
-		}, SetupException::class, 'Js filter "Lorem" already exists.');
+		}, Exception::class, 'Js filter "Lorem" already exists.');
 	}
 
 
@@ -52,7 +51,7 @@ final class Exceptions extends AbstractTestCase
 				{
 					return '';
 				});
-		}, SetupException::class, 'Css filter "Lorem" already exists.');
+		}, Exception::class, 'Css filter "Lorem" already exists.');
 	}
 
 
@@ -66,7 +65,7 @@ final class Exceptions extends AbstractTestCase
 				->addPathsPlaceholders([
 					'frontCssDir' => __DIR__ . '/front/css',
 				]);
-		}, SetupException::class, 'Placeholder "frontCssDir" already exists.');
+		}, Exception::class, 'Placeholder "frontCssDir" already exists.');
 	}
 
 
@@ -76,9 +75,9 @@ final class Exceptions extends AbstractTestCase
 			$webLoader = $this->getWebLoader();
 			$webLoader->createJsFilesCollection('test')
 				->setFiles(['somefile.js']);
-			$webLoader->compile();
-			$webLoader->getFilesCollectionRender()->js('test');
-		}, CompileException::class, 'File "somefile.js" not found.');
+
+			$webLoader->getFilesCollectionRender();
+		}, Exception::class, 'File "somefile.js" not found.');
 	}
 
 
@@ -89,10 +88,43 @@ final class Exceptions extends AbstractTestCase
 			$webLoader->createJsFilesCollection('test')
 					->setFiles(['%cssFixtures%/style-a.css'])
 					->setFilters(['test']);
-			$webLoader->compile();
-			$webLoader->getFilesCollectionRender()->js('test');
-		}, CompileException::class, 'Undefined filter "test".');
+
+			$webLoader->getFilesCollectionRender();
+		}, Exception::class, 'Undefined filter "test".');
 	}
+
+
+	public function testUnknownFilesCollectionsContainerSection()
+	{
+		Assert::exception(function () {
+			$webLoader = $this->getWebLoader();
+			$webLoader->createFilesCollectionsContainersFromArray([
+				'test' => [
+					'csCollections' => [
+						'collection'
+					]
+				]
+			]);
+			$webLoader->getFilesCollectionRender();
+		}, Exception::class, 'Unknown configuration section "csCollections" in files collections container "test".');
+	}
+
+
+	public function testUnknownFilesCollectionSection()
+	{
+		Assert::exception(function () {
+			$webLoader = $this->getWebLoader();
+			$webLoader->createFilesCollectionsFromArray([
+				'test' => [
+					'csFilters' => [
+						'file.css'
+					]
+				]
+			]);
+			$webLoader->getFilesCollectionRender();
+		}, Exception::class, 'Unknown configuration section "csFilters" in files collection "test".');
+	}
+
 
 }
 
