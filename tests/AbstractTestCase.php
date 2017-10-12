@@ -36,6 +36,14 @@ abstract class AbstractTestCase extends TestCase
 	private $webloader;
 
 
+	public function __construct()
+	{
+		if ( ! is_dir(self::ACTUAL_DIR)) {
+			mkdir(self::ACTUAL_DIR);
+		}
+	}
+
+
 	public function createCssCollection(string $name): FilesCollection
 	{
 		return $this->getWebLoader()
