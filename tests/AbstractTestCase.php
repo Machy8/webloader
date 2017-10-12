@@ -38,7 +38,7 @@ abstract class AbstractTestCase extends TestCase
 
 	public function __construct()
 	{
-		if ( ! is_dir(self::ACTUAL_DIR)) {
+		if ( ! file_exists(self::ACTUAL_DIR)) {
 			mkdir(self::ACTUAL_DIR);
 		}
 	}
