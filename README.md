@@ -36,7 +36,7 @@ $webloader->createJsCollection('homepage')
         'minifier'
     ]);
     
-echo $webloader->render()->js('homepage', ['async' => TRUE']);
+echo $webloader->render()->js('homepage', ['async' => TRUE]);
 ```
 
 *Nette framework:*
