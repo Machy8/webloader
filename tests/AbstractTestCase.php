@@ -22,16 +22,16 @@ use WebLoader\FilesCollection;
 abstract class AbstractTestCase extends TestCase
 {
 
-	const PATHS_PLACEHOLDERS = [
-		'cssFixtures' => './fixtures/css',
-		'jsFixtures' => './fixtures/js',
-		'configsDir' => './fixtures/configs'
-	];
-
 	const
-		WEBTEMP_DIR = './webtemp',
 		ACTUAL_DIR = self::WEBTEMP_DIR . '/actual',
-		EXPECTED_DIR = self::WEBTEMP_DIR . '/expected';
+		EXPECTED_DIR = self::WEBTEMP_DIR . '/expected',
+		WEBTEMP_DIR = 'webtemp';
+
+	const PATHS_PLACEHOLDERS = [
+		'cssFixtures' => 'fixtures/css',
+		'configsDir' => 'fixtures/configs',
+		'jsFixtures' => 'fixtures/js'
+	];
 
 	private $webloader;
 
@@ -39,7 +39,7 @@ abstract class AbstractTestCase extends TestCase
 	public function __construct()
 	{
 		if ( ! file_exists(self::ACTUAL_DIR)) {
-			mkdir(self::ACTUAL_DIR);
+			mkdir(self::ACTUAL_DIR, 0777, true);
 		}
 	}
 

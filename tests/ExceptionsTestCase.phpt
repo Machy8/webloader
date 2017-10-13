@@ -22,7 +22,7 @@ use WebLoader\Exception;
 /**
  * @testCase
  */
-final class Exceptions extends AbstractTestCase
+final class ExceptionsTestCase extends AbstractTestCase
 {
 
 	public function testDuplicatedCssFilterException()
@@ -128,4 +128,4 @@ final class Exceptions extends AbstractTestCase
 
 }
 
-(new Exceptions())->run();
+(new ExceptionsTestCase())->run();

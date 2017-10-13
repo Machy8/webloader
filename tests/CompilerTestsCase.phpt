@@ -22,7 +22,7 @@ use tubalmartin\CssMin\Minifier;
 /**
  * @testCase
  */
-final class Compiler extends AbstractTestCase
+final class CompilerTestsCase extends AbstractTestCase
 {
 
 	public function testCssCollectionLinkElement()
@@ -81,7 +81,7 @@ final class Compiler extends AbstractTestCase
 
 		file_put_contents(
 			self::ACTUAL_DIR . '/' . $collectionName . '.html',
-			$this->getWebLoader()->getFilesCollectionRender()->js($collectionName, NULL, TRUE)
+			$this->getWebLoader()->getFilesCollectionRender()->js($collectionName, [], TRUE)
 		);
 
 		$this->matchHtmlFile($collectionName);
@@ -161,7 +161,7 @@ final class Compiler extends AbstractTestCase
 
 		Assert::equal(
 			'<script async defer type="text/javascript" src="' . self::ACTUAL_DIR . '/' . $collectionNameA . '.js?v=' . $version . '"></script><script async defer type="text/javascript" src="' . self::ACTUAL_DIR . '/' . $collectionNameB . '.js?v=' . $version . '"></script>',
-			$render->js(['async' => TRUE, 'defer' => TRUE])
+			$render->js(NULL, ['async' => TRUE, 'defer' => TRUE])
 		);
 
 		$this->matchCssFile($collectionNameA);
@@ -170,4 +170,4 @@ final class Compiler extends AbstractTestCase
 
 }
 
-(new Compiler())->run();
+(new CompilerTestsCase())->run();
