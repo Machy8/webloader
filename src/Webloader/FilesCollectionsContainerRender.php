@@ -20,7 +20,7 @@ class FilesCollectionsContainerRender
 	/**
 	 * @var FilesCollectionsContainer[][]
 	 */
-	private $filesCollectionsContainers = [];
+	private $collectionsContainers = [];
 
 	/**
 	 * @var FilesCollectionRender
@@ -28,86 +28,98 @@ class FilesCollectionsContainerRender
 	private $render;
 
 	/**
-	 * @var FilesCollectionsContainer
+	 * @var string
 	 */
-	private $selectedContainer;
+	private $selectedContainerName;
 
 
 	/**
-	 * @param FilesCollectionsContainer[][] $filesCollections
+	 * @param FilesCollectionsContainer[][] $collectionsContainers
 	 */
-	public function __construct(FilesCollectionRender $render, array $filesCollectionsContainers)
+	public function __construct(FilesCollectionRender $render, array $collectionsContainers)
 	{
-		$this->filesCollectionsContainers = $filesCollectionsContainers;
+		$this->collectionsContainers = $collectionsContainers;
 		$this->render = $render;
 	}
 
 
-	public function css(array $attributes = NULL,  bool $content = FALSE): string
+	public function css(string $containerName = NULL, array $attributes = [], bool $loadContent = FALSE): string
 	{
 		$cssElements = '';
+		$cssFilesCollections = $this->getContainer($containerName)->getCssFilesCollections();
 
-		foreach ($this->selectedContainer->getCssFilesCollections() as $collection) {
-			$cssElements .= $this->render->css($collection, $attributes, $content);
+		foreach ($cssFilesCollections as $collectionName) {
+			$cssElements .= $this->render->css($collectionName, $attributes, $loadContent);
 		}
 
 		return $cssElements;
 	}
 
 
-	public function cssPrefetch(array $collectionsNames = NULL): string
+	public function cssPrefetch(string $containerName = NULL, array $collectionsNames = []): string
 	{
-		$collectionsNames = $collectionsNames ?? [];
-		$cssCollectionsFromContainer = $this->selectedContainer->getCssFilesCollections();
+		$cssCollectionsFromContainer = $this->getContainer($containerName)->getCssFilesCollections();
 		$cssCollectionsNames = array_merge($cssCollectionsFromContainer, $collectionsNames);
+
 		return $this->render->cssPrefetch($cssCollectionsNames);
 	}
 
 
-	public function cssPreload(array $collectionsNames = NULL): string
+	public function cssPreload(string $containerName = NULL, array $collectionsNames = []): string
 	{
-		$collectionsNames = $collectionsNames ?? [];
-		$cssCollectionsFromContainer = $this->selectedContainer->getCssFilesCollections();
+		$cssCollectionsFromContainer = $this->getContainer($containerName)->getCssFilesCollections();
 		$cssCollectionsNames = array_merge($cssCollectionsFromContainer, $collectionsNames);
+
 		return $this->render->cssPreload($cssCollectionsNames);
 	}
 
 
-	public function js(array $attributes = NULL,  bool $content = FALSE): string
+	public function js(string $containerName = NULL, array $attributes = NULL, bool $loadContent = FALSE): string
 	{
 		$jsElements = '';
+		$jsFilesCollections = $this->getContainer($containerName)->getJsFilesCollections();
 
-		foreach ($this->selectedContainer->getJsFilesCollections() as $collection) {
-			$jsElements .= $this->render->js($collection, $attributes, $content);
+		foreach ($jsFilesCollections as $collectionName) {
+			$jsElements .= $this->render->js($collectionName, $attributes, $loadContent);
 		}
 
 		return $jsElements;
 	}
 
 
-	public function jsPrefetch(array $collectionsNames = NULL): string
+	public function jsPrefetch(string $containerName = NULL, array $collectionsNames = []): string
 	{
-		$collectionsNames = $collectionsNames ?? [];
-		$jsCollectionsFromContainer = $this->selectedContainer->getJsFilesCollections();
+		$jsCollectionsFromContainer = $this->getContainer($containerName)->getJsFilesCollections();
 		$jsCollectionsNames = array_merge($jsCollectionsFromContainer, $collectionsNames);
+
 		return $this->render->jsPrefetch($jsCollectionsNames);
 	}
 
 
-	public function jsPreload(array $collectionsNames = NULL): string
+	public function jsPreload(string $containerName = NULL, array $collectionsNames = []): string
 	{
-		$collectionsNames = $collectionsNames ?? [];
-		$jsCollectionsFromContainer = $this->selectedContainer->getJsFilesCollections();
+		$jsCollectionsFromContainer = $this->getContainer($containerName)->getJsFilesCollections();
 		$jsCollectionsNames = array_merge($jsCollectionsFromContainer, $collectionsNames);
+
 		return $this->render->jsPreload($jsCollectionsNames);
 	}
 
 
-	public function selectContainer(string $name): FilesCollectionsContainerRender
+	public function selectContainer(string $containerName): FilesCollectionsContainerRender
 	{
-		$this->selectedContainer = $this->filesCollectionsContainers[$name];
-
+		$this->selectedContainerName = $containerName;
 		return $this;
+	}
+
+
+	private function getContainer(string $containerName = NULL): FilesCollectionsContainer
+	{
+		if ( ! $containerName && ! $this->selectedContainerName) {
+			throw new Exception('Trying to call files collections container render on NULL.');
+		}
+
+		$containerName = $containerName ?? $this->selectedContainerName;
+		return $this->collectionsContainers[$containerName];
 	}
 
 }

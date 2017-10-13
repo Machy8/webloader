@@ -20,15 +20,17 @@ class FilesCollection
 	const
 		CONFIG_SECTION_CSS_FILES = Compiler::CSS . 'Files',
 		CONFIG_SECTION_CSS_FILTERS = Compiler::CSS . 'Filters',
-		CONFIG_SECTION_CSS_OUTPUT_SETUP = Compiler::CSS . 'OutputSetup',
+		CONFIG_SECTION_CSS_LOAD_CONTENT = Compiler::CSS . 'LoadContent',
+		CONFIG_SECTION_CSS_OUTPUT_ELEMENT_ATTRIBUTES = Compiler::CSS . 'OutputElementAttributes',
 		CONFIG_SECTION_JS_FILES = Compiler::JS . 'Files',
 		CONFIG_SECTION_JS_FILTERS = Compiler::JS . 'Filters',
-		CONFIG_SECTION_JS_OUTPUT_SETUP = Compiler::JS . 'OutputSetup';
+		CONFIG_SECTION_JS_LOAD_CONTENT = Compiler::JS . 'LoadContent',
+		CONFIG_SECTION_JS_OUTPUT_ELEMENT_ATTRIBUTES = Compiler::JS . 'OutputElementAttributes';
 
 	/**
 	 * @var array
 	 */
-	private $attributes = [];
+	private $outputElementAttributes = [];
 
 	/**
 	 * @var string[]
@@ -53,9 +55,9 @@ class FilesCollection
 	}
 
 
-	public function getAttributes(): array
+	public function getOutputElementAttributes(): array
 	{
-		return $this->attributes;
+		return $this->outputElementAttributes;
 	}
 
 
@@ -87,6 +89,13 @@ class FilesCollection
 	public function setFilters(array $filters): FilesCollection
 	{
 		$this->filters = $filters;
+		return $this;
+	}
+
+
+	public function setOutputElementAttributes(array $attributes): FilesCollection
+	{
+		$this->outputElementAttributes = $attributes;
 		return $this;
 	}
 

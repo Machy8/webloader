@@ -207,10 +207,14 @@ class Compiler
 	public function createFilesCollectionsFromArray(array $collections): Compiler
 	{
 		foreach ($collections as $collectionName => $sections) {
-			$cssFiles = NULL;
-			$cssFilters = NULL;
-			$jsFiles = NULL;
-			$jsFilters = NULL;
+			$cssContentLoadingEnabled = FALSE;
+			$cssFiles = [];
+			$cssFilters = [];
+			$cssOutputElementAttributes = [];
+			$jsContentLoadingEnabled = FALSE;
+			$jsFiles = [];
+			$jsFilters = [];
+			$jsOutputElementAttributes = [];
 
 			foreach ($sections as $sectionName => $values) {
 				if ( ! $values) {
@@ -220,14 +224,26 @@ class Compiler
 				if ($sectionName === FilesCollection::CONFIG_SECTION_CSS_FILES) {
 					$cssFiles = $values;
 
-				} elseif ($sectionName === FilesCollection::CONFIG_SECTION_JS_FILES) {
-					$jsFiles = $values;
-
 				} elseif ($sectionName === FilesCollection::CONFIG_SECTION_CSS_FILTERS) {
 					$cssFilters = $values;
 
+				} elseif ($sectionName === FilesCollection::CONFIG_SECTION_CSS_LOAD_CONTENT && $values === TRUE) {
+					$cssContentLoadingEnabled = TRUE;
+
+				} elseif ($sectionName === FilesCollection::CONFIG_SECTION_CSS_OUTPUT_ELEMENT_ATTRIBUTES) {
+					$cssOutputElementAttributes = $values;
+
+				} elseif ($sectionName === FilesCollection::CONFIG_SECTION_JS_FILES) {
+					$jsFiles = $values;
+
 				} elseif ($sectionName === FilesCollection::CONFIG_SECTION_JS_FILTERS) {
 					$jsFilters = $values;
+
+				} elseif ($sectionName === FilesCollection::CONFIG_SECTION_JS_LOAD_CONTENT && $values === TRUE) {
+					$jsContentLoadingEnabled = TRUE;
+
+				} elseif ($sectionName === FilesCollection::CONFIG_SECTION_JS_OUTPUT_ELEMENT_ATTRIBUTES) {
+					$jsOutputElementAttributes = $values;
 
 				} else {
 					throw new Exception(
@@ -238,18 +254,24 @@ class Compiler
 			}
 
 			if ($cssFiles) {
-				$cssCollection = $this->createCssFilesCollection($collectionName)->setFiles($cssFiles);
+				$cssCollection = $this->createCssFilesCollection($collectionName)
+					->setFiles($cssFiles)
+					->setFilters($cssFilters)
+					->setOutputElementAttributes($cssOutputElementAttributes);
 
-				if ($cssFilters) {
-					$cssCollection->setFilters($cssFilters);
+				if ($cssContentLoadingEnabled) {
+					$cssCollection->enableContentLoading();
 				}
 			}
 
 			if ($jsFiles) {
-				$jsCollection = $this->createJsFilesCollection($collectionName)->setFiles($jsFiles);
+				$jsCollection = $this->createJsFilesCollection($collectionName)
+					->setFiles($jsFiles)
+					->setFilters($jsFilters)
+					->setOutputElementAttributes($jsOutputElementAttributes);
 
-				if ($jsFilters) {
-					$jsCollection->setFilters($jsFilters);
+				if ($jsContentLoadingEnabled) {
+					$jsCollection->enableContentLoading();
 				}
 			}
 		}
@@ -409,15 +431,9 @@ class Compiler
 					continue;
 				}
 
-				$code = $this->loadFiles($filesCollection->getFiles());
-
-				foreach ($filesCollection->getFilters() as $filter) {
-					if ( ! array_key_exists($filter, $this->filters[$filesCollectionsType])) {
-						throw new Exception('Undefined filter "' . $filter . '".');
-					}
-
-					$code = $this->filters[$filesCollectionsType][$filter]($code);
-				}
+				$code = $this->loadFiles(
+					$filesCollectionsType, $filesCollection->getFiles(), $filesCollection->getFilters()
+				);
 
 				file_put_contents($filePath, $code);
 			}
@@ -427,7 +443,7 @@ class Compiler
 	}
 
 
-	private function loadFiles(array $files): string
+	private function loadFiles(string $type, array $files, array $filters): string
 	{
 		$output = '';
 		$filesCount = count($files);
@@ -440,6 +456,14 @@ class Compiler
 			}
 
 			$output .= file_get_contents($file);
+
+			foreach ($filters as $filter) {
+				if ( ! array_key_exists($filter, $this->filters[$type])) {
+					throw new Exception('Undefined filter "' . $filter . '".');
+				}
+
+				$output = $this->filters[$type][$filter]($output, $file);
+			}
 
 			if (($i + 1) < $filesCount) {
 				$output .= "\n";

@@ -37,7 +37,12 @@ class FilesCollectionRender
 	/**
 	 * @var FilesCollection[][]
 	 */
-	private $filesCollections;
+	private $collections;
+
+	/**
+	 * @var string
+	 */
+	private $selectedCollectionName;
 
 	/**
 	 * @var string
@@ -51,27 +56,27 @@ class FilesCollectionRender
 
 
 	/**
-	 * @param FilesCollection[][] $filesCollections
+	 * @param FilesCollection[][] $collections
 	 */
-	public function __construct(array $filesCollections, string $outputDir, string $version)
+	public function __construct(array $collections, string $outputDir, string $version)
 	{
-		$this->filesCollections = $filesCollections;
+		$this->collections = $collections;
 		$this->outputDir = $outputDir;
 		$this->version = $version;
 	}
 
 
-	public function css(string $collectionName, array $attributes = NULL, bool $content = FALSE): string
+	public function css(string $collectionName = NULL, array $attributes = [], bool $loadContent = FALSE): string
 	{
-		$filesCollection = $this->getFilesCollection($collectionName, Compiler::CSS);
-		$attributes = $attributes ?? [];
-		$attributes = array_merge($attributes, $filesCollection->getAttributes());
+		$collectionName = $this->getSelectedCollectionName($collectionName);
+		$collection = $this->getCollection($collectionName, Compiler::CSS);
+		$attributes = array_merge($attributes, $collection->getOutputElementAttributes());
 		$attributes['type'] = self::STYLE_TYPE_ATTRIBUTE;
 		$element = self::STYLE_ELEMENT;
 		$filePath = $this->getCollectionFilePath($collectionName, Compiler::CSS);
 		$filePathParameter = NULL;
 
-		if ($content || $filesCollection->isContentLoadingEnabled()) {
+		if ($loadContent || $collection->isContentLoadingEnabled()) {
 			$filePathParameter = $filePath;
 
 		} else {
@@ -121,16 +126,16 @@ class FilesCollectionRender
 	}
 
 
-	public function js(string $collectionName, array $attributes = NULL, bool $content = FALSE): string
+	public function js(string $collectionName = NULL, array $attributes = [], bool $loadContent = FALSE): string
 	{
-		$filesCollection = $this->getFilesCollection($collectionName, Compiler::JS);
-		$attributes = $attributes ?? [];
-		$attributes = array_merge($attributes, $filesCollection->getAttributes());
+		$collectionName = $this->getSelectedCollectionName($collectionName);
+		$collection = $this->getCollection($collectionName, Compiler::JS);
+		$attributes = array_merge($attributes, $collection->getOutputElementAttributes());
 		$attributes['type'] = self::SCRIPT_TYPE_ATTRIBUTE;
 		$filePath = $this->getCollectionFilePath($collectionName, Compiler::JS);
 		$filePathParameter = NULL;
 
-		if ($content || $filesCollection->isContentLoadingEnabled()) {
+		if ($loadContent || $collection->isContentLoadingEnabled()) {
 			$filePathParameter = $filePath;
 
 		} else {
@@ -152,6 +157,13 @@ class FilesCollectionRender
 		return $this->generateMetaLinkElements(
 			$collectionsNames, Compiler::JS, self::LINK_PRELOAD, self::LINK_PRELOAD_AS_JS
 		);
+	}
+
+
+	public function selectCollection(string $collectionName): FilesCollectionRender
+	{
+		$this->selectedCollectionName = $collectionName;
+		return $this;
 	}
 
 
@@ -198,22 +210,32 @@ class FilesCollectionRender
 	}
 
 
-	private function getCollectionFilePath(string $name, string $type): string
+	private function getCollectionFilePath(string $collectionName, string $type): string
 	{
-		return $this->outputDir . '/' . $name . '.' . $type;
+		return $this->outputDir . '/' . $collectionName . '.' . $type;
 	}
 
 
 	/**
-	 * @throws CompileException
+	 * @throws Exception
 	 */
-	private function getFilesCollection(string $name, string $type): FilesCollection
+	private function getCollection(string $collectionName, string $type): FilesCollection
 	{
-		if ( ! array_key_exists($name, $this->filesCollections[$type])) {
-			throw new CompileException('Undefined files collection "' . $name . '".');
+		if ( ! array_key_exists($collectionName, $this->collections[$type])) {
+			throw new Exception('Undefined files collection "' . $collectionName . '".');
 		}
 
-		return $this->filesCollections[$type][$name];
+		return $this->collections[$type][$collectionName];
+	}
+
+
+	private function getSelectedCollectionName(string $collectionName = NULL): string
+	{
+		if ( ! $collectionName && ! $this->selectedCollectionName) {
+			throw new Exception('Trying to call files collection render on NULL.');
+		}
+
+		return $collectionName ?? $this->selectedCollectionName;
 	}
 
 }
