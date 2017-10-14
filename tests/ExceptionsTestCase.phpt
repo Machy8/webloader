@@ -25,6 +25,36 @@ use WebLoader\Exception;
 final class ExceptionsTestCase extends AbstractTestCase
 {
 
+	public function testDuplicatedCssFilesCollectionException()
+	{
+		Assert::exception(function () {
+			$webLoader = $this->getWebLoader();
+			$webLoader->createCssFilesCollection('test');
+			$webLoader->createCssFilesCollection('test');
+		}, Exception::class, 'CSS files collection "test" already exists.');
+	}
+
+
+	public function testDuplicatedJsFilesCollectionException()
+	{
+		Assert::exception(function () {
+			$webLoader = $this->getWebLoader();
+			$webLoader->createJsFilesCollection('test');
+			$webLoader->createJsFilesCollection('test');
+		}, Exception::class, 'Javascript files collection "test" already exists.');
+	}
+
+
+	public function testDuplicatedFilesCollectionsContainerException()
+	{
+		Assert::exception(function () {
+			$webLoader = $this->getWebLoader();
+			$webLoader->createFilesCollectionsContainer('test');
+			$webLoader->createFilesCollectionsContainer('test');
+		}, Exception::class, 'Files collections container "test" already exists.');
+	}
+
+
 	public function testDuplicatedCssFilterException()
 	{
 		Assert::exception(function () {
@@ -125,6 +155,29 @@ final class ExceptionsTestCase extends AbstractTestCase
 		}, Exception::class, 'Unknown configuration section "csFilters" in files collection "test".');
 	}
 
+
+	public function testMissingFilesCollectionsContainerConfigurationFileException()
+	{
+		Assert::exception(function () {
+			$webLoader = $this->getWebLoader()->createFilesCollectionsContainersFromConfig('path/to/config.neon');
+		}, Exception::class, 'Files collections containers configuration file "path/to/config.neon" not found.');
+	}
+
+
+	public function testMissingFilesCollectionConfigurationFileException()
+	{
+		Assert::exception(function () {
+			$webLoader = $this->getWebLoader()->createFilesCollectionsFromConfig('path/to/config.neon');
+		}, Exception::class, 'Files collections configuration file "path/to/config.neon" not found.');
+	}
+
+
+	public function testWrongOutputDirException()
+	{
+		Assert::exception(function () {
+			$webLoader = $this->getWebLoader()->setOutputDir('path/to/some/dir');
+		}, Exception::class, 'Given output dir "path/to/some/dir" doesn\'t exists or is not a directory.');
+	}
 
 }
 

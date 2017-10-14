@@ -196,6 +196,11 @@ class Compiler
 	public function createFilesCollectionsContainersFromConfig(string $configPath): Compiler
 	{
 		$configPath = $this->replacePathsPlaceholders($configPath);
+
+		if ( ! file_exists($configPath)) {
+			throw new Exception('Files collections containers configuration file "' . $configPath . '" not found.');
+		}
+
 		$fileContent = file_get_contents($configPath);
 		$containers = Neon::decode($fileContent);
 		$this->createFilesCollectionsContainersFromArray($containers);
@@ -283,6 +288,11 @@ class Compiler
 	public function createFilesCollectionsFromConfig(string $configPath): Compiler
 	{
 		$configPath = $this->replacePathsPlaceholders($configPath);
+
+		if ( ! file_exists($configPath)) {
+			throw new Exception('Files collections configuration file "' . $configPath . '" not found.');
+		}
+
 		$fileContent = file_get_contents($configPath);
 		$collections = Neon::decode($fileContent);
 		$this->createFilesCollectionsFromArray($collections);
@@ -401,6 +411,7 @@ class Compiler
 	public function setOutputDir(string $path): Compiler
 	{
 		$path = rtrim($path, '/');
+
 		if ( ! is_dir($path)) {
 			throw new Exception('Given output dir "' . $path . '" doesn\'t exists or is not a directory.');
 		}
@@ -427,11 +438,11 @@ class Compiler
 			foreach ($filesCollections as $filesCollectionName => $filesCollection) {
 				$filePath = $this->outputDir . '/' . $filesCollectionName . '.' . $filesCollectionsType;
 
-				if (file_exists($filePath) && $this->cacheEnabled) {
+				if (file_exists($filePath) && $this->isCacheEnabled()) {
 					continue;
 				}
 
-				$code = $this->loadFiles(
+				$code = $this->loadCssJsFiles(
 					$filesCollectionsType, $filesCollection->getFiles(), $filesCollection->getFilters()
 				);
 
@@ -443,7 +454,7 @@ class Compiler
 	}
 
 
-	private function loadFiles(string $type, array $files, array $filters): string
+	private function loadCssJsFiles(string $type, array $files, array $filters): string
 	{
 		$output = '';
 		$filesCount = count($files);
