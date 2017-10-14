@@ -38,7 +38,7 @@ class Compiler
 	/**
 	 * @var string
 	 */
-	private $documentRoot = '/';
+	private $documentRoot;
 
 	/**
 	 * @var FilesCollectionRender
@@ -327,7 +327,11 @@ class Compiler
 	{
 		if ( ! $this->filesCollectionRender) {
 			$this->compile();
-			$basePath = str_replace($this->documentRoot, '', $this->outputDir);
+			$basePath = $this->outputDir;
+
+			if ($this->documentRoot) {
+				$basePath = str_replace($this->documentRoot, '', $this->outputDir);
+			}
 
 			$this->filesCollectionRender = new FilesCollectionRender(
 				$this->filesCollections,
@@ -416,6 +420,12 @@ class Compiler
 
 	public function setDocumentRoot(string $path): Compiler
 	{
+		$path = rtrim($path, '/');
+
+		if ( ! is_dir($path)) {
+			throw new Exception('Given document root "' . $path . '" doesn\'t exists or is not a directory.');
+		}
+
 		$this->documentRoot = $path;
 		return $this;
 	}
