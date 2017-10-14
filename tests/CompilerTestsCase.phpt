@@ -177,7 +177,7 @@ final class CompilerTestsCase extends AbstractTestCase
 		Assert::equal($collectionALink . $collectionBLink, $render->jsPrefetch());
 
 		$collectionALink = '<link rel="preload" as="script" href="' . self::ACTUAL_DIR . '/' . $collectionNameA . '.js?v=' . $version . '">';
-		$collectionALink = '<link rel="preload" as="script" href="' . self::ACTUAL_DIR . '/' . $collectionNameB . '.js?v=' . $version . '">';
+		$collectionBLink = '<link rel="preload" as="script" href="' . self::ACTUAL_DIR . '/' . $collectionNameB . '.js?v=' . $version . '">';
 		Assert::equal($collectionALink . $collectionBLink, $render->jsPreload());
 
 		$this->matchCssFile($collectionNameA);
