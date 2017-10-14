@@ -390,7 +390,7 @@ class Compiler
 			} else {
 				$time = time();
 
-				if ($this->cacheEnabled) {
+				if ($this->isCacheEnabled()) {
 					file_put_contents($lock, $time);
 				}
 			}
