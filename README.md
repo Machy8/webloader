@@ -9,15 +9,13 @@
 - If you use Nette Framework - v2.3+
 
 ## Installation
-**1 - Download the Web loader using composer:**
 ```
  composer require machy8/webloader
 ```
 
-**2 - Usage:**
+## Examples:
 
-*Typical:*
-
+**Typical:**
 ```php
 $webloader = \WebLoader\Compiler;
 $webloader->addJsFilter('minifier', function(string $code) {
@@ -36,8 +34,92 @@ $webloader->createJsCollection('homepage')
         'minifier'
     ]);
     
-echo $webloader->render()->js('homepage', ['async' => TRUE]);
+echo $webloader->getFilesCollectionRender()->js('homepage', ['async' => TRUE]);
 ```
 
-*Nette framework:*
-- TODO
+**Nette framework:**
+
+Configuration file
+````YAML
+extensions:
+    webloader: WebLoader\Bridges\Nette\WebLoaderExtension
+    
+webloader:
+    outputDir: path/to/webtemp
+    filesCollections:
+        critical:
+            cssFiles:
+                - path/to/file.css
+            cssLoadContent: TRUE
+            jsFiles:
+                - path/to/file.js
+                
+            jsFilters:
+                - minify
+            jsLoadContent: TRUE
+
+        homepage:
+            cssFiles:
+                - path/to/file.css
+
+            jsFiles:
+                - path/to/file.js
+
+            cssFilters:
+                - urlFilter
+
+    filesCollectionsContainers:
+        homepage:
+            cssCollections:
+                - critical
+                - homepage
+
+            jsCollections:
+                - critical
+                - homepage
+````
+
+Presenter
+````PHP
+
+/**
+ * @var Compiler
+ */
+private $webLoader;
+
+
+public function __construct(\WebLoader\Compiler $compiler)
+{
+    $this->webLoader = $compiler;
+}
+
+
+public function beforeRender()
+{
+    $this->webloader
+        ->addCssFilter('urlFilter', function(string $code, string $file) {
+            $filter = \WebLoader\Filters\CssUrlFilter('path/to/webtemp');
+            return $filter->filter($code, $file);
+        })
+        
+        ->addJsFilter('minify', function(string $code) {
+            $closureCompiler = new \GoogleClosureCompiler\Compiler;
+            $response = $closureCompiler->setJsCode($code)->compile();
+
+            if ($response) {
+                 return $response->getCompiledCode();
+            }
+
+            return $code;
+        });
+       
+    $this->template->setParameters([
+        'webloaderContainersRender' => $this->webLoader->getFilesCollectionsContainerRender()->selectContainer('homepage')
+    ]);
+}
+````
+
+````LATTE
+{$webloaderContainerRender->css()|noescape}
+{$webloaderContainerRender->js()|noescape}
+````
