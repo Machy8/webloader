@@ -26,6 +26,8 @@ class WebLoaderExtension extends CompilerExtension
 	 */
 	protected $config = [
 		'debugger' => '%debugMode%',
+		'disableCache' => FALSE,
+		'documentRoot' => NULL,
 		'filesCollections' => [],
 		'filesCollectionsContainers' => [],
 		'outputDir' => NULL,
@@ -39,14 +41,19 @@ class WebLoaderExtension extends CompilerExtension
 		$config = $this->getConfig($this->config);
 
 		$compiler = $builder->addDefinition($this->prefix('compiler'))
-			->setClass('WebLoader\Compiler');
+			->setClass('WebLoader\Compiler')
+			->setArguments([$config['outputDir']]);
+
+		if (isset($config['documentRoot'])) {
+			$compiler->addSetup('setDocumentRoot', $config['documentRoot']);
+		}
+
+		if (isset($config['disableCache'])) {
+			$compiler->addSetup('disableCache');
+		}
 
 		if (isset($config['outputDir'])) {
 			$compiler->addSetup('setOutputDir', [$config['outputDir']]);
-		}
-
-		if (isset($config['documentRoot'])) {
-			$compiler->addSetup('setDocumentRoot', [$config['includeDir']]);
 		}
 
 		if (isset($config['filesCollections'])) {

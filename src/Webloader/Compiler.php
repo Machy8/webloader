@@ -36,6 +36,11 @@ class Compiler
 	private $compiled;
 
 	/**
+	 * @var string
+	 */
+	private $documentRoot = '/';
+
+	/**
 	 * @var FilesCollectionRender
 	 */
 	private $filesCollectionRender;
@@ -322,10 +327,11 @@ class Compiler
 	{
 		if ( ! $this->filesCollectionRender) {
 			$this->compile();
+			$basePath = str_replace($this->documentRoot, '', $this->outputDir);
 
 			$this->filesCollectionRender = new FilesCollectionRender(
 				$this->filesCollections,
-				$this->outputDir,
+				$basePath,
 				$this->getVersion()
 			);
 		}
@@ -405,6 +411,13 @@ class Compiler
 	public function isCacheEnabled(): bool
 	{
 		return $this->cacheEnabled;
+	}
+
+
+	public function setDocumentRoot(string $path): Compiler
+	{
+		$this->documentRoot = $path;
+		return $this;
 	}
 
 

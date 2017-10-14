@@ -74,7 +74,7 @@ class FilesCollectionsContainerRender
 	}
 
 
-	public function js(string $containerName = NULL, array $attributes = NULL, bool $loadContent = FALSE): string
+	public function js(string $containerName = NULL, array $attributes = [], bool $loadContent = FALSE): string
 	{
 		$jsElements = '';
 		$jsFilesCollections = $this->getContainer($containerName)->getJsFilesCollections();
