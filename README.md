@@ -120,6 +120,6 @@ public function beforeRender()
 ````
 
 ````LATTE
-{$webloaderContainerRender->css()|noescape}
-{$webloaderContainerRender->js()|noescape}
+{$webloaderContainersRender->css()|noescape}
+{$webloaderContainersRender->js()|noescape}
 ````
