@@ -57,7 +57,6 @@ class WebLoaderExtension extends CompilerExtension
 		}
 
 		if (isset($config['filesCollections'])) {
-			bdump($config['filesCollections']);
 			$compiler->addSetup('createFilesCollectionsFromArray', [$config['filesCollections']]);
 		}
 
