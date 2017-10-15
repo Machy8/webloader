@@ -45,7 +45,7 @@ class WebLoaderExtension extends CompilerExtension
 			->setArguments([$config['outputDir']]);
 
 		if (isset($config['documentRoot'])) {
-			$compiler->addSetup('setDocumentRoot', $config['documentRoot']);
+			$compiler->addSetup('setDocumentRoot', [$config['documentRoot']]);
 		}
 
 		if (isset($config['disableCache'])) {
