@@ -47,6 +47,7 @@ class WebLoaderPanel implements IBarPanel
 		$filesCollectionsContainers = $this->getWebLoader()->getFilesCollectionsContainers();
 		$filters = $this->getWebLoader()->getFilters();
 		$outputDir = $this->getWebLoader()->getOutputDir();
+		$documentRoot = $this->getWebLoader()->getDocumentRoot();
 		$pathsPlaceholders = $this->getWebLoader()->getPathsPlaceholders();
 		$version = $this->getWebLoader()->getVersion();
 

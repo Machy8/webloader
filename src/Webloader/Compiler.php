@@ -38,7 +38,7 @@ class Compiler
 	/**
 	 * @var string
 	 */
-	private $documentRoot;
+	private $documentRoot = '/';
 
 	/**
 	 * @var FilesCollectionRender
@@ -323,6 +323,12 @@ class Compiler
 	}
 
 
+	public function getDocumentRoot(): string
+	{
+		return $this->documentRoot;
+	}
+
+
 	public function getFilesCollectionRender(): FilesCollectionRender
 	{
 		if ( ! $this->filesCollectionRender) {
@@ -330,7 +336,7 @@ class Compiler
 			$basePath = $this->outputDir;
 
 			if ($this->documentRoot) {
-				$basePath = str_replace($this->documentRoot, '', $this->outputDir);
+				$basePath = preg_replace('~^' . $this->documentRoot . '~', '', $this->outputDir, 1);
 			}
 
 			$this->filesCollectionRender = new FilesCollectionRender(

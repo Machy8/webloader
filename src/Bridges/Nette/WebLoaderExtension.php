@@ -30,8 +30,7 @@ class WebLoaderExtension extends CompilerExtension
 		'documentRoot' => NULL,
 		'filesCollections' => [],
 		'filesCollectionsContainers' => [],
-		'outputDir' => NULL,
-		'includePath' => NULL
+		'outputDir' => NULL
 	];
 
 
