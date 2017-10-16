@@ -25,7 +25,7 @@ class WebLoaderExtension extends CompilerExtension
 	 * @var array
 	 */
 	protected $config = [
-		'debugger' => '%debugMode%',
+		'debugger' => TRUE,
 		'disableCache' => FALSE,
 		'documentRoot' => NULL,
 		'filesCollections' => [],
@@ -63,7 +63,7 @@ class WebLoaderExtension extends CompilerExtension
 			$compiler->addSetup('createFilesCollectionsContainersFromArray', [$config['filesCollectionsContainers']]);
 		}
 
-		if (isset($config['debugger'])) {
+		if (isset($config['debugger']) && $config['debugger'] === TRUE) {
 			$builder->addDefinition($this->prefix('tracyPanel'))
 				->setClass('WebLoader\Bridges\Tracy\WebLoaderPanel');
 
