@@ -15,8 +15,8 @@
 		<?php foreach ($filesCollectionsContainers as $filesCollectionsContainersName => $filesCollectionsContainer) {; ?>
 			<tr>
 				<td><?php echo $filesCollectionsContainersName; ?></td>
-				<td><?php dump($filesCollectionsContainer->getCssFilesCollections()); ?></td>
-				<td><?php dump($filesCollectionsContainer->getJsFilesCollections()); ?></td>
+				<td><?php dump($filesCollectionsContainer->getCssCollections()); ?></td>
+				<td><?php dump($filesCollectionsContainer->getJsCollections()); ?></td>
 			</tr>
 		<?php };?>
 	</tbody>
