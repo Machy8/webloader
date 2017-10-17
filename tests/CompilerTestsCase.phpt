@@ -38,7 +38,7 @@ final class CompilerTestsCase extends AbstractTestCase
 		});
 
 		Assert::equal(
-			'<link type="text/css" rel="stylesheet" href="/' . self::ACTUAL_DIR . '/' . $collectionName . '.css?v=' . $version . '">',
+			'<link type="text/css" rel="stylesheet" href="/' . self::BASE_PATH . '/' . $collectionName . '.css?v=' . $version . '">',
 			$compiler->getFilesCollectionRender()->css($collectionName)
 		);
 
@@ -68,7 +68,7 @@ final class CompilerTestsCase extends AbstractTestCase
 		$version = $compiler->getVersion();
 
 		Assert::equal(
-			'<script async type="text/javascript" src="/' . self::ACTUAL_DIR . '/' . $collectionName . '.js?v=' . $version . '"></script>',
+			'<script async type="text/javascript" src="/' . self::BASE_PATH . '/' . $collectionName . '.js?v=' . $version . '"></script>',
 			$compiler->getFilesCollectionRender()->js($collectionName, ['async' => TRUE])
 		);
 
@@ -113,12 +113,12 @@ final class CompilerTestsCase extends AbstractTestCase
 		$render = $compiler->getFilesCollectionRender();
 
 		Assert::equal(
-			'<link type="text/css" rel="stylesheet" href="/' . self::ACTUAL_DIR . '/' . $collectionNameA . '.css?v=' . $version . '">',
+			'<link type="text/css" rel="stylesheet" href="/' . self::BASE_PATH . '/' . $collectionNameA . '.css?v=' . $version . '">',
 			$render->css($collectionNameA)
 		);
 
 		Assert::equal(
-			'<script async defer type="text/javascript" src="/' . self::ACTUAL_DIR . '/' . $collectionNameB . '.js?v=' . $version . '"></script>',
+			'<script async defer type="text/javascript" src="/' . self::BASE_PATH . '/' . $collectionNameB . '.js?v=' . $version . '"></script>',
 			$render->js($collectionNameB, ['async' => TRUE, 'defer' => TRUE])
 		);
 
@@ -156,28 +156,28 @@ final class CompilerTestsCase extends AbstractTestCase
 
 		$render = $compiler->getFilesCollectionsContainerRender()->selectContainer('testContainer');
 
-		$collectionALink = '<link type="text/css" rel="stylesheet" href="/' . self::ACTUAL_DIR . '/' . $collectionNameA . '.css?v=' . $version . '">';
-		$collectionBLink = '<link type="text/css" rel="stylesheet" href="/' . self::ACTUAL_DIR . '/' . $collectionNameB . '.css?v=' . $version . '">';
+		$collectionALink = '<link type="text/css" rel="stylesheet" href="/' . self::BASE_PATH . '/' . $collectionNameA . '.css?v=' . $version . '">';
+		$collectionBLink = '<link type="text/css" rel="stylesheet" href="/' . self::BASE_PATH . '/' . $collectionNameB . '.css?v=' . $version . '">';
 		Assert::equal($collectionALink . $collectionBLink, $render->css());
 
-		$collectionALink = '<link rel="prefetch" href="/' . self::ACTUAL_DIR . '/' . $collectionNameA . '.css?v=' . $version . '">';
-		$collectionBLink = '<link rel="prefetch" href="/' . self::ACTUAL_DIR . '/' . $collectionNameB . '.css?v=' . $version . '">';
+		$collectionALink = '<link rel="prefetch" href="/' . self::BASE_PATH . '/' . $collectionNameA . '.css?v=' . $version . '">';
+		$collectionBLink = '<link rel="prefetch" href="/' . self::BASE_PATH . '/' . $collectionNameB . '.css?v=' . $version . '">';
 		Assert::equal($collectionALink . $collectionBLink, $render->cssPrefetch());
 
-		$collectionALink = '<link rel="preload" as="style" href="/' . self::ACTUAL_DIR . '/' . $collectionNameA . '.css?v=' . $version . '">';
-		$collectionBLink = '<link rel="preload" as="style" href="/' . self::ACTUAL_DIR . '/' . $collectionNameB . '.css?v=' . $version . '">';
+		$collectionALink = '<link rel="preload" as="style" href="/' . self::BASE_PATH . '/' . $collectionNameA . '.css?v=' . $version . '">';
+		$collectionBLink = '<link rel="preload" as="style" href="/' . self::BASE_PATH . '/' . $collectionNameB . '.css?v=' . $version . '">';
 		Assert::equal($collectionALink . $collectionBLink, $render->cssPreload());
 
-		$collectionALink = '<script async defer type="text/javascript" src="/' . self::ACTUAL_DIR . '/' . $collectionNameA . '.js?v=' . $version . '"></script>';
-		$collectionBLink = '<script async defer type="text/javascript" src="/' . self::ACTUAL_DIR . '/' . $collectionNameB . '.js?v=' . $version . '"></script>';
+		$collectionALink = '<script async defer type="text/javascript" src="/' . self::BASE_PATH . '/' . $collectionNameA . '.js?v=' . $version . '"></script>';
+		$collectionBLink = '<script async defer type="text/javascript" src="/' . self::BASE_PATH . '/' . $collectionNameB . '.js?v=' . $version . '"></script>';
 		Assert::equal($collectionALink . $collectionBLink, $render->js(NULL, ['async' => TRUE, 'defer' => TRUE]));
 
-		$collectionALink = '<link rel="prefetch" href="/' . self::ACTUAL_DIR . '/' . $collectionNameA . '.js?v=' . $version . '">';
-		$collectionBLink = '<link rel="prefetch" href="/' . self::ACTUAL_DIR . '/' . $collectionNameB . '.js?v=' . $version . '">';
+		$collectionALink = '<link rel="prefetch" href="/' . self::BASE_PATH . '/' . $collectionNameA . '.js?v=' . $version . '">';
+		$collectionBLink = '<link rel="prefetch" href="/' . self::BASE_PATH . '/' . $collectionNameB . '.js?v=' . $version . '">';
 		Assert::equal($collectionALink . $collectionBLink, $render->jsPrefetch());
 
-		$collectionALink = '<link rel="preload" as="script" href="/' . self::ACTUAL_DIR . '/' . $collectionNameA . '.js?v=' . $version . '">';
-		$collectionBLink = '<link rel="preload" as="script" href="/' . self::ACTUAL_DIR . '/' . $collectionNameB . '.js?v=' . $version . '">';
+		$collectionALink = '<link rel="preload" as="script" href="/' . self::BASE_PATH . '/' . $collectionNameA . '.js?v=' . $version . '">';
+		$collectionBLink = '<link rel="preload" as="script" href="/' . self::BASE_PATH . '/' . $collectionNameB . '.js?v=' . $version . '">';
 		Assert::equal($collectionALink . $collectionBLink, $render->jsPreload());
 
 		$this->matchCssFile($collectionNameA);

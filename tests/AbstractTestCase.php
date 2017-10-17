@@ -23,10 +23,13 @@ abstract class AbstractTestCase extends TestCase
 {
 
 	const
-		ACTUAL_DIR = self::WEBTEMP_DIR . '/actual',
+		ACTUAL_DIR = self::WEBTEMP_DIR . '/' . self::ACTUAL_DIR_NAME,
+		ACTUAL_DIR_NAME = 'actual',
+		BASE_PATH = self::WEBTEMP_DIR_NAME . '/' . self::ACTUAL_DIR_NAME,
 		DOCUMENT_ROOT = __DIR__,
 		EXPECTED_DIR = self::WEBTEMP_DIR . '/expected',
-		WEBTEMP_DIR = 'webtemp';
+		WEBTEMP_DIR = self::DOCUMENT_ROOT . '/' . self::WEBTEMP_DIR_NAME,
+		WEBTEMP_DIR_NAME = 'webtemp';
 
 	const PATHS_PLACEHOLDERS = [
 		'cssFixtures' => 'fixtures/css',

@@ -340,6 +340,8 @@ class Compiler
 				$basePath = preg_replace('~^' . $this->documentRoot . '~', '', $this->outputDir, 1);
 			}
 
+			$basePath = trim($basePath, '/');
+
 			$this->filesCollectionRender = new FilesCollectionRender(
 				$this->filesCollections,
 				$this->documentRoot,
@@ -432,9 +434,7 @@ class Compiler
 			throw new Exception('Given document root "' . $path . '" doesn\'t exists or is not a directory.');
 		}
 
-		$path = trim($path, '/');
-
-		$this->documentRoot = $path;
+		$this->documentRoot = rtrim($path, '/');
 		return $this;
 	}
 
@@ -449,9 +449,7 @@ class Compiler
 			throw new Exception('Given output dir "' . $path . '" is not writable.');
 		}
 
-		$path = trim($path, '/');
-
-		$this->outputDir = $path;
+		$this->outputDir = rtrim($path, '/');
 		return $this;
 	}
 
