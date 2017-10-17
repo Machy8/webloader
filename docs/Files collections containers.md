@@ -8,13 +8,13 @@
 
 ````php
 $webloader->createFilesCollectionsContainer('homepage')
-	->setCssCollections([
-		'homepage',
-		'critical'
-	])
-	->setJsCollections([
-		'homepage'
-	]);
+    ->setCssCollections([
+        'homepage',
+        'critical'
+    ])
+    ->setJsCollections([
+        'homepage'
+    ]);
 
 $render = $webloader->getFilesCollectionsContainerRender()->selectContainer('homepage');
 
@@ -36,9 +36,9 @@ echo $render->js('core');
 **NEON**
 ````YAML
 core:
-	cssCollections:
-		- core
-		- critical
-	jsCollections: 
-		- core
+    cssCollections:
+        - core
+        - critical
+    jsCollections: 
+    - core
 ````
