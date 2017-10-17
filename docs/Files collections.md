@@ -3,6 +3,10 @@
 - Two ways to create them: calling appropriate method or define them in configuration file
 
 ## Calling appropriate methods
+- createCssFilesCollection
+- createJsFilesCollection
+- createFilesCollectionsFromArray
+
 ````php
 $webloader->setOutputDir('path/to/output/dir');
 
@@ -23,8 +27,16 @@ $webLoader->createJsFilesCollection('core')
 	->setFilters([
 		'minifier'
 	]);
+	
+$webLoader->createFilesCollectionsFromArray([
+    'admin' => [
+        'cssFiles' => ['path/to/some/file.css'],
+        'cssFilters' => ['filterName']
+    ]
+]);
 
 $render = $webloader->render();
+
 echo $render->css('core');
 echo $render->js('core');
 ````
@@ -32,26 +44,30 @@ echo $render->js('core');
 ## Configuration file (webloader.neon)
 **PHP**
 ````php
-$webLoader
-	->setOutputDir('path/to/output/dir')
-	->createFilesCollectionsFromConfig('path/to/webloader.neon');
+$webLoader->setOutputDir('path/to/output/dir')
+    ->createFilesCollectionsFromConfig('path/to/webloader.neon');
 
-$render = $webloader->render();
+$render = $webloader->getFilesCollectionRender();
+
 echo $render->css('core');
 echo $render->js('core');
 ````
 
 **NEON**
-````neon
+````yaml
 core:
 	jsFiles:
 		- path/to/jquery.js
 		- path/to/anotherLibrary.js
+
 	cssFiles:
 		- path/to/cssFramework.css
 		- path/to/anotherStyle.css
+
 	jsFilters:
+		- urlFilter
 		- minifier
+
 	cssFilters:
 		- minifier
 ````
