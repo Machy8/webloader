@@ -106,6 +106,22 @@ final class ExceptionsTestCase extends AbstractTestCase
 	}
 
 
+	public function testUndefinedFilesCollectionsContainerException()
+	{
+		Assert::exception(function () {
+			$this->getWebLoader()->getFilesCollectionsContainerRender()->selectContainer('test')->css();
+		}, Exception::class, 'Trying to get undefined files collections container "test".');
+	}
+
+
+	public function testUndefinedFilesCollectionException()
+	{
+		Assert::exception(function () {
+			$this->getWebLoader()->getFilesCollectionRender()->selectCollection('test')->css();
+		}, Exception::class, 'Trying to get undefined files collection "test".');
+	}
+
+
 	public function testUndefinedFilterException()
 	{
 		Assert::exception(function () {

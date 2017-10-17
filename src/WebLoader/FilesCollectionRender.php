@@ -35,6 +35,11 @@ class FilesCollectionRender
 	const VERSION_MARK = '?v=';
 
 	/**
+	 * @var string
+	 */
+	private $basePath;
+
+	/**
 	 * @var FilesCollection[][]
 	 */
 	private $collections;
@@ -42,12 +47,12 @@ class FilesCollectionRender
 	/**
 	 * @var string
 	 */
-	private $selectedCollectionName;
+	private $documentRoot;
 
 	/**
 	 * @var string
 	 */
-	private $outputDir;
+	private $selectedCollectionName;
 
 	/**
 	 * @var int
@@ -58,10 +63,11 @@ class FilesCollectionRender
 	/**
 	 * @param FilesCollection[][] $collections
 	 */
-	public function __construct(array $collections, string $outputDir, string $version)
+	public function __construct(array $collections, string $documentRoot, string $basePath, string $version)
 	{
 		$this->collections = $collections;
-		$this->outputDir = $outputDir;
+		$this->documentRoot = $documentRoot;
+		$this->basePath = $basePath;
 		$this->version = $version;
 	}
 
@@ -73,16 +79,16 @@ class FilesCollectionRender
 		$attributes = array_merge($attributes, $collection->getOutputElementAttributes());
 		$attributes['type'] = self::STYLE_TYPE_ATTRIBUTE;
 		$element = self::STYLE_ELEMENT;
-		$filePath = $this->getCollectionFilePath($collectionName, Compiler::CSS);
+		$basePath = $this->getCollectionBasePath($collectionName, Compiler::CSS);
 		$filePathParameter = NULL;
 
 		if ($loadContent || $collection->isContentLoadingEnabled()) {
-			$filePathParameter = $filePath;
+			$filePathParameter =  $this->getCollectionFilePath($basePath);
 
 		} else {
 			$element = self::LINK_ELEMENT;
 			$attributes['rel'] = 'stylesheet';
-			$attributes['href'] = $this->addVersionToFilePath($filePath);
+			$attributes['href'] = $this->addVersionTobasePath($basePath);
 		}
 
 		return $this->generateElement($element, $attributes, $filePathParameter);
@@ -117,8 +123,8 @@ class FilesCollectionRender
 		}
 
 		foreach ($collectionsNames as $collectionName) {
-			$filePath = $this->getCollectionFilePath($collectionName, $collectionsType);
-			$attributes['href'] = $this->addVersionToFilePath($filePath);
+			$basePath = $this->getCollectionBasePath($collectionName, $collectionsType);
+			$attributes['href'] = $this->addVersionToBasePath($basePath);
 			$tags .= $this->generateElement(self::LINK_ELEMENT, $attributes);
 		}
 
@@ -132,14 +138,15 @@ class FilesCollectionRender
 		$collection = $this->getCollection($collectionName, Compiler::JS);
 		$attributes = array_merge($attributes, $collection->getOutputElementAttributes());
 		$attributes['type'] = self::SCRIPT_TYPE_ATTRIBUTE;
-		$filePath = $this->getCollectionFilePath($collectionName, Compiler::JS);
+		$basePath = $this->getCollectionBasePath($collectionName, Compiler::JS);
 		$filePathParameter = NULL;
 
 		if ($loadContent || $collection->isContentLoadingEnabled()) {
-			$filePathParameter = $filePath;
+			$filePathParameter = $this->getCollectionFilePath($basePath);
 
 		} else {
-			$attributes['src'] = $this->addVersionToFilePath($filePath);
+			$attributes['src'] = $this->addVersionToBasePath($basePath);
+			bdump($attributes);
 		}
 
 		return $this->generateElement(self::SCRIPT_ELEMENT, $attributes, $filePathParameter);
@@ -167,7 +174,7 @@ class FilesCollectionRender
 	}
 
 
-	private function addVersionToFilePath(string $path): string
+	private function addVersionToBasePath(string $path): string
 	{
 		return $path . self::VERSION_MARK . $this->version;
 	}
@@ -204,25 +211,43 @@ class FilesCollectionRender
 	}
 
 
+	private function getCollectionBasePath(string $collectionName, string $type): string
+	{
+		$basePath = '/' . $collectionName . '.' . $type;
+
+		if ($this->basePath) {
+			$basePath = '/' . $this->basePath . $basePath;
+		}
+
+		return $basePath;
+	}
+
+
 	private function getFileContent(string $path): string
 	{
 		return "\n" . file_get_contents($path) . "\n";
 	}
 
 
-	private function getCollectionFilePath(string $collectionName, string $type): string
+	private function getCollectionFilePath(string $basePath): string
 	{
-		return $this->outputDir . '/' . $collectionName . '.' . $type;
+		$filePath = '/' . $basePath;
+
+		if ($this->documentRoot) {
+			$filePath = '/' . $this->documentRoot . $filePath;
+		}
+
+		return $filePath;
 	}
 
 
 	/**
 	 * @throws Exception
 	 */
-	private function getCollection(string $collectionName, string $type): FilesCollection
+	private function getCollection(string $collectionName = NULL, string $type): FilesCollection
 	{
 		if ( ! array_key_exists($collectionName, $this->collections[$type])) {
-			throw new Exception('Undefined files collection "' . $collectionName . '".');
+			throw new Exception('Trying to get undefined files collection "' . $collectionName . '".');
 		}
 
 		return $this->collections[$type][$collectionName];

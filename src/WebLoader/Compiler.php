@@ -38,7 +38,7 @@ class Compiler
 	/**
 	 * @var string
 	 */
-	private $documentRoot = '/';
+	private $documentRoot;
 
 	/**
 	 * @var FilesCollectionRender
@@ -92,9 +92,10 @@ class Compiler
 	private $version;
 
 
-	public function __construct(string $outputDir)
+	public function __construct(string $outputDir, string $documentRoot = '/')
 	{
 		$this->setOutputDir($outputDir);
+		$this->setDocumentRoot($documentRoot);
 	}
 
 
@@ -341,6 +342,7 @@ class Compiler
 
 			$this->filesCollectionRender = new FilesCollectionRender(
 				$this->filesCollections,
+				$this->documentRoot,
 				$basePath,
 				$this->getVersion()
 			);
@@ -426,11 +428,11 @@ class Compiler
 
 	public function setDocumentRoot(string $path): Compiler
 	{
-		$path = rtrim($path, '/');
-
 		if ( ! is_dir($path)) {
 			throw new Exception('Given document root "' . $path . '" doesn\'t exists or is not a directory.');
 		}
+
+		$path = trim($path, '/');
 
 		$this->documentRoot = $path;
 		return $this;
@@ -439,8 +441,6 @@ class Compiler
 
 	public function setOutputDir(string $path): Compiler
 	{
-		$path = rtrim($path, '/');
-
 		if ( ! is_dir($path)) {
 			throw new Exception('Given output dir "' . $path . '" doesn\'t exists or is not a directory.');
 		}
@@ -448,6 +448,8 @@ class Compiler
 		if ( ! is_writable($path)) {
 			throw new Exception('Given output dir "' . $path . '" is not writable.');
 		}
+
+		$path = trim($path, '/');
 
 		$this->outputDir = $path;
 		return $this;
@@ -465,7 +467,11 @@ class Compiler
 	{
 		foreach ($this->filesCollections as $filesCollectionsType => $filesCollections) {
 			foreach ($filesCollections as $filesCollectionName => $filesCollection) {
-				$filePath = $this->outputDir . '/' . $filesCollectionName . '.' . $filesCollectionsType;
+				$filePath = $filesCollectionName . '.' . $filesCollectionsType;
+
+				if ($this->outputDir) {
+					$filePath = $this->outputDir . '/' . $filePath;
+				}
 
 				if (file_exists($filePath) && $this->isCacheEnabled()) {
 					continue;

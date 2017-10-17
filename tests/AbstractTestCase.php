@@ -24,6 +24,7 @@ abstract class AbstractTestCase extends TestCase
 
 	const
 		ACTUAL_DIR = self::WEBTEMP_DIR . '/actual',
+		DOCUMENT_ROOT = __DIR__,
 		EXPECTED_DIR = self::WEBTEMP_DIR . '/expected',
 		WEBTEMP_DIR = 'webtemp';
 
@@ -93,7 +94,7 @@ abstract class AbstractTestCase extends TestCase
 	public function setUp()
 	{
 		parent::setUp();
-		$this->webloader = new Compiler(self::ACTUAL_DIR);
+		$this->webloader = new Compiler(self::ACTUAL_DIR, self::DOCUMENT_ROOT);
 		$this->webloader
 			->addPathsPlaceholders(self::PATHS_PLACEHOLDERS)
 			->disableCache();
