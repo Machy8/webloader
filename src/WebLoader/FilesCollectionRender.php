@@ -146,7 +146,6 @@ class FilesCollectionRender
 
 		} else {
 			$attributes['src'] = $this->addVersionToBasePath($basePath);
-			bdump($attributes);
 		}
 
 		return $this->generateElement(self::SCRIPT_ELEMENT, $attributes, $filePathParameter);
