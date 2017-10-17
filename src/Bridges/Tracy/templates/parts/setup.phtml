@@ -12,12 +12,25 @@
 
 	<tbody>
 		<tr>
+			<td>Document root</td>
+			<td><?php echo $documentRoot; ?></td>
+		</tr>
+		<tr>
 			<td>Output dir</td>
 			<td><?php echo $outputDir; ?></td>
 		</tr>
 		<tr>
-			<td>Document root</td>
-			<td><?php echo $documentRoot; ?></td>
+			<td>Base path</td>
+			<td>
+				<?php
+					$basePath = $outputDir;
+
+					if ($documentRoot) {
+						$basePath = preg_replace('~^' . $documentRoot . '~', '', $outputDir, 1);
+					}
+					echo $basePath
+				?>
+			</td>
 		</tr>
 		<tr>
 			<td>Cache</td>
