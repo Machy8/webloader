@@ -2,7 +2,7 @@
 - Placeholders can be used in paths to configuration files or to css and js files
 
 ````php
-$webLoader->addPathPlaceholders([
+$webLoader->addPathsPlaceholders([
     'cssDir' => 'path/to/css/files',
     'jsDir' => 'path/to/js/files',
     'configFiles' => 'path/to/configuration/files'
