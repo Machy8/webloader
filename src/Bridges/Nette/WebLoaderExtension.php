@@ -24,7 +24,7 @@ class WebLoaderExtension extends CompilerExtension
 	/**
 	 * @var array
 	 */
-	protected $config = [
+	protected $defaults = [
 		'debugger' => TRUE,
 		'disableCache' => FALSE,
 		'documentRoot' => NULL,
@@ -36,34 +36,37 @@ class WebLoaderExtension extends CompilerExtension
 
 	public function loadConfiguration()
 	{
+		$this->validateConfig($this->defaults);
 		$builder = $this->getContainerBuilder();
-		$config = $this->getConfig($this->config);
 
 		$compiler = $builder->addDefinition($this->prefix('compiler'))
 			->setClass('WebLoader\Compiler')
-			->setArguments([$config['outputDir']]);
+			->setArguments([$this->config['outputDir']]);
 
-		if (isset($config['documentRoot'])) {
-			$compiler->addSetup('setDocumentRoot', [$config['documentRoot']]);
+		if ($this->config['documentRoot']) {
+			$compiler->addSetup('setDocumentRoot', [$this->config['documentRoot']]);
 		}
 
-		if (isset($config['disableCache'])) {
+		if ($this->config['disableCache']) {
 			$compiler->addSetup('disableCache');
 		}
 
-		if (isset($config['outputDir'])) {
-			$compiler->addSetup('setOutputDir', [$config['outputDir']]);
+		if ($this->config['outputDir']) {
+			$compiler->addSetup('setOutputDir', [$this->config['outputDir']]);
 		}
 
-		if (isset($config['filesCollections'])) {
-			$compiler->addSetup('createFilesCollectionsFromArray', [$config['filesCollections']]);
+		if ($this->config['filesCollections']) {
+			$compiler->addSetup('createFilesCollectionsFromArray', [$this->config['filesCollections']]);
 		}
 
-		if (isset($config['filesCollectionsContainers'])) {
-			$compiler->addSetup('createFilesCollectionsContainersFromArray', [$config['filesCollectionsContainers']]);
+		if ($this->config['filesCollectionsContainers']) {
+			$compiler->addSetup(
+				'createFilesCollectionsContainersFromArray',
+				[$this->config['filesCollectionsContainers']]
+			);
 		}
 
-		if (isset($config['debugger']) && $config['debugger'] === TRUE) {
+		if ($this->config['debugger'] === TRUE) {
 			$builder->addDefinition($this->prefix('tracyPanel'))
 				->setClass('WebLoader\Bridges\Tracy\WebLoaderPanel');
 
