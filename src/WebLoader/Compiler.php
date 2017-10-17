@@ -186,11 +186,11 @@ class Compiler
 			$container = $this->createFilesCollectionsContainer($containerName);
 
 			if ($cssFilesCollections) {
-				$container->setCssFilesCollections($cssFilesCollections);
+				$container->setCssCollections($cssFilesCollections);
 			}
 
 			if ($jsFilesCollections) {
-				$container->setJsFilesCollections($jsFilesCollections);
+				$container->setJsCollections($jsFilesCollections);
 			}
 		}
 

@@ -24,38 +24,38 @@ class FilesCollectionsContainer
 	/**
 	 * @var string[]
 	 */
-	private $cssFilesCollections;
+	private $cssCollections;
 
 	/**
 	 * @var string[]
 	 */
-	private $jsFilesCollections;
+	private $jsCollections;
 
 
 	/**
 	 * @return string[]
 	 */
-	public function getCssFilesCollections(): array
+	public function getCssCollections(): array
 	{
-		return $this->cssFilesCollections;
+		return $this->cssCollections;
 	}
 
 
 	/**
 	 * @return string[]
 	 */
-	public function getJsFilesCollections(): array
+	public function getJsCollections(): array
 	{
-		return $this->jsFilesCollections;
+		return $this->jsCollections;
 	}
 
 
 	/**
 	 * @param string[] $collections
 	 */
-	public function setCssFilesCollections(array $collections): FilesCollectionsContainer
+	public function setCssCollections(array $collections): FilesCollectionsContainer
 	{
-		$this->cssFilesCollections = $collections;
+		$this->cssCollections = $collections;
 		return $this;
 	}
 
@@ -63,9 +63,9 @@ class FilesCollectionsContainer
 	/**
 	 * @param string[] $collections
 	 */
-	public function setJsFilesCollections(array $collections): FilesCollectionsContainer
+	public function setJsCollections(array $collections): FilesCollectionsContainer
 	{
-		$this->jsFilesCollections = $collections;
+		$this->jsCollections = $collections;
 		return $this;
 	}
 

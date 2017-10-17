@@ -46,7 +46,7 @@ class FilesCollectionsContainerRender
 	public function css(string $containerName = NULL, array $attributes = [], bool $loadContent = FALSE): string
 	{
 		$cssElements = '';
-		$cssFilesCollections = $this->getContainer($containerName)->getCssFilesCollections();
+		$cssFilesCollections = $this->getContainer($containerName)->getCssCollections();
 
 		foreach ($cssFilesCollections as $collectionName) {
 			$cssElements .= $this->render->css($collectionName, $attributes, $loadContent);
@@ -58,7 +58,7 @@ class FilesCollectionsContainerRender
 
 	public function cssPrefetch(string $containerName = NULL, array $collectionsNames = []): string
 	{
-		$cssCollectionsFromContainer = $this->getContainer($containerName)->getCssFilesCollections();
+		$cssCollectionsFromContainer = $this->getContainer($containerName)->getCssCollections();
 		$cssCollectionsNames = array_merge($cssCollectionsFromContainer, $collectionsNames);
 
 		return $this->render->cssPrefetch($cssCollectionsNames);
@@ -67,7 +67,7 @@ class FilesCollectionsContainerRender
 
 	public function cssPreload(string $containerName = NULL, array $collectionsNames = []): string
 	{
-		$cssCollectionsFromContainer = $this->getContainer($containerName)->getCssFilesCollections();
+		$cssCollectionsFromContainer = $this->getContainer($containerName)->getCssCollections();
 		$cssCollectionsNames = array_merge($cssCollectionsFromContainer, $collectionsNames);
 
 		return $this->render->cssPreload($cssCollectionsNames);
@@ -77,7 +77,7 @@ class FilesCollectionsContainerRender
 	public function js(string $containerName = NULL, array $attributes = [], bool $loadContent = FALSE): string
 	{
 		$jsElements = '';
-		$jsFilesCollections = $this->getContainer($containerName)->getJsFilesCollections();
+		$jsFilesCollections = $this->getContainer($containerName)->getJsCollections();
 
 		foreach ($jsFilesCollections as $collectionName) {
 			$jsElements .= $this->render->js($collectionName, $attributes, $loadContent);
@@ -89,7 +89,7 @@ class FilesCollectionsContainerRender
 
 	public function jsPrefetch(string $containerName = NULL, array $collectionsNames = []): string
 	{
-		$jsCollectionsFromContainer = $this->getContainer($containerName)->getJsFilesCollections();
+		$jsCollectionsFromContainer = $this->getContainer($containerName)->getJsCollections();
 		$jsCollectionsNames = array_merge($jsCollectionsFromContainer, $collectionsNames);
 
 		return $this->render->jsPrefetch($jsCollectionsNames);
@@ -98,7 +98,7 @@ class FilesCollectionsContainerRender
 
 	public function jsPreload(string $containerName = NULL, array $collectionsNames = []): string
 	{
-		$jsCollectionsFromContainer = $this->getContainer($containerName)->getJsFilesCollections();
+		$jsCollectionsFromContainer = $this->getContainer($containerName)->getJsCollections();
 		$jsCollectionsNames = array_merge($jsCollectionsFromContainer, $collectionsNames);
 
 		return $this->render->jsPreload($jsCollectionsNames);

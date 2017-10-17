@@ -28,9 +28,8 @@ final class ExceptionsTestCase extends AbstractTestCase
 	public function testDuplicatedCssFilesCollectionException()
 	{
 		Assert::exception(function () {
-			$webLoader = $this->getWebLoader();
-			$webLoader->createCssFilesCollection('test');
-			$webLoader->createCssFilesCollection('test');
+			$this->getWebLoader()->createCssFilesCollection('test');
+			$this->getWebLoader()->createCssFilesCollection('test');
 		}, Exception::class, 'CSS files collection "test" already exists.');
 	}
 
@@ -38,9 +37,8 @@ final class ExceptionsTestCase extends AbstractTestCase
 	public function testDuplicatedJsFilesCollectionException()
 	{
 		Assert::exception(function () {
-			$webLoader = $this->getWebLoader();
-			$webLoader->createJsFilesCollection('test');
-			$webLoader->createJsFilesCollection('test');
+			$this->getWebLoader()->createJsFilesCollection('test');
+			$this->getWebLoader()->createJsFilesCollection('test');
 		}, Exception::class, 'Javascript files collection "test" already exists.');
 	}
 
@@ -48,9 +46,8 @@ final class ExceptionsTestCase extends AbstractTestCase
 	public function testDuplicatedFilesCollectionsContainerException()
 	{
 		Assert::exception(function () {
-			$webLoader = $this->getWebLoader();
-			$webLoader->createFilesCollectionsContainer('test');
-			$webLoader->createFilesCollectionsContainer('test');
+			$this->getWebLoader()->createFilesCollectionsContainer('test');
+			$this->getWebLoader()->createFilesCollectionsContainer('test');
 		}, Exception::class, 'Files collections container "test" already exists.');
 	}
 
@@ -73,12 +70,10 @@ final class ExceptionsTestCase extends AbstractTestCase
 	{
 		Assert::exception(function () {
 			$this->getWebLoader()
-				->addCssFilter('Lorem', function ()
-				{
+				->addCssFilter('Lorem', function () {
 					return '';
 				})
-				->addCssFilter('Lorem', function ()
-				{
+				->addCssFilter('Lorem', function () {
 					return '';
 				});
 		}, Exception::class, 'Css filter "Lorem" already exists.');
@@ -127,15 +122,15 @@ final class ExceptionsTestCase extends AbstractTestCase
 	public function testUnknownFilesCollectionsContainerSection()
 	{
 		Assert::exception(function () {
-			$webLoader = $this->getWebLoader();
-			$webLoader->createFilesCollectionsContainersFromArray([
-				'test' => [
-					'csCollections' => [
-						'collection'
+			$this->getWebLoader()
+				->createFilesCollectionsContainersFromArray([
+					'test' => [
+						'csCollections' => [
+							'collection'
+						]
 					]
-				]
-			]);
-			$webLoader->getFilesCollectionRender();
+				])
+				->getFilesCollectionRender();
 		}, Exception::class, 'Unknown configuration section "csCollections" in files collections container "test".');
 	}
 
@@ -143,15 +138,15 @@ final class ExceptionsTestCase extends AbstractTestCase
 	public function testUnknownFilesCollectionSection()
 	{
 		Assert::exception(function () {
-			$webLoader = $this->getWebLoader();
-			$webLoader->createFilesCollectionsFromArray([
-				'test' => [
-					'csFilters' => [
-						'file.css'
+			$this->getWebLoader()
+				->createFilesCollectionsFromArray([
+					'test' => [
+						'csFilters' => [
+							'file.css'
+						]
 					]
-				]
-			]);
-			$webLoader->getFilesCollectionRender();
+				])
+				->getFilesCollectionRender();
 		}, Exception::class, 'Unknown configuration section "csFilters" in files collection "test".');
 	}
 
@@ -159,7 +154,7 @@ final class ExceptionsTestCase extends AbstractTestCase
 	public function testMissingFilesCollectionsContainerConfigurationFileException()
 	{
 		Assert::exception(function () {
-			$webLoader = $this->getWebLoader()->createFilesCollectionsContainersFromConfig('path/to/config.neon');
+			$this->getWebLoader()->createFilesCollectionsContainersFromConfig('path/to/config.neon');
 		}, Exception::class, 'Files collections containers configuration file "path/to/config.neon" not found.');
 	}
 
@@ -167,7 +162,7 @@ final class ExceptionsTestCase extends AbstractTestCase
 	public function testMissingFilesCollectionConfigurationFileException()
 	{
 		Assert::exception(function () {
-			$webLoader = $this->getWebLoader()->createFilesCollectionsFromConfig('path/to/config.neon');
+			$this->getWebLoader()->createFilesCollectionsFromConfig('path/to/config.neon');
 		}, Exception::class, 'Files collections configuration file "path/to/config.neon" not found.');
 	}
 
@@ -175,7 +170,7 @@ final class ExceptionsTestCase extends AbstractTestCase
 	public function testWrongOutputDirException()
 	{
 		Assert::exception(function () {
-			$webLoader = $this->getWebLoader()->setOutputDir('path/to/some/dir');
+			$this->getWebLoader()->setOutputDir('path/to/some/dir');
 		}, Exception::class, 'Given output dir "path/to/some/dir" doesn\'t exists or is not a directory.');
 	}
 
