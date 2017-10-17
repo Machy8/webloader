@@ -16,13 +16,13 @@
 ## Examples:
 
 **Typical:**
-```php
+```PHP
 $webloader = \WebLoader\Compiler;
 $webloader->addJsFilter('minifier', function(string $code) {
         // Minify
         return $code;
     })
-    ->addPathPlaceholders([
+    ->addPathsPlaceholders([
         'jsDir' => 'path/to/js/dir'
     ]);
     
@@ -51,12 +51,6 @@ webloader:
             cssFiles:
                 - path/to/file.css
             cssLoadContent: TRUE
-            jsFiles:
-                - path/to/file.js
-                
-            jsFilters:
-                - minify
-            jsLoadContent: TRUE
 
         homepage:
             cssFiles:
@@ -75,7 +69,6 @@ webloader:
                 - homepage
 
             jsCollections:
-                - critical
                 - homepage
 ````
 
