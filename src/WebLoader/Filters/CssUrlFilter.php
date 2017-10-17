@@ -34,15 +34,17 @@ class CssUrlFilter
 
 	public function __construct(string $outputDirPath, string $documentRoot = '/')
 	{
-		$this->documentRoot = $documentRoot;
-		$outputDirPath = preg_replace('~' . $documentRoot . '~', '', rtrim($outputDirPath, '/'));
+		$this->documentRoot = trim($documentRoot, '/');
+		$outputDirPath = preg_replace('~' . $documentRoot . '~', '', trim($outputDirPath, '/'));
 		$this->relativePathToOutputDir = '/' . str_repeat('../', substr_count($outputDirPath, '/'));
 	}
 
 
 	public function filter(string $code, string $filePath): string
 	{
+		$filePath = ltrim($filePath, '/');
 		$pathInfo = preg_replace('~^' . $this->documentRoot . '~', '', pathinfo($filePath)['dirname'], 1);
+		$pathInfo = trim($pathInfo, '/');
 
 		return preg_replace_callback(self::URL_REGEXP, function ($urlMatch) use ($pathInfo){
 			$cssUrl = $urlMatch['url'];
@@ -51,7 +53,7 @@ class CssUrlFilter
 				return $urlMatch[0];
 			}
 
-			$pathInfo = preg_replace('~(/?[^/]+){' . substr_count($cssUrl, '../') . '}$~', '', trim($pathInfo, '/'));
+			$pathInfo = preg_replace('~(/?[^/]+){' . substr_count($cssUrl, '../') . '}$~', '', $pathInfo);
 			$url = "url('" . $this->relativePathToOutputDir;
 
 			if ($pathInfo) {
