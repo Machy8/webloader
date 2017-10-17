@@ -106,6 +106,22 @@ final class ExceptionsTestCase extends AbstractTestCase
 	}
 
 
+	public function testNullFilesCollectionsContainerException()
+	{
+		Assert::exception(function () {
+			$this->getWebLoader()->getFilesCollectionsContainerRender()->css();
+		}, Exception::class, 'Trying to call files collections container render on NULL.');
+	}
+
+
+	public function testNullFilesCollectionException()
+	{
+		Assert::exception(function () {
+			$this->getWebLoader()->getFilesCollectionRender()->jsPrefetch();
+		}, Exception::class, 'Trying to call files collection render on NULL.');
+	}
+
+
 	public function testUndefinedFilesCollectionsContainerException()
 	{
 		Assert::exception(function () {

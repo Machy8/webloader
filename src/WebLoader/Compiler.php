@@ -141,7 +141,7 @@ class Compiler
 			throw new Exception('CSS files collection "' . $name . '" already exists.');
 		}
 
-		return $this->filesCollections[self::CSS][$name] = new FilesCollection;
+		return $this->filesCollections[self::CSS][$name] = new FilesCollection($name);
 	}
 
 
@@ -313,7 +313,7 @@ class Compiler
 			throw new Exception('Javascript files collection "' . $name . '" already exists.');
 		}
 
-		return $this->filesCollections[self::JS][$name] = new FilesCollection;
+		return $this->filesCollections[self::JS][$name] = new FilesCollection($name);
 	}
 
 

@@ -47,6 +47,17 @@ class FilesCollection
 	 */
 	private $loadContent = FALSE;
 
+	/**
+	 * @var string
+	 */
+	private $name;
+
+
+	public function __construct(string $name)
+	{
+		$this->name = $name;
+	}
+
 
 	public function enableContentLoading(): FilesCollection
 	{
@@ -70,6 +81,12 @@ class FilesCollection
 	public function getFilters(): array
 	{
 		return $this->filters;
+	}
+
+
+	public function getName(): string
+	{
+		return $this->name;
 	}
 
 
