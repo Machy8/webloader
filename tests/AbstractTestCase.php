@@ -33,6 +33,9 @@ abstract class AbstractTestCase extends TestCase
 		'jsFixtures' => 'fixtures/js'
 	];
 
+	/**
+	 * @var Compiler
+	 */
 	private $webloader;
 
 
