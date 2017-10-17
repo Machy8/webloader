@@ -454,6 +454,7 @@ class Compiler
 	}
 
 
+	// TODO rename to setPathsPlaceholdersCharacter?
 	public function setPathPlaceholderCharacter(string $character): Compiler
 	{
 		$this->pathPlaceholderCharacter = $character;
