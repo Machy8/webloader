@@ -31,7 +31,7 @@ final class FiltersTestCase extends AbstractTestCase
 		$webLoader->addCssFilter('cssUrlFilter', function (string $code, string $file) {
 			$filter = new CssUrlFilter(self::WEBTEMP_DIR);
 			return $filter->filter($code, $file);
-		});
+		}, TRUE);
 
 		$webLoader->createCssFilesCollection($collectionName)
 			->setFiles(['%cssFixtures%/style-c.css'])

@@ -2,14 +2,15 @@ test-files-collections-container-from-config-a:
 	cssFiles:
 		- %cssFixtures%/style-b.css
 		- %cssFixtures%/style-a.css
+	cssFilters:
+		- cssMin
 
 	jsFiles:
 		- %jsFixtures%/script-b.js
 		- %jsFixtures%/script-a.js
+
 	jsFilters:
 		- googleClosureCompiler
-	cssFilters:
-		- cssMin
 
 
 test-files-collections-container-from-config-b:
