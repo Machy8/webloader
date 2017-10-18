@@ -50,6 +50,7 @@ webloader:
         critical:
             cssFiles:
                 - path/to/file.css
+
             cssLoadContent: TRUE
 
         homepage:
