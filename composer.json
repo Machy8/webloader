@@ -10,8 +10,8 @@
 	"require-dev": {
 		"tracy/tracy": "^2.4",
 		"nette/tester": "^2.0",
-		"machy8/google-closure-compiler": "dev-master",
-		"tubalmartin/cssmin": "dev-master"
+		"tubalmartin/cssmin": "dev-master",
+		"machy8/google-closure-compiler": "^1.0"
 	},
 	"suggests": {
 		"machy8/google-closure-compiler.php": "PHP client for the Google Closure Compiler API in one file",
