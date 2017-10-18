@@ -99,24 +99,32 @@ class Compiler
 	}
 
 
-	public function addCssFilter(string $name, callable $filter): Compiler
+	public function addCssFilter(string $name, callable $filter, bool $forEachFile = NULL): Compiler
 	{
 		if (array_key_exists($name, $this->filters[Compiler::CSS])) {
 			throw new Exception('Css filter "' . $name . '" already exists.');
 		}
 
-		$this->filters[Compiler::CSS][$name] = $filter;
+		$this->filters[Compiler::CSS][$name] = [
+			'callback' => $filter,
+			'forEachFile' => (bool) $forEachFile
+		];
+
 		return $this;
 	}
 
 
-	public function addJsFilter(string $name, callable $filter): Compiler
+	public function addJsFilter(string $name, callable $filter, bool $oncePerCollection = NULL): Compiler
 	{
 		if (array_key_exists($name, $this->filters[Compiler::JS])) {
 			throw new Exception('Js filter "' . $name . '" already exists.');
 		}
 
-		$this->filters[Compiler::JS][$name] = $filter;
+		$this->filters[Compiler::JS][$name] = [
+			'callback' => $filter,
+			'forEachFile' => (bool) $oncePerCollection
+		];
+
 		return $this;
 	}
 
@@ -492,6 +500,7 @@ class Compiler
 	{
 		$output = '';
 		$filesCount = count($files);
+		$oncePerCollectionFilters = [];
 
 		for ($i = 0; $i < $filesCount; $i++) {
 			$file = $this->replacePathsPlaceholders($files[$i]);
@@ -500,19 +509,31 @@ class Compiler
 				throw new Exception('File "' . $file . '" not found.');
 			}
 
-			$output .= file_get_contents($file);
+			$fileContent = file_get_contents($file);
 
 			foreach ($filters as $filter) {
 				if ( ! array_key_exists($filter, $this->filters[$type])) {
 					throw new Exception('Undefined filter "' . $filter . '".');
 				}
+				$filter = $this->filters[$type][$filter];
 
-				$output = $this->filters[$type][$filter]($output, $file);
+				if ($filter['forEachFile']) {
+					$fileContent = $filter['callback']($fileContent, $file);
+
+				} else {
+					$oncePerCollectionFilters[] = $filter;
+				}
 			}
 
 			if (($i + 1) < $filesCount) {
-				$output .= "\n";
+				$fileContent .= "\n";
 			}
+
+			$output .= $fileContent;
+		}
+
+		foreach ($oncePerCollectionFilters as $filter) {
+			$output = $filter['callback']($output);
 		}
 
 		return $output;
