@@ -39,40 +39,38 @@ class WebLoaderExtension extends CompilerExtension
 		$this->validateConfig($this->defaults);
 		$builder = $this->getContainerBuilder();
 
-		$compiler = $builder->addDefinition($this->prefix('compiler'))
-			->setClass('WebLoader\Compiler')
+		$webLoader = $builder->addDefinition($this->prefix('engine'))
+			->setClass('WebLoader\Engine')
 			->setArguments([$this->config['outputDir']]);
 
 		if ($this->config['documentRoot']) {
-			$compiler->addSetup('setDocumentRoot', [$this->config['documentRoot']]);
+			$webLoader->addSetup('setDocumentRoot', [$this->config['documentRoot']]);
 		}
 
 		if ($this->config['disableCache']) {
-			$compiler->addSetup('disableCache');
+			$webLoader->addSetup('disableCache');
 		}
 
 		if ($this->config['outputDir']) {
-			$compiler->addSetup('setOutputDir', [$this->config['outputDir']]);
+			$webLoader->addSetup('setOutputDir', [$this->config['outputDir']]);
 		}
 
 		if ($this->config['filesCollections']) {
-			$compiler->addSetup('createFilesCollectionsFromArray', [$this->config['filesCollections']]);
+			$webLoader->addSetup('createFilesCollectionsFromArray', [$this->config['filesCollections']]);
 		}
 
 		if ($this->config['filesCollectionsContainers']) {
-			$compiler->addSetup(
-				'createFilesCollectionsContainersFromArray',
-				[$this->config['filesCollectionsContainers']]
+			$webLoader->addSetup(
+				'createFilesCollectionsContainersFromArray', [$this->config['filesCollectionsContainers']]
 			);
 		}
 
 		if ($this->config['debugger'] === TRUE) {
 			$builder->addDefinition($this->prefix('tracyPanel'))
-				->setClass('WebLoader\Bridges\Tracy\WebLoaderPanel');
-
-			$compiler->addSetup(
-				'@' . $this->prefix('tracyPanel') . '::setWebLoader', ['@' . $this->prefix('compiler')]
-			);
+				->setClass('WebLoader\Bridges\Tracy\WebLoaderPanel')
+				->addSetup(
+					'setWebLoader', [$webLoader->getCompiler()]
+				);
 		}
 	}
 
