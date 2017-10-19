@@ -18,14 +18,14 @@ class FilesCollection
 {
 
 	const
-		CONFIG_SECTION_CSS_FILES = Compiler::CSS . 'Files',
-		CONFIG_SECTION_CSS_FILTERS = Compiler::CSS . 'Filters',
-		CONFIG_SECTION_CSS_LOAD_CONTENT = Compiler::CSS . 'LoadContent',
-		CONFIG_SECTION_CSS_OUTPUT_ELEMENT_ATTRIBUTES = Compiler::CSS . 'OutputElementAttributes',
-		CONFIG_SECTION_JS_FILES = Compiler::JS . 'Files',
-		CONFIG_SECTION_JS_FILTERS = Compiler::JS . 'Filters',
-		CONFIG_SECTION_JS_LOAD_CONTENT = Compiler::JS . 'LoadContent',
-		CONFIG_SECTION_JS_OUTPUT_ELEMENT_ATTRIBUTES = Compiler::JS . 'OutputElementAttributes';
+		CONFIG_SECTION_CSS_FILES = Engine::CSS . 'Files',
+		CONFIG_SECTION_CSS_FILTERS = Engine::CSS . 'Filters',
+		CONFIG_SECTION_CSS_LOAD_CONTENT = Engine::CSS . 'LoadContent',
+		CONFIG_SECTION_CSS_OUTPUT_ELEMENT_ATTRIBUTES = Engine::CSS . 'OutputElementAttributes',
+		CONFIG_SECTION_JS_FILES = Engine::JS . 'Files',
+		CONFIG_SECTION_JS_FILTERS = Engine::JS . 'Filters',
+		CONFIG_SECTION_JS_LOAD_CONTENT = Engine::JS . 'LoadContent',
+		CONFIG_SECTION_JS_OUTPUT_ELEMENT_ATTRIBUTES = Engine::JS . 'OutputElementAttributes';
 
 	/**
 	 * @var array
@@ -52,10 +52,16 @@ class FilesCollection
 	 */
 	private $name;
 
+	/**
+	 * @var string
+	 */
+	private $type;
 
-	public function __construct(string $name)
+
+	public function __construct(string $name, string $type)
 	{
 		$this->name = $name;
+		$this->type = $type;
 	}
 
 
@@ -87,6 +93,12 @@ class FilesCollection
 	public function getName(): string
 	{
 		return $this->name;
+	}
+
+
+	public function getType(): string
+	{
+		return $this->type;
 	}
 
 
