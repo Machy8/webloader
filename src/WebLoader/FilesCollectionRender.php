@@ -35,51 +35,37 @@ class FilesCollectionRender
 	const VERSION_MARK = '?v=';
 
 	/**
+	 * @var Compiler
+	 */
+	private $compiler;
+
+	/**
 	 * @var string
 	 */
 	private $basePath;
-
-	/**
-	 * @var FilesCollection[][]
-	 */
-	private $collections;
-
-	/**
-	 * @var string
-	 */
-	private $documentRoot;
 
 	/**
 	 * @var string
 	 */
 	private $selectedCollectionName;
 
-	/**
-	 * @var int
-	 */
-	private $version;
 
-
-	/**
-	 * @param FilesCollection[][] $collections
-	 */
-	public function __construct(array $collections, string $documentRoot, string $basePath, string $version)
+	public function __construct(Compiler $compiler)
 	{
-		$this->collections = $collections;
-		$this->documentRoot = $documentRoot;
-		$this->basePath = $basePath;
-		$this->version = $version;
+		$this->compiler = $compiler;
+		$this->basePath = $this->createBasePath($compiler->getDocumentRoot(), $compiler->getOutputDir());
 	}
 
 
 	public function css(string $collectionName = NULL, array $attributes = [], bool $loadContent = FALSE): string
 	{
-		$collection = $this->getSelectedCollection($collectionName, Compiler::CSS);
+		$collection = $this->getSelectedCollection($collectionName, Engine::CSS);
 		$collectionName = $collection->getName();
+		$this->compiler->compileCssFilesCollection($collectionName);
 		$attributes = array_merge($attributes, $collection->getOutputElementAttributes());
 		$attributes['type'] = self::STYLE_TYPE_ATTRIBUTE;
 		$element = self::STYLE_ELEMENT;
-		$basePath = $this->getCollectionBasePath($collectionName, Compiler::CSS);
+		$basePath = $this->getCollectionBasePath($collectionName, Engine::CSS);
 		$filePathParameter = NULL;
 
 		if ($loadContent || $collection->isContentLoadingEnabled()) {
@@ -97,25 +83,32 @@ class FilesCollectionRender
 
 	public function cssPrefetch(array $collectionsNames = []): string
 	{
-		return $this->generateMetaLinkElements($collectionsNames, Compiler::CSS, self::LINK_PREFETCH);
+		return $this->generateMetaLinkElements($collectionsNames, Engine::CSS, self::LINK_PREFETCH);
 	}
 
 
 	public function cssPreload(array $collectionsNames = []): string
 	{
 		return $this->generateMetaLinkElements(
-			$collectionsNames, Compiler::CSS, self::LINK_PRELOAD, self::LINK_PRELOAD_AS_CSS
+			$collectionsNames, Engine::CSS, self::LINK_PRELOAD, self::LINK_PRELOAD_AS_CSS
 		);
+	}
+
+
+	public function getCompiler(): Compiler
+	{
+		return $this->compiler;
 	}
 
 
 	public function js(string $collectionName = NULL, array $attributes = [], bool $loadContent = FALSE): string
 	{
-		$collection = $this->getSelectedCollection($collectionName, Compiler::JS);
+		$collection = $this->getSelectedCollection($collectionName, Engine::JS);
 		$collectionName = $collection->getName();
+		$this->compiler->compileJsFilesCollection($collectionName);
 		$attributes = array_merge($attributes, $collection->getOutputElementAttributes());
 		$attributes['type'] = self::SCRIPT_TYPE_ATTRIBUTE;
-		$basePath = $this->getCollectionBasePath($collectionName, Compiler::JS);
+		$basePath = $this->getCollectionBasePath($collectionName, Engine::JS);
 		$filePathParameter = NULL;
 
 		if ($loadContent || $collection->isContentLoadingEnabled()) {
@@ -131,14 +124,14 @@ class FilesCollectionRender
 
 	public function jsPrefetch(array $collectionsNames = []): string
 	{
-		return $this->generateMetaLinkElements($collectionsNames, Compiler::JS, self::LINK_PREFETCH);
+		return $this->generateMetaLinkElements($collectionsNames, Engine::JS, self::LINK_PREFETCH);
 	}
 
 
 	public function jsPreload(array $collectionsNames = []): string
 	{
 		return $this->generateMetaLinkElements(
-			$collectionsNames, Compiler::JS, self::LINK_PRELOAD, self::LINK_PRELOAD_AS_JS
+			$collectionsNames, Engine::JS, self::LINK_PRELOAD, self::LINK_PRELOAD_AS_JS
 		);
 	}
 
@@ -152,7 +145,7 @@ class FilesCollectionRender
 
 	private function addVersionToBasePath(string $path): string
 	{
-		return $path . self::VERSION_MARK . $this->version;
+		return $path . self::VERSION_MARK . $this->compiler->getVersion();
 	}
 
 
@@ -228,8 +221,8 @@ class FilesCollectionRender
 
 	private function getCollectionFilePath(string $path): string
 	{
-		if ($this->documentRoot) {
-			$path = rtrim($this->documentRoot, '/') . $path;
+		if ($this->compiler->getDocumentRoot()) {
+			$path = rtrim($this->compiler->getDocumentRoot(), '/') . $path;
 		}
 
 		return $path;
@@ -253,11 +246,19 @@ class FilesCollectionRender
 
 		$collectionName = $collectionName ?? $this->selectedCollectionName;
 
-		if ( ! array_key_exists($collectionName, $this->collections[$type])) {
-			throw new Exception('Trying to get undefined files collection "' . $collectionName . '".');
+		return $this->compiler->getFilesCollection($collectionName, $type);
+	}
+
+
+	private function createBasePath(string $documentRoot, string $outputDir): string
+	{
+		$basePath = $outputDir;
+
+		if ($documentRoot) {
+			$basePath = preg_replace('~^' . $documentRoot . '~', '', $outputDir, 1);
 		}
 
-		return $this->collections[$type][$collectionName];
+		return trim($basePath, '/');
 	}
 
 }

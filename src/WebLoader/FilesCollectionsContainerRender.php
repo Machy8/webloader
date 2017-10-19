@@ -18,11 +18,6 @@ class FilesCollectionsContainerRender
 {
 
 	/**
-	 * @var FilesCollectionsContainer[][]
-	 */
-	private $collectionsContainers = [];
-
-	/**
 	 * @var FilesCollectionRender
 	 */
 	private $render;
@@ -33,12 +28,8 @@ class FilesCollectionsContainerRender
 	private $selectedContainerName;
 
 
-	/**
-	 * @param FilesCollectionsContainer[][] $collectionsContainers
-	 */
-	public function __construct(FilesCollectionRender $render, array $collectionsContainers)
+	public function __construct(FilesCollectionRender $render)
 	{
-		$this->collectionsContainers = $collectionsContainers;
 		$this->render = $render;
 	}
 
@@ -120,11 +111,11 @@ class FilesCollectionsContainerRender
 
 		$containerName = $containerName ?? $this->selectedContainerName;
 
-		if ( ! array_key_exists($containerName, $this->collectionsContainers)) {
+		if ( ! array_key_exists($containerName, $this->render->getCompiler()->getFilesCollectionsContainers())) {
 			throw new Exception('Trying to get undefined files collections container "' . $containerName . '".');
 		}
 
-		return $this->collectionsContainers[$containerName];
+		return $this->render->getCompiler()->getFilesCollectionsContainers()[$containerName];
 	}
 
 }
