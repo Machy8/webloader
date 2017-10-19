@@ -17,7 +17,7 @@
 
 **Typical:**
 ```PHP
-$webloader = \WebLoader\Compiler;
+$webloader = \WebLoader\Engine;
 $webloader->addJsFilter('minifier', function(string $code) {
         // Minify
         return $code;
@@ -50,18 +50,16 @@ webloader:
         critical:
             cssFiles:
                 - path/to/file.css
-
             cssLoadContent: TRUE
 
         homepage:
             cssFiles:
                 - path/to/file.css
+            cssFilters:
+                - urlFilter
 
             jsFiles:
                 - path/to/file.js
-
-            cssFilters:
-                - urlFilter
 
     filesCollectionsContainers:
         homepage:
@@ -75,32 +73,31 @@ webloader:
 
 Presenter
 ````PHP
-
 /**
- * @var Compiler
+ * @var Engine
  */
 private $webLoader;
 
 
-public function __construct(\WebLoader\Compiler $compiler)
+public function __construct(\WebLoader\Engine $engine)
 {
-    $this->webLoader = $compiler;
+    $this->webLoader = $engine;
 }
 
 
 public function beforeRender()
 {
-    $this->webloader
+    $this->webLoader
         ->addCssFilter('urlFilter', function(string $code, string $file) {
             $filter = \WebLoader\Filters\CssUrlFilter('path/to/webtemp');
             return $filter->filter($code, $file);
-        })
+        }, TRUE)
         
         ->addJsFilter('minify', function(string $code) {
             $closureCompiler = new \GoogleClosureCompiler\Compiler;
             $response = $closureCompiler->setJsCode($code)->compile();
 
-            if ($response) {
+            if ($response && $response->isWithoutErrors()) {
                  return $response->getCompiledCode();
             }
 
