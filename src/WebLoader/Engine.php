@@ -163,9 +163,9 @@ class Engine
 	}
 
 
-	public function setPathPlaceholderCharacter(string $character): Engine
+	public function setPathPlaceholderDelimiter(string $delimiter): Engine
 	{
-		$this->getCompiler()->setPathPlaceholderCharacter($character);
+		$this->getCompiler()->setPathPlaceholderDelimiter($delimiter);
 		return $this;
 	}
 

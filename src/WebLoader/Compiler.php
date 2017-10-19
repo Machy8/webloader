@@ -60,7 +60,7 @@ class Compiler
 	/**
 	 * @var string
 	 */
-	private $pathPlaceholderCharacter = '%';
+	private $pathPlaceholderDelimiter = '%';
 
 	/**
 	 * @var array
@@ -431,9 +431,9 @@ class Compiler
 	}
 
 
-	public function setPathPlaceholderCharacter(string $character): Compiler
+	public function setPathPlaceholderDelimiter(string $delimiter): Compiler
 	{
-		$this->pathPlaceholderCharacter = $character;
+		$this->pathPlaceholderDelimiter = $delimiter;
 		return $this;
 	}
 
@@ -503,7 +503,7 @@ class Compiler
 	{
 		foreach ($this->pathsPlaceholders as $placeholder => $path) {
 			$filePath = str_replace(
-				$this->pathPlaceholderCharacter . $placeholder . $this->pathPlaceholderCharacter, $path, $filePath
+				$this->pathPlaceholderDelimiter . $placeholder . $this->pathPlaceholderDelimiter, $path, $filePath
 			);
 		}
 
