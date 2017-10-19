@@ -40,5 +40,5 @@ core:
         - core
         - critical
     jsCollections: 
-    - core
+        - core
 ````
