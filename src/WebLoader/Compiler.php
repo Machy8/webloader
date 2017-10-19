@@ -19,10 +19,6 @@ use Nette\Neon\Neon;
 class Compiler
 {
 
-	const
-		CSS = 'css',
-		JS = 'js';
-
 	const LOCK_FILE_NAME = 'webloader.lock';
 
 	/**
@@ -31,32 +27,17 @@ class Compiler
 	private $cacheEnabled = TRUE;
 
 	/**
-	 * @var bool
-	 */
-	private $compiled;
-
-	/**
 	 * @var string
 	 */
 	private $documentRoot;
 
 	/**
-	 * @var FilesCollectionRender
-	 */
-	private $filesCollectionRender;
-
-	/**
 	 * @var FilesCollection[][]
 	 */
 	private $filesCollections = [
-		self::CSS => [],
-		self::JS => []
+		Engine::CSS => [],
+		Engine::JS => []
 	];
-
-	/**
-	 * @var FilesCollectionsContainerRender
-	 */
-	private $filesCollectionsContainerRender;
 
 	/**
 	 * @var FilesCollectionsContainer[][]
@@ -67,8 +48,8 @@ class Compiler
 	 * @var array
 	 */
 	private $filters = [
-		self::CSS => [],
-		self::JS => []
+		Engine::CSS => [],
+		Engine::JS => []
 	];
 
 	/**
@@ -92,20 +73,13 @@ class Compiler
 	private $version;
 
 
-	public function __construct(string $outputDir, string $documentRoot = '/')
-	{
-		$this->setOutputDir($outputDir);
-		$this->setDocumentRoot($documentRoot);
-	}
-
-
 	public function addCssFilter(string $name, callable $filter, bool $forEachFile = NULL): Compiler
 	{
-		if (array_key_exists($name, $this->filters[Compiler::CSS])) {
+		if (array_key_exists($name, $this->filters[Engine::CSS])) {
 			throw new Exception('Css filter "' . $name . '" already exists.');
 		}
 
-		$this->filters[Compiler::CSS][$name] = [
+		$this->filters[Engine::CSS][$name] = [
 			'callback' => $filter,
 			'forEachFile' => (bool) $forEachFile
 		];
@@ -116,11 +90,11 @@ class Compiler
 
 	public function addJsFilter(string $name, callable $filter, bool $oncePerCollection = NULL): Compiler
 	{
-		if (array_key_exists($name, $this->filters[Compiler::JS])) {
+		if (array_key_exists($name, $this->filters[Engine::JS])) {
 			throw new Exception('Js filter "' . $name . '" already exists.');
 		}
 
-		$this->filters[Compiler::JS][$name] = [
+		$this->filters[Engine::JS][$name] = [
 			'callback' => $filter,
 			'forEachFile' => (bool) $oncePerCollection
 		];
@@ -143,13 +117,37 @@ class Compiler
 	}
 
 
+	public function compileAllFilesCollections()
+	{
+		foreach ($this->filesCollections as $filesCollectionsType => $filesCollections) {
+			foreach ($filesCollections as $filesCollectionName => $filesCollection) {
+				$this->compileSingleFilesCollection($filesCollection);
+			}
+		}
+	}
+
+
+	public function compileCssFilesCollection(string $name)
+	{
+		$collection = $this->getFilesCollection($name, Engine::CSS);
+		$this->compileSingleFilesCollection($collection);
+	}
+
+
+	public function compileJsFilesCollection(string $name)
+	{
+		$collection = $this->getFilesCollection($name, Engine::JS);
+		$this->compileSingleFilesCollection($collection);
+	}
+
+
 	public function createCssFilesCollection(string $name): FilesCollection
 	{
-		if (array_key_exists($name, $this->filesCollections[self::CSS])) {
+		if (array_key_exists($name, $this->filesCollections[Engine::CSS])) {
 			throw new Exception('CSS files collection "' . $name . '" already exists.');
 		}
 
-		return $this->filesCollections[self::CSS][$name] = new FilesCollection($name);
+		return $this->filesCollections[Engine::CSS][$name] = new FilesCollection($name, Engine::CSS);
 	}
 
 
@@ -317,11 +315,11 @@ class Compiler
 
 	public function createJsFilesCollection(string $name): FilesCollection
 	{
-		if (array_key_exists($name, $this->filesCollections[self::JS])) {
+		if (array_key_exists($name, $this->filesCollections[Engine::JS])) {
 			throw new Exception('Javascript files collection "' . $name . '" already exists.');
 		}
 
-		return $this->filesCollections[self::JS][$name] = new FilesCollection($name);
+		return $this->filesCollections[Engine::JS][$name] = new FilesCollection($name, Engine::JS);
 	}
 
 
@@ -338,48 +336,19 @@ class Compiler
 	}
 
 
-	public function getFilesCollectionRender(): FilesCollectionRender
+	public function getFilesCollection(string $name, string $type): FilesCollection
 	{
-		if ( ! $this->filesCollectionRender) {
-			$this->compile();
-			$basePath = $this->outputDir;
-
-			if ($this->documentRoot) {
-				$basePath = preg_replace('~^' . $this->documentRoot . '~', '', $this->outputDir, 1);
-			}
-
-			$basePath = trim($basePath, '/');
-
-			$this->filesCollectionRender = new FilesCollectionRender(
-				$this->filesCollections,
-				$this->documentRoot,
-				$basePath,
-				$this->getVersion()
-			);
+		if ( ! array_key_exists($name, $this->filesCollections[$type])) {
+			throw new Exception('Trying to get undefined ' . strtoupper($type) . ' files collection "' . $name . '".');
 		}
 
-		return $this->filesCollectionRender;
+		return $this->filesCollections[$type][$name];
 	}
 
 
 	public function getFilesCollections(): array
 	{
 		return $this->filesCollections;
-	}
-
-
-	public function getFilesCollectionsContainerRender(): FilesCollectionsContainerRender
-	{
-		if ( ! $this->filesCollectionsContainerRender) {
-			$this->compile();
-
-			$this->filesCollectionsContainerRender = new FilesCollectionsContainerRender(
-				$this->getFilesCollectionRender(),
-				$this->filesCollectionsContainers
-			);
-		}
-
-		return $this->filesCollectionsContainerRender;
 	}
 
 
@@ -462,7 +431,6 @@ class Compiler
 	}
 
 
-	// TODO rename to setPathsPlaceholdersCharacter?
 	public function setPathPlaceholderCharacter(string $character): Compiler
 	{
 		$this->pathPlaceholderCharacter = $character;
@@ -470,29 +438,20 @@ class Compiler
 	}
 
 
-	private function compile()
+	private function compileSingleFilesCollection(FilesCollection $collection)
 	{
-		foreach ($this->filesCollections as $filesCollectionsType => $filesCollections) {
-			foreach ($filesCollections as $filesCollectionName => $filesCollection) {
-				$filePath = $filesCollectionName . '.' . $filesCollectionsType;
+		$filePath = $collection->getName() . '.' . $collection->getType();
 
-				if ($this->outputDir) {
-					$filePath = $this->outputDir . '/' . $filePath;
-				}
-
-				if (file_exists($filePath) && $this->isCacheEnabled()) {
-					continue;
-				}
-
-				$code = $this->loadCssJsFiles(
-					$filesCollectionsType, $filesCollection->getFiles(), $filesCollection->getFilters()
-				);
-
-				file_put_contents($filePath, $code);
-			}
+		if ($this->outputDir) {
+			$filePath = $this->outputDir . '/' . $filePath;
 		}
 
-		$this->compiled = TRUE;
+		if (file_exists($filePath) && $this->isCacheEnabled()) {
+			return;
+		}
+
+		$code = $this->loadCssJsFiles($collection->getType(), $collection->getFiles(), $collection->getFilters());
+		file_put_contents($filePath, $code);
 	}
 
 
