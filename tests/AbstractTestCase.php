@@ -15,7 +15,7 @@ namespace WebLoader\Tests;
 
 use Tester\Assert;
 use Tester\TestCase;
-use WebLoader\Compiler;
+use WebLoader\Engine;
 use WebLoader\FilesCollection;
 
 
@@ -38,7 +38,12 @@ abstract class AbstractTestCase extends TestCase
 	];
 
 	/**
-	 * @var Compiler
+	 * @var string
+	 */
+	private $filesVersion;
+
+	/**
+	 * @var Engine
 	 */
 	private $webloader;
 
@@ -46,12 +51,12 @@ abstract class AbstractTestCase extends TestCase
 	public function __construct()
 	{
 		if ( ! file_exists(self::ACTUAL_DIR)) {
-			mkdir(self::ACTUAL_DIR, 0777, true);
+			mkdir(self::ACTUAL_DIR, 0777, TRUE);
 		}
 	}
 
 
-	public function createCssCollection(string $name): FilesCollection
+	protected function createCssCollection(string $name): FilesCollection
 	{
 		return $this->getWebLoader()
 			->createCssFilesCollection($name)
@@ -62,7 +67,7 @@ abstract class AbstractTestCase extends TestCase
 	}
 
 
-	public function createJsCollection(string $name): FilesCollection
+	protected function createJsCollection(string $name): FilesCollection
 	{
 		return $this->getWebLoader()
 			->createJsFilesCollection($name)
@@ -73,38 +78,43 @@ abstract class AbstractTestCase extends TestCase
 	}
 
 
-	public function matchCssFile(string $actual, string $expected = NULL)
+	protected function matchCssFile(string $actual, string $expected = NULL)
 	{
 		$expected = $expected ?? $actual;
-		$this->matchFile($expected, $actual, Compiler::CSS);
+		$this->matchFile($expected, $actual, Engine::CSS);
 	}
 
 
-	public function matchHtmlFile(string $actual, string $expected = NULL)
+	protected function matchHtmlFile(string $actual, string $expected = NULL)
 	{
 		$expected = $expected ?? $actual;
 		$this->matchFile($expected, $actual, 'html');
 	}
 
 
-	public function matchJsFile(string $actual, string $expected = NULL)
+	protected function matchJsFile(string $actual, string $expected = NULL)
 	{
 		$expected = $expected ?? $actual;
-		$this->matchFile($expected, $actual, Compiler::JS);
+		$this->matchFile($expected, $actual, Engine::JS);
 	}
 
 
-	public function setUp()
+	protected function setUp()
 	{
 		parent::setUp();
-		$this->webloader = new Compiler(self::ACTUAL_DIR, self::DOCUMENT_ROOT);
-		$this->webloader
-			->addPathsPlaceholders(self::PATHS_PLACEHOLDERS)
-			->disableCache();
+		$this->webloader = new Engine(self::ACTUAL_DIR, self::DOCUMENT_ROOT);
+		$this->filesVersion = $this->webloader->getCompiler()->getVersion();
+		$this->webloader->addPathsPlaceholders(self::PATHS_PLACEHOLDERS)->disableCache();
 	}
 
 
-	protected function getWebLoader(): Compiler
+	protected function getFilesVersion(): string
+	{
+		return $this->filesVersion;
+	}
+
+
+	protected function getWebLoader(): Engine
 	{
 		return $this->webloader;
 	}

@@ -98,10 +98,8 @@ final class ExceptionsTestCase extends AbstractTestCase
 	{
 		Assert::exception(function () {
 			$webLoader = $this->getWebLoader();
-			$webLoader->createJsFilesCollection('test')
-				->setFiles(['somefile.js']);
-
-			$webLoader->getFilesCollectionRender();
+			$webLoader->createJsFilesCollection('test')->setFiles(['somefile.js']);
+			$webLoader->getCompiler()->compileAllFilesCollections();
 		}, Exception::class, 'File "somefile.js" not found.');
 	}
 
@@ -134,7 +132,7 @@ final class ExceptionsTestCase extends AbstractTestCase
 	{
 		Assert::exception(function () {
 			$this->getWebLoader()->getFilesCollectionRender()->selectCollection('test')->css();
-		}, Exception::class, 'Trying to get undefined files collection "test".');
+		}, Exception::class, 'Trying to get undefined CSS files collection "test".');
 	}
 
 
@@ -145,8 +143,7 @@ final class ExceptionsTestCase extends AbstractTestCase
 			$webLoader->createJsFilesCollection('test')
 					->setFiles(['%cssFixtures%/style-a.css'])
 					->setFilters(['test']);
-
-			$webLoader->getFilesCollectionRender();
+			$webLoader->getCompiler()->compileAllFilesCollections();
 		}, Exception::class, 'Undefined filter "test".');
 	}
 
