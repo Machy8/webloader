@@ -3,8 +3,6 @@
 - Shows information about: Files collections, files collections containers, filters, placeholders, output and document root dir path, if cache is enabled and version
 
 ````php
-use WebLoader;
-
-$panel = new WebLoader\Bridges\Tracy\WebLoaderPanel;
+$panel = new \WebLoader\Bridges\Tracy\WebLoaderPanel;
 $panel->setWebLoader($webLoader->getCompiler());
 ````
