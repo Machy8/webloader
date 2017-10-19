@@ -18,8 +18,8 @@ class FilesCollectionsContainer
 {
 
 	const
-		CONFIG_SECTION_CSS_COLLECTIONS = Compiler::CSS . 'Collections',
-		CONFIG_SECTION_JS_COLLECTIONS = Compiler::JS . 'Collections';
+		CONFIG_SECTION_CSS_COLLECTIONS = Engine::CSS . 'Collections',
+		CONFIG_SECTION_JS_COLLECTIONS = Engine::JS . 'Collections';
 
 	/**
 	 * @var string[]
