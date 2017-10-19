@@ -39,6 +39,9 @@ class WebLoaderExtension extends CompilerExtension
 		$this->validateConfig($this->defaults);
 		$builder = $this->getContainerBuilder();
 
+		$builder->addDefinition($this->prefix('compiler'))
+			->setClass('WebLoader\Compiler');
+
 		$webLoader = $builder->addDefinition($this->prefix('engine'))
 			->setClass('WebLoader\Engine')
 			->setArguments([$this->config['outputDir']]);
@@ -69,7 +72,7 @@ class WebLoaderExtension extends CompilerExtension
 			$builder->addDefinition($this->prefix('tracyPanel'))
 				->setClass('WebLoader\Bridges\Tracy\WebLoaderPanel')
 				->addSetup(
-					'setWebLoader', [$webLoader->getCompiler()]
+					'setWebLoader', ['@' . $this->prefix('compiler')]
 				);
 		}
 	}
