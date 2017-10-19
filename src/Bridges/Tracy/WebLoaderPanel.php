@@ -26,7 +26,7 @@ class WebLoaderPanel implements IBarPanel
 	/**
 	 * @var Compiler
 	 */
-	private $webLoader;
+	private $webLoaderCompiler;
 
 
 	public function __construct()
@@ -42,14 +42,14 @@ class WebLoaderPanel implements IBarPanel
 	{
 		ob_start();
 
-		$cacheEnabled = $this->getWebLoader()->isCacheEnabled();
-		$filesCollectionsByType = $this->getWebLoader()->getFilesCollections();
-		$filesCollectionsContainers = $this->getWebLoader()->getFilesCollectionsContainers();
-		$filters = $this->getWebLoader()->getFilters();
-		$outputDir = $this->getWebLoader()->getOutputDir();
-		$documentRoot = $this->getWebLoader()->getDocumentRoot();
-		$pathsPlaceholders = $this->getWebLoader()->getPathsPlaceholders();
-		$version = $this->getWebLoader()->getVersion();
+		$cacheEnabled = $this->getWebLoaderCompiler()->isCacheEnabled();
+		$filesCollectionsByType = $this->getWebLoaderCompiler()->getFilesCollections();
+		$filesCollectionsContainers = $this->getWebLoaderCompiler()->getFilesCollectionsContainers();
+		$filters = $this->getWebLoaderCompiler()->getFilters();
+		$outputDir = $this->getWebLoaderCompiler()->getOutputDir();
+		$documentRoot = $this->getWebLoaderCompiler()->getDocumentRoot();
+		$pathsPlaceholders = $this->getWebLoaderCompiler()->getPathsPlaceholders();
+		$version = $this->getWebLoaderCompiler()->getVersion();
 
 		require self::TEMPLATES_DIR . '/panel.phtml';
 
@@ -67,21 +67,16 @@ class WebLoaderPanel implements IBarPanel
 	}
 
 
-	public function setWebLoader(Compiler $compiler): self
+	public function setWebLoader(Compiler $compiler): WebLoaderPanel
 	{
-		$this->webLoader = $compiler;
-
+		$this->webLoaderCompiler = $compiler;
 		return $this;
 	}
 
 
-	private function getWebLoader(): Compiler
+	private function getWebLoaderCompiler(): Compiler
 	{
-		if ( ! $this->webLoader) {
-			$this->webLoader = new Compiler;
-		}
-
-		return $this->webLoader;
+		return $this->webLoaderCompiler;
 	}
 
 }
