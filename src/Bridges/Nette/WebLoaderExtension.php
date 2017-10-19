@@ -43,12 +43,12 @@ class WebLoaderExtension extends CompilerExtension
 			->setClass('WebLoader\Engine')
 			->setArguments([$this->config['outputDir']]);
 
-		if ($this->config['documentRoot']) {
-			$webLoader->addSetup('setDocumentRoot', [$this->config['documentRoot']]);
-		}
-
 		if ($this->config['disableCache']) {
 			$webLoader->addSetup('disableCache');
+		}
+
+		if ($this->config['documentRoot']) {
+			$webLoader->addSetup('setDocumentRoot', [$this->config['documentRoot']]);
 		}
 
 		if ($this->config['outputDir']) {
