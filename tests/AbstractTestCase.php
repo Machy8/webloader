@@ -59,10 +59,11 @@ abstract class AbstractTestCase extends TestCase
 	protected function createCssCollection(string $name): FilesCollection
 	{
 		return $this->getWebLoader()
+			->setPathPlaceholderDelimiter('#')
 			->createCssFilesCollection($name)
 			->setFiles([
-				'%cssFixtures%/style-a.css',
-				'%cssFixtures%/style-b.css'
+				'#cssFixtures#/style-a.css',
+				'#cssFixtures#/style-b.css'
 			]);
 	}
 
@@ -102,9 +103,12 @@ abstract class AbstractTestCase extends TestCase
 	protected function setUp()
 	{
 		parent::setUp();
-		$this->webloader = new Engine(self::ACTUAL_DIR, self::DOCUMENT_ROOT);
+		$this->webloader = new Engine(self::ACTUAL_DIR);
 		$this->filesVersion = $this->webloader->getCompiler()->getVersion();
-		$this->webloader->addPathsPlaceholders(self::PATHS_PLACEHOLDERS)->disableCache();
+		$this->webloader
+			->addPathsPlaceholders(self::PATHS_PLACEHOLDERS)
+			->setDocumentRoot(self::DOCUMENT_ROOT)
+			->disableCache();
 	}
 
 

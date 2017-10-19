@@ -115,12 +115,24 @@ final class CompilerTestsCase extends AbstractTestCase
 		);
 
 		Assert::equal(
-			'<script async defer type="text/javascript" src="/' . self::BASE_PATH . '/' . $collectionNameB . '.js?v=' . $this->getFilesVersion() . '"></script>',
-			$render->js($collectionNameB, ['async' => TRUE, 'defer' => TRUE])
+			'<script defer async type="text/javascript" src="/' . self::BASE_PATH . '/' . $collectionNameB . '.js?v=' . $this->getFilesVersion() . '"></script>',
+			$render->js($collectionNameB, ['defer' => TRUE])
+		);
+
+		file_put_contents(
+			self::ACTUAL_DIR . '/' . $collectionNameA . '.html',
+			$render->js($collectionNameA)
+		);
+
+		file_put_contents(
+			self::ACTUAL_DIR . '/' . $collectionNameB . '.html',
+			$render->css($collectionNameB)
 		);
 
 		$this->matchCssFile($collectionNameA);
 		$this->matchJsFile($collectionNameB);
+		$this->matchHtmlFile($collectionNameA);
+		$this->matchHtmlFile($collectionNameB);
 	}
 
 

@@ -6,14 +6,20 @@ test-files-collections-from-config-a:
 	jsFiles:
 		- %jsFixtures%/script-a.js
 		- %jsFixtures%/script-b.js
+	jsLoadContent: TRUE
 
 test-files-collections-from-config-b:
 	cssFiles:
 		- %cssFixtures%/style-b.css
 		- %cssFixtures%/style-a.css
+	cssLoadContent: TRUE
+	cssOutputElementAttributes:
+		amp-custom: TRUE
 
 	jsFiles:
 		- %jsFixtures%/script-b.js
 		- %jsFixtures%/script-a.js
 	jsFilters:
 		- googleClosureCompiler
+	jsOutputElementAttributes:
+		async: TRUE
