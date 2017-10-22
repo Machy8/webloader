@@ -164,6 +164,7 @@ class Compiler
 	public function createFilesCollectionsContainersFromArray(array $containers): Compiler
 	{
 		foreach ($containers as $containerName => $sections) {
+			$containerName = (string) $containerName;
 			$cssFilesCollections = NULL;
 			$jsFilesCollections = NULL;
 
@@ -224,6 +225,7 @@ class Compiler
 	public function createFilesCollectionsFromArray(array $collections): Compiler
 	{
 		foreach ($collections as $collectionName => $sections) {
+			$collectionName = (string) $collectionName;
 			$cssContentLoadingEnabled = FALSE;
 			$cssFiles = [];
 			$cssFilters = [];
@@ -472,7 +474,7 @@ class Compiler
 
 			foreach ($filters as $filter) {
 				if ( ! array_key_exists($filter, $this->filters[$type])) {
-					throw new Exception('Undefined filter "' . $filter . '".');
+					throw new Exception('Undefined ' . strtoupper($type) .' filter "' . $filter . '".');
 				}
 				$filter = $this->filters[$type][$filter];
 
