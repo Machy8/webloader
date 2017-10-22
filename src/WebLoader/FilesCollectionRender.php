@@ -81,13 +81,21 @@ class FilesCollectionRender
 	}
 
 
-	public function cssPrefetch(array $collectionsNames = []): string
+	/**
+	 * @param array|string|NULL $collectionsNames
+	 * @return string
+	 */
+	public function cssPrefetch($collectionsNames = NULL): string
 	{
 		return $this->generateMetaLinkElements($collectionsNames, Engine::CSS, self::LINK_PREFETCH);
 	}
 
 
-	public function cssPreload(array $collectionsNames = []): string
+	/**
+	 * @param array|string|NULL $collectionsNames
+	 * @return string
+	 */
+	public function cssPreload($collectionsNames = NULL): string
 	{
 		return $this->generateMetaLinkElements(
 			$collectionsNames, Engine::CSS, self::LINK_PRELOAD, self::LINK_PRELOAD_AS_CSS
@@ -122,13 +130,21 @@ class FilesCollectionRender
 	}
 
 
-	public function jsPrefetch(array $collectionsNames = []): string
+	/**
+	 * @param array|string|NULL $collectionsNames
+	 * @return string
+	 */
+	public function jsPrefetch($collectionsNames = NULL): string
 	{
 		return $this->generateMetaLinkElements($collectionsNames, Engine::JS, self::LINK_PREFETCH);
 	}
 
 
-	public function jsPreload(array $collectionsNames = []): string
+	/**
+	 * @param array|string|NULL $collectionsNames
+	 * @return string
+	 */
+	public function jsPreload($collectionsNames = NULL): string
 	{
 		return $this->generateMetaLinkElements(
 			$collectionsNames, Engine::JS, self::LINK_PRELOAD, self::LINK_PRELOAD_AS_JS
@@ -180,8 +196,11 @@ class FilesCollectionRender
 	}
 
 
+	/**
+	 * @param array|string|NULL $collectionsNames
+	 */
 	private function generateMetaLinkElements(
-		array $collectionsNames,
+		$collectionsNames = NULL,
 		string $collectionsType,
 		string $rel,
 		string $as = NULL
@@ -195,6 +214,9 @@ class FilesCollectionRender
 
 		if ( ! $collectionsNames) {
 			$collectionsNames[] = $this->getSelectedCollection(NULL, $collectionsType)->getName();
+
+		} elseif (is_string($collectionsNames)) {
+			$collectionsNames = [$this->getSelectedCollection($collectionsNames, $collectionsType)->getName()];
 		}
 
 		foreach ($collectionsNames as $collectionName) {

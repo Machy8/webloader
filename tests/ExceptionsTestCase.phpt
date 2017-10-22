@@ -144,7 +144,7 @@ final class ExceptionsTestCase extends AbstractTestCase
 					->setFiles(['%cssFixtures%/style-a.css'])
 					->setFilters(['test']);
 			$webLoader->getCompiler()->compileAllFilesCollections();
-		}, Exception::class, 'Undefined filter "test".');
+		}, Exception::class, 'Undefined JS filter "test".');
 	}
 
 
