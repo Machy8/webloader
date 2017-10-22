@@ -34,8 +34,9 @@ class CssUrlFilter
 
 	public function __construct(string $outputDirPath, string $documentRoot = '/')
 	{
-		$this->documentRoot = trim($documentRoot, '/');
+		$documentRoot = trim($documentRoot, '/');
 		$outputDirPath = preg_replace('~' . $documentRoot . '~', '', trim($outputDirPath, '/'));
+		$this->documentRoot = $documentRoot;
 		$this->relativePathToOutputDir = '/' . str_repeat('../', substr_count($outputDirPath, '/'));
 	}
 

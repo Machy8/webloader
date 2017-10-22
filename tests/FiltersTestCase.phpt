@@ -28,8 +28,10 @@ final class FiltersTestCase extends AbstractTestCase
 	{
 		$collectionName = 'test-css-url-filter';
 		$webLoader = $this->getWebLoader();
-		$webLoader->addCssFilter('cssUrlFilter', function (string $code, string $file) {
-			$filter = new CssUrlFilter(self::WEBTEMP_DIR);
+		$outputDir = $webLoader->getCompiler()->getOutputDir();
+		$documentRoot = $webLoader->getCompiler()->getDocumentRoot();
+		$webLoader->addCssFilter('cssUrlFilter', function (string $code, string $file) use ($outputDir, $documentRoot) {
+			$filter = new CssUrlFilter($outputDir, $documentRoot);
 			return $filter->filter($code, $file);
 		}, TRUE);
 
