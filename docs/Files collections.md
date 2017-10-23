@@ -35,7 +35,7 @@ $webLoader->createFilesCollectionsFromArray([
     ]
 ]);
 
-$render = $webloader->render();
+$render = $webloader->getFilesCollectionRender();
 
 echo $render->css('core');
 echo $render->js('core');
