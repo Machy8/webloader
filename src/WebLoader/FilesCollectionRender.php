@@ -217,6 +217,11 @@ class FilesCollectionRender
 
 		} elseif (is_string($collectionsNames)) {
 			$collectionsNames = [$this->getSelectedCollection($collectionsNames, $collectionsType)->getName()];
+
+		} else {
+			foreach($collectionsNames as $collectionName) {
+				$this->compiler->getFilesCollection($collectionName, $collectionsType);
+			}
 		}
 
 		foreach ($collectionsNames as $collectionName) {
