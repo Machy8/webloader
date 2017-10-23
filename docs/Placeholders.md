@@ -16,6 +16,7 @@ $webloader->createCssFilesCollection('core')
     ->setFiles([
         '%cssDir%/style.css'
     ]);
+    
 $webLoader->setPathPlaceholderDelimiter('#');
     
 $webloader->createJsFilesCollection('core')
