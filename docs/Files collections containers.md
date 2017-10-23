@@ -1,5 +1,5 @@
 # Files collections containers
-- Files collections containers wraps multiple files collections so you can organize them and render them in a bit more simple way
+- Files collections containers wraps multiple files collections so you can organize them and render them in a bit more simple way.
 - As in files collections, you can create them by calling appropriate methods or create a configuration file.
 
 ## Calling appropriate methods
