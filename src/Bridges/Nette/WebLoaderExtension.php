@@ -2,9 +2,7 @@
 
 /**
  *
- * This file is part of the Macdom
- *
- * Copyright (c) 2015-2017 Vladimír Macháček
+ * Copyright (c) Vladimír Macháček
  *
  * For the full copyright and license information, please view the file license.md
  * that was distributed with this source code.
@@ -16,34 +14,83 @@ declare(strict_types = 1);
 namespace WebLoader\Bridges\Nette;
 
 use Nette\DI\CompilerExtension;
+use Nette\DI\ContainerBuilder;
 
 
 class WebLoaderExtension extends CompilerExtension
 {
 
+	const
+		ENGINE_CLASSNAME = 'WebLoader\Engine',
+		ENGINE_PREFIX = 'engine';
+
+	const TRACY_CLASSNAME = 'Tracy\Debugger';
+
+	const
+		TRACY_PANEL_CLASSNAME = 'WebLoader\Bridges\Tracy\WebLoaderPanel',
+		TRACY_PANEL_PREFIX = 'tracyPanel';
+
+	/**
+	 * @var array
+	 */
+	protected $config;
+
 	/**
 	 * @var array
 	 */
 	protected $defaults = [
-		'debugger' => TRUE,
+		'debugger' => '%debugMode%',
 		'disableCache' => FALSE,
 		'documentRoot' => NULL,
 		'filesCollections' => [],
 		'filesCollectionsContainers' => [],
-		'outputDir' => NULL
+		'outputDir' => NULL,
+		'pathPlaceholderDelimiter' => '#',
+		'pathsPlaceholders' => []
 	];
+
+	/**
+	 * @var ContainerBuilder
+	 */
+	private $builder;
 
 
 	public function loadConfiguration()
 	{
-		$this->validateConfig($this->defaults);
-		$builder = $this->getContainerBuilder();
+		$this->config = $this->getConfig($this->defaults);
+		$this->builder = $this->getContainerBuilder();
 
-		$builder->addDefinition($this->prefix('compiler'))
-			->setClass('WebLoader\Compiler');
+		$this->setupTracyPanel();
+		$this->setupWebLoader();
+	}
 
-		$webLoader = $builder->addDefinition($this->prefix('engine'))
-			->setClass('WebLoader\Engine')
+
+	public function afterCompile(\Nette\PhpGenerator\ClassType $classType)
+	{
+		if ($this->config['debugger'] !== TRUE || ! class_exists(self::TRACY_CLASSNAME)) {
+			return;
+		}
+
+		$classType->getMethod('initialize')->addBody(
+			'$this->getByType("' . self::TRACY_PANEL_CLASSNAME
+			. '")->setWebLoader($this->getByType("' . self::ENGINE_CLASSNAME . '")->getCompiler());'
+		);
+	}
+
+
+	private function setupTracyPanel()
+	{
+		if ($this->config['debugger'] === TRUE) {
+			$this->builder->addDefinition($this->prefix(self::TRACY_PANEL_PREFIX))
+				->setFactory(self::TRACY_PANEL_CLASSNAME);
+		}
+	}
+
+
+	private function setupWebLoader()
+	{
+		$webLoader = $this->builder->addDefinition($this->prefix(self::ENGINE_PREFIX))
+			->setFactory(self::ENGINE_CLASSNAME)
 			->setArguments([$this->config['outputDir']]);
 
 		if ($this->config['disableCache']) {
@@ -52,10 +99,6 @@ class WebLoaderExtension extends CompilerExtension
 
 		if ($this->config['documentRoot']) {
 			$webLoader->addSetup('setDocumentRoot', [$this->config['documentRoot']]);
-		}
-
-		if ($this->config['outputDir']) {
-			$webLoader->addSetup('setOutputDir', [$this->config['outputDir']]);
 		}
 
 		if ($this->config['filesCollections']) {
@@ -68,12 +111,12 @@ class WebLoaderExtension extends CompilerExtension
 			);
 		}
 
-		if ($this->config['debugger'] === TRUE) {
-			$builder->addDefinition($this->prefix('tracyPanel'))
-				->setClass('WebLoader\Bridges\Tracy\WebLoaderPanel')
-				->addSetup(
-					'setWebLoader', ['@' . $this->prefix('compiler')]
-				);
+		if ($this->config['pathPlaceholderDelimiter']) {
+			$webLoader->addSetup('setPathPlaceholderDelimiter', [$this->config['pathPlaceholderDelimiter']]);
+		}
+
+		if ($this->config['pathsPlaceholders']) {
+			$webLoader->addSetup('addPathsPlaceholders', [$this->config['pathsPlaceholders']]);
 		}
 	}
 
