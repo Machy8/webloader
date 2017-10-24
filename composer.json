@@ -14,7 +14,7 @@
 		"machy8/google-closure-compiler": "^1.0"
 	},
 	"suggest": {
-		"machy8/google-closure-compiler.php": "PHP client for the Google Closure Compiler API in one file",
+		"machy8/google-closure-compiler": "PHP client for the Google Closure Compiler API in one file",
 		"tedivm/jshrink": "Javascript Minifier built in PHP",
 		"tubalmartin/cssmin": "A PHP port of the YUI CSS compressor"
 	},
