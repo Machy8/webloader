@@ -10,10 +10,10 @@
 	"require-dev": {
 		"tracy/tracy": "^2.4",
 		"nette/tester": "^2.0",
-		"tubalmartin/cssmin": "dev-master",
+		"tubalmartin/cssmin": "^4.1",
 		"machy8/google-closure-compiler": "^1.0"
 	},
-	"suggests": {
+	"suggest": {
 		"machy8/google-closure-compiler.php": "PHP client for the Google Closure Compiler API in one file",
 		"tedivm/jshrink": "Javascript Minifier built in PHP",
 		"tubalmartin/cssmin": "A PHP port of the YUI CSS compressor"
@@ -21,10 +21,11 @@
 	"autoload": {
 		"classmap": ["src/"]
 	},
-	"minimum-stability": "dev",
 	"extra": {
 		"branch-alias": {
 			"dev-master": "1.0-dev"
 		}
-	}
+	},
+	"minimum-stability": "dev",
+	"prefer-stable" : true
 }
