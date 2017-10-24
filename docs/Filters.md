@@ -1,6 +1,6 @@
 # Filters
-- Separated for **CSS** and **JS** so they can have the same name
-- They can be initialized for each file in files collection or once for whole collection after all files are loaded
+- Separated for **CSS** and **JS** so they can have the same name.
+- They can be initialized for each file in files collection or once for whole collection after all files are loaded.
 
 ````php
 $webLoader

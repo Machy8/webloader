@@ -1,5 +1,6 @@
 # Placeholders
-- Placeholders can be used in paths to configuration files or to css and js files
+- Placeholders can be used in paths to configuration files or to css and js files.
+- Is possible to set own path placeholder delimiter. Default is `%`.
 
 ````php
 $webLoader->addPathsPlaceholders([
@@ -16,8 +17,10 @@ $webloader->createCssFilesCollection('core')
         '%cssDir%/style.css'
     ]);
     
+$webLoader->setPathPlaceholderDelimiter('#');
+    
 $webloader->createJsFilesCollection('core')
     ->setFiles([
-        '%jsDir%/script.js'
+        '#jsDir#/script.js'
     ]);
 ````

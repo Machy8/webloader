@@ -114,3 +114,35 @@ public function beforeRender()
 {$webloaderContainersRender->css()|noescape}
 {$webloaderContainersRender->js()|noescape}
 ````
+
+## Output examples:
+````html
+<!-- $render->css('style') -->
+<link type="text/css" rel="stylesheet" href="style.css?v=1508834107">
+
+<!-- $render->css('style', [], TRUE) -->
+<style type="text/css">
+ /* Code */
+</style>
+
+<!-- $render->cssPreload('style') -->
+<link rel="preload" href="style.css?v=1508834107" as="style">
+
+<!-- $render->cssPrefetch('style') -->
+<link rel="prefetch" href="style.css?v=1508834107">
+
+
+<!-- $render->js('script') -->
+<script type="text/javascript" src="script.js?v=1508834107"></script>
+
+<!-- $render->js('script', [], TRUE) -->
+<script type="text/javascript"> 
+ // Code
+</script>
+
+<!-- $render->jsPreload('script') -->
+<link rel="preload" href="script.css?v=1508834107" as="script">
+
+<!-- $render->jsPrefetch('script') -->
+<link rel="prefetch" href="script.css?v=1508834107">
+````
