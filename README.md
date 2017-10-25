@@ -4,6 +4,13 @@
 
 📦 Simple, easy to use, php bundler for javascript and css.
 
+## In a nutshell
+- **Configurable**: in one file (example bellow or in docs)
+- Files **[collections](https://github.com/Machy8/webloader/blob/master/docs/Files%20collections.md)** and **[containers](https://github.com/Machy8/webloader/blob/master/docs/Files%20collections%20containers.md)**: makes assets organizing incredibly simple
+- **[Filters](https://github.com/Machy8/webloader/blob/master/docs/Filters.md)**: callable in two different ways
+- **[Path placeholders](https://github.com/Machy8/webloader/blob/master/docs/Placeholders.md)**: reusable paths to files, less writing
+- [Debugger bar](https://github.com/Machy8/webloader/blob/master/docs/Tracy%20bridge.md) for [Tracy](https://tracy.nette.org/cs/)
+
 ## Requirements
 - PHP 7.0+
 - If you use Nette Framework - v2.3+
