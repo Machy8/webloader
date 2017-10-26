@@ -282,7 +282,7 @@ class FilesCollectionRender
 		$basePath = $outputDir;
 
 		if ($documentRoot) {
-			$basePath = preg_replace('~^' . $documentRoot . '~', '', $outputDir, 1);
+			$basePath = str_replace($documentRoot, '', $outputDir);
 		}
 
 		return trim($basePath, '/');
