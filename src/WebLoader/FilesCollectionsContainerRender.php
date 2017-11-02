@@ -111,11 +111,7 @@ class FilesCollectionsContainerRender
 
 		$containerName = $containerName ?? $this->selectedContainerName;
 
-		if ( ! array_key_exists($containerName, $this->render->getCompiler()->getFilesCollectionsContainers())) {
-			throw new Exception('Trying to get undefined files collections container "' . $containerName . '".');
-		}
-
-		return $this->render->getCompiler()->getFilesCollectionsContainers()[$containerName];
+		return $this->render->getCompiler()->getFilesCollectionsContainer($containerName);
 	}
 
 }

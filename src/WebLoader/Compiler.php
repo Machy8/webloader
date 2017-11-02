@@ -40,7 +40,7 @@ class Compiler
 	];
 
 	/**
-	 * @var FilesCollectionsContainer[][]
+	 * @var FilesCollectionsContainer[]
 	 */
 	private $filesCollectionsContainers = [];
 
@@ -75,7 +75,7 @@ class Compiler
 
 	public function addCssFilter(string $name, callable $filter, bool $forEachFile = NULL): Compiler
 	{
-		if (array_key_exists($name, $this->filters[Engine::CSS])) {
+		if ($this->filterExists($name, Engine::CSS)) {
 			throw new Exception('Css filter "' . $name . '" already exists.');
 		}
 
@@ -88,15 +88,15 @@ class Compiler
 	}
 
 
-	public function addJsFilter(string $name, callable $filter, bool $oncePerCollection = NULL): Compiler
+	public function addJsFilter(string $name, callable $filter, bool $forEachFile = NULL): Compiler
 	{
-		if (array_key_exists($name, $this->filters[Engine::JS])) {
+		if ($this->filterExists($name, Engine::JS)) {
 			throw new Exception('Js filter "' . $name . '" already exists.');
 		}
 
 		$this->filters[Engine::JS][$name] = [
 			'callback' => $filter,
-			'forEachFile' => (bool) $oncePerCollection
+			'forEachFile' => (bool) $forEachFile
 		];
 
 		return $this;
@@ -106,7 +106,7 @@ class Compiler
 	public function addPathsPlaceholders(array $placeholders): Compiler
 	{
 		foreach ($placeholders as $placeholder => $path) {
-			if (array_key_exists($placeholder, $this->pathsPlaceholders)) {
+			if ($this->pathPlaceholderExists($placeholder)) {
 				throw new Exception('Placeholder "' . $placeholder . '" already exists.');
 			}
 
@@ -143,7 +143,7 @@ class Compiler
 
 	public function createCssFilesCollection(string $name): FilesCollection
 	{
-		if (array_key_exists($name, $this->filesCollections[Engine::CSS])) {
+		if ($this->filesCollectionExists($name, Engine::CSS)) {
 			throw new Exception('CSS files collection "' . $name . '" already exists.');
 		}
 
@@ -153,7 +153,7 @@ class Compiler
 
 	public function createFilesCollectionsContainer(string $name): FilesCollectionsContainer
 	{
-		if (array_key_exists($name, $this->filesCollectionsContainers)) {
+		if ($this->filesCollectionsContainerExists($name)) {
 			throw new Exception('Files collections container "' . $name . '" already exists.');
 		}
 
@@ -317,7 +317,7 @@ class Compiler
 
 	public function createJsFilesCollection(string $name): FilesCollection
 	{
-		if (array_key_exists($name, $this->filesCollections[Engine::JS])) {
+		if ($this->filesCollectionExists($name, Engine::JS)) {
 			throw new Exception('Javascript files collection "' . $name . '" already exists.');
 		}
 
@@ -340,11 +340,21 @@ class Compiler
 
 	public function getFilesCollection(string $name, string $type): FilesCollection
 	{
-		if ( ! array_key_exists($name, $this->filesCollections[$type])) {
+		if ( ! $this->filesCollectionExists($name, $type)) {
 			throw new Exception('Trying to get undefined ' . strtoupper($type) . ' files collection "' . $name . '".');
 		}
 
 		return $this->filesCollections[$type][$name];
+	}
+
+
+	public function getFilesCollectionsContainer(string $name): FilesCollectionsContainer
+	{
+		if ( ! $this->filesCollectionsContainerExists($name)) {
+			throw new Exception('Trying to get undefined files collections container "' . $name . '".');
+		}
+
+		return $this->filesCollectionsContainers[$name];
 	}
 
 
@@ -440,6 +450,44 @@ class Compiler
 	}
 
 
+	/**
+	 * @throws Exception
+	 */
+	public function filesCollectionExists(string $name, string $type): bool
+	{
+		if ( ! $this->isTypeCorrect($type)) {
+			throw new Exception('Unknown files collection type "' . $type . '".');
+		}
+
+		return array_key_exists($name, $this->filesCollections[$type]);
+	}
+
+
+	public function filesCollectionsContainerExists(string $name): bool
+	{
+		return array_key_exists($name, $this->filesCollectionsContainers);
+	}
+
+
+	/**
+	 * @throws Exception
+	 */
+	public function filterExists(string $name, string $type): bool
+	{
+		if ( ! $this->isTypeCorrect($type)) {
+			throw new Exception('Unknown filter type "' . $type . '".');
+		}
+
+		return array_key_exists($name, $this->filters[$type]);
+	}
+
+
+	public function pathPlaceholderExists(string $placeholder): bool
+	{
+		return array_key_exists($placeholder, $this->pathsPlaceholders);
+	}
+
+
 	private function compileSingleFilesCollection(FilesCollection $collection)
 	{
 		$filePath = $collection->getName() . '.' . $collection->getType();
@@ -454,6 +502,12 @@ class Compiler
 
 		$code = $this->loadCssJsFiles($collection->getType(), $collection->getFiles(), $collection->getFilters());
 		file_put_contents($filePath, $code);
+	}
+
+
+	private function isTypeCorrect(string $type): bool
+	{
+		return in_array($type, [Engine::CSS, Engine::JS]);
 	}
 
 
@@ -473,7 +527,7 @@ class Compiler
 			$fileContent = file_get_contents($file);
 
 			foreach ($filters as $filter) {
-				if ( ! array_key_exists($filter, $this->filters[$type])) {
+				if ( ! $this->filterExists($filter, $type)) {
 					throw new Exception('Undefined ' . strtoupper($type) .' filter "' . $filter . '".');
 				}
 				$filter = $this->filters[$type][$filter];
