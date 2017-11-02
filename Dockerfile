@@ -17,6 +17,6 @@ RUN apt-get install -y apt-transport-https lsb-release ca-certificates wget \
 
 RUN curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-CMD	[ "php", "-S", "[::]:82", "-t", "/var/www/html" ]
+CMD	[ "php", "-S", "[::]:80", "-t", "/var/www/html" ]
 
-EXPOSE 82
+EXPOSE 80
