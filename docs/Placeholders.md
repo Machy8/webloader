@@ -9,6 +9,14 @@ $webLoader->addPathsPlaceholders([
     'configFiles' => 'path/to/configuration/files'
 ]);
 
+// In the Compiler, there are *Exists methods that can help you avoid unwanted exceptions when working 
+// with WebLoader object on multiple places
+if ( ! $webLoader->getCompiler()->pathPlaceholderExists('cssDir')) {
+    $webloader->addPathsPlaceholders([
+        'cssDir' => 'path/to/other/css/files'
+    ]);
+}
+
 // Usage
 $webloader->createFilesCollectionsFromConfig('%configFiles%/webloader.neon');
 
