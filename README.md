@@ -1,6 +1,7 @@
 # Web loader
 [![Build Status](https://travis-ci.org/Machy8/webloader.svg?branch=master)](https://travis-ci.org/Machy8/webloader)
 [![Coverage Status](https://coveralls.io/repos/github/Machy8/webloader/badge.svg?branch=master)](https://coveralls.io/github/Machy8/webloader?branch=master)
+[![Packagist](https://img.shields.io/packagist/dm/machy8/webloader.svg)](https://github.com/Machy8/webloader)
 
 📦 Simple, easy to use, php bundler for javascript and css.
 
