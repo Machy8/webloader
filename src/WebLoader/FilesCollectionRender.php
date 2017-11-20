@@ -49,6 +49,11 @@ class FilesCollectionRender
 	 */
 	private $selectedCollectionName;
 
+	/**
+	 * @var string
+	 */
+	private $selectedFileName;
+
 
 	public function __construct(Compiler $compiler)
 	{
@@ -61,7 +66,7 @@ class FilesCollectionRender
 	{
 		$collection = $this->getSelectedCollection(Engine::CSS, $collectionName);
 		$collectionName = $collection->getName();
-		$this->compiler->compileFilesCollection(Engine::CSS, $collectionName);
+		$this->compiler->compileFilesCollectionByType(Engine::CSS, $collectionName);
 		$attributes = array_merge($attributes, $collection->getOutputElementAttributes());
 		$attributes['type'] = self::STYLE_TYPE_ATTRIBUTE;
 		$element = self::STYLE_ELEMENT;
@@ -113,7 +118,7 @@ class FilesCollectionRender
 	{
 		$collection = $this->getSelectedCollection(Engine::JS, $collectionName);
 		$collectionName = $collection->getName();
-		$this->compiler->compileFilesCollection(Engine::JS, $collectionName);
+		$this->compiler->compileFilesCollectionByType(Engine::JS, $collectionName);
 		$attributes = array_merge($attributes, $collection->getOutputElementAttributes());
 		$attributes['type'] = self::SCRIPT_TYPE_ATTRIBUTE;
 		$basePath = $this->getCollectionBasePath($collectionName, Engine::JS);
@@ -155,6 +160,13 @@ class FilesCollectionRender
 	public function selectCollection(string $collectionName): FilesCollectionRender
 	{
 		$this->selectedCollectionName = $collectionName;
+		return $this;
+	}
+
+
+	public function selectFile(string $fileName): FilesCollectionRender
+	{
+		$this->selectedFileName = $fileName;
 		return $this;
 	}
 
