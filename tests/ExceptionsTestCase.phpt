@@ -39,7 +39,7 @@ final class ExceptionsTestCase extends AbstractTestCase
 		Assert::exception(function () {
 			$this->getWebLoader()->createJsFilesCollection('test');
 			$this->getWebLoader()->createJsFilesCollection('test');
-		}, Exception::class, 'Javascript files collection "test" already exists.');
+		}, Exception::class, 'JS files collection "test" already exists.');
 	}
 
 
@@ -62,7 +62,7 @@ final class ExceptionsTestCase extends AbstractTestCase
 				->addJsFilter('Lorem', function () {
 					return '';
 				});
-		}, Exception::class, 'Js filter "Lorem" already exists.');
+		}, Exception::class, 'JS filter "Lorem" already exists.');
 	}
 
 
@@ -76,7 +76,7 @@ final class ExceptionsTestCase extends AbstractTestCase
 				->addCssFilter('Lorem', function () {
 					return '';
 				});
-		}, Exception::class, 'Css filter "Lorem" already exists.');
+		}, Exception::class, 'CSS filter "Lorem" already exists.');
 	}
 
 
