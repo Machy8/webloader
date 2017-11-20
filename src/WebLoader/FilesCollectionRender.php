@@ -165,6 +165,18 @@ class FilesCollectionRender
 	}
 
 
+	private function createBasePath(string $documentRoot, string $outputDir): string
+	{
+		$basePath = $outputDir;
+
+		if ($documentRoot) {
+			$basePath = str_replace($documentRoot, '', $outputDir);
+		}
+
+		return trim($basePath, '/');
+	}
+
+
 	private function generateElement(string $element, array $attributes, string $filePath = NULL): string
 	{
 		$tag = '<' . $element;
@@ -274,18 +286,6 @@ class FilesCollectionRender
 		$collectionName = $collectionName ?? $this->selectedCollectionName;
 
 		return $this->compiler->getFilesCollection($collectionName, $type);
-	}
-
-
-	private function createBasePath(string $documentRoot, string $outputDir): string
-	{
-		$basePath = $outputDir;
-
-		if ($documentRoot) {
-			$basePath = str_replace($documentRoot, '', $outputDir);
-		}
-
-		return trim($basePath, '/');
 	}
 
 }
