@@ -59,9 +59,9 @@ class FilesCollectionRender
 
 	public function css(string $collectionName = NULL, array $attributes = [], bool $loadContent = FALSE): string
 	{
-		$collection = $this->getSelectedCollection($collectionName, Engine::CSS);
+		$collection = $this->getSelectedCollection(Engine::CSS, $collectionName);
 		$collectionName = $collection->getName();
-		$this->compiler->compileCssFilesCollection($collectionName);
+		$this->compiler->compileFilesCollection(Engine::CSS, $collectionName);
 		$attributes = array_merge($attributes, $collection->getOutputElementAttributes());
 		$attributes['type'] = self::STYLE_TYPE_ATTRIBUTE;
 		$element = self::STYLE_ELEMENT;
@@ -111,9 +111,9 @@ class FilesCollectionRender
 
 	public function js(string $collectionName = NULL, array $attributes = [], bool $loadContent = FALSE): string
 	{
-		$collection = $this->getSelectedCollection($collectionName, Engine::JS);
+		$collection = $this->getSelectedCollection(Engine::JS, $collectionName);
 		$collectionName = $collection->getName();
-		$this->compiler->compileJsFilesCollection($collectionName);
+		$this->compiler->compileFilesCollection(Engine::JS, $collectionName);
 		$attributes = array_merge($attributes, $collection->getOutputElementAttributes());
 		$attributes['type'] = self::SCRIPT_TYPE_ATTRIBUTE;
 		$basePath = $this->getCollectionBasePath($collectionName, Engine::JS);
@@ -225,14 +225,14 @@ class FilesCollectionRender
 		}
 
 		if ( ! $collectionsNames) {
-			$collectionsNames[] = $this->getSelectedCollection(NULL, $collectionsType)->getName();
+			$collectionsNames[] = $this->getSelectedCollection($collectionsType)->getName();
 
 		} elseif (is_string($collectionsNames)) {
-			$collectionsNames = [$this->getSelectedCollection($collectionsNames, $collectionsType)->getName()];
+			$collectionsNames = [$this->getSelectedCollection($collectionsType, $collectionsNames)->getName()];
 
 		} else {
 			foreach($collectionsNames as $collectionName) {
-				$this->compiler->getFilesCollection($collectionName, $collectionsType);
+				$this->compiler->getFilesCollection($collectionsType, $collectionName);
 			}
 		}
 
@@ -277,7 +277,7 @@ class FilesCollectionRender
 	/**
 	 * @throws Exception
 	 */
-	private function getSelectedCollection(string $collectionName = NULL, string $type): FilesCollection
+	private function getSelectedCollection(string $type, string $collectionName = NULL): FilesCollection
 	{
 		if ( ! $collectionName && ! $this->selectedCollectionName) {
 			throw new Exception('Trying to call files collection render on NULL.');
@@ -285,7 +285,7 @@ class FilesCollectionRender
 
 		$collectionName = $collectionName ?? $this->selectedCollectionName;
 
-		return $this->compiler->getFilesCollection($collectionName, $type);
+		return $this->compiler->getFilesCollection($type, $collectionName);
 	}
 
 }

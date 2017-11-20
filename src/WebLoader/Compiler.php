@@ -73,13 +73,24 @@ class Compiler
 	private $version;
 
 
+	/**
+	 * Use addFilter
+	 * @deprecated
+	 */
 	public function addCssFilter(string $name, callable $filter, bool $forEachFile = NULL): Compiler
 	{
-		if ($this->filterExists($name, Engine::CSS)) {
-			throw new Exception('Css filter "' . $name . '" already exists.');
+		$this->addFilter(Engine::CSS, $name, $filter, $forEachFile);
+		return $this;
+	}
+
+
+	public function addFilter(string $type, string $name, callable $filter, bool $forEachFile = NULL)
+	{
+		if ($this->filterExists($type, $name)) {
+			throw new Exception(strtoupper($type) . ' filter "' . $name . '" already exists.');
 		}
 
-		$this->filters[Engine::CSS][$name] = [
+		$this->filters[$type][$name] = [
 			'callback' => $filter,
 			'forEachFile' => (bool) $forEachFile
 		];
@@ -88,17 +99,13 @@ class Compiler
 	}
 
 
+	/**
+	 * Use add filter
+	 * @deprecated
+	 */
 	public function addJsFilter(string $name, callable $filter, bool $forEachFile = NULL): Compiler
 	{
-		if ($this->filterExists($name, Engine::JS)) {
-			throw new Exception('Js filter "' . $name . '" already exists.');
-		}
-
-		$this->filters[Engine::JS][$name] = [
-			'callback' => $filter,
-			'forEachFile' => (bool) $forEachFile
-		];
-
+		$this->addFilter(Engine::JS, $name, $filter, $forEachFile);
 		return $this;
 	}
 
@@ -127,27 +134,50 @@ class Compiler
 	}
 
 
+	/**
+	 * Use compileFilesCollection
+	 * @deprecated
+	 */
 	public function compileCssFilesCollection(string $name)
 	{
-		$collection = $this->getFilesCollection($name, Engine::CSS);
+		$this->compileFilesCollectionByType(Engine::CSS, $name);
+	}
+
+
+	public function compileFilesCollectionByType(string $type, string $name)
+	{
+		$collection = $this->getFilesCollection($type, $name);
 		$this->compileSingleFilesCollection($collection);
 	}
 
 
+	/**
+	 * Use compileFilesCollection
+	 * @deprecated
+	 */
 	public function compileJsFilesCollection(string $name)
 	{
-		$collection = $this->getFilesCollection($name, Engine::JS);
-		$this->compileSingleFilesCollection($collection);
+		$this->compileFilesCollectionByType(Engine::JS, $name);
 	}
 
 
-	public function createCssFilesCollection(string $name): FilesCollection
+	public function createFilesCollection(string $type, string $name): FilesCollection
 	{
-		if ($this->filesCollectionExists($name, Engine::CSS)) {
-			throw new Exception('CSS files collection "' . $name . '" already exists.');
+		if ($this->filesCollectionExists($type, $name)) {
+			throw new Exception(strtoupper($type) . ' files collection "' . $name . '" already exists.');
 		}
 
-		return $this->filesCollections[Engine::CSS][$name] = new FilesCollection($name, Engine::CSS);
+		return $this->filesCollections[$type][$name] = new FilesCollection($name, $type);
+	}
+
+
+	/**
+	 * Use createFilesCollection
+	 * @deprecated
+	 */
+	public function createCssFilesCollection(string $name): FilesCollection
+	{
+		return $this->createFilesCollection(Engine::CSS, $name);
 	}
 
 
@@ -273,7 +303,7 @@ class Compiler
 			}
 
 			if ($cssFiles) {
-				$cssCollection = $this->createCssFilesCollection($collectionName)
+				$cssCollection = $this->createFilesCollection(Engine::CSS, $collectionName)
 					->setFiles($cssFiles)
 					->setFilters($cssFilters)
 					->setOutputElementAttributes($cssOutputElementAttributes);
@@ -284,7 +314,7 @@ class Compiler
 			}
 
 			if ($jsFiles) {
-				$jsCollection = $this->createJsFilesCollection($collectionName)
+				$jsCollection = $this->createFilesCollection(Engine::JS, $collectionName)
 					->setFiles($jsFiles)
 					->setFilters($jsFilters)
 					->setOutputElementAttributes($jsOutputElementAttributes);
@@ -315,13 +345,13 @@ class Compiler
 	}
 
 
+	/**
+	 * Use createFilesCollection
+	 * @deprecated
+	 */
 	public function createJsFilesCollection(string $name): FilesCollection
 	{
-		if ($this->filesCollectionExists($name, Engine::JS)) {
-			throw new Exception('Javascript files collection "' . $name . '" already exists.');
-		}
-
-		return $this->filesCollections[Engine::JS][$name] = new FilesCollection($name, Engine::JS);
+		return $this->createFilesCollection(Engine::JS, $name);
 	}
 
 
@@ -338,9 +368,9 @@ class Compiler
 	}
 
 
-	public function getFilesCollection(string $name, string $type): FilesCollection
+	public function getFilesCollection(string $type, string $name): FilesCollection
 	{
-		if ( ! $this->filesCollectionExists($name, $type)) {
+		if ( ! $this->filesCollectionExists($type, $name)) {
 			throw new Exception('Trying to get undefined ' . strtoupper($type) . ' files collection "' . $name . '".');
 		}
 
@@ -453,7 +483,7 @@ class Compiler
 	/**
 	 * @throws Exception
 	 */
-	public function filesCollectionExists(string $name, string $type): bool
+	public function filesCollectionExists(string $type, string $name): bool
 	{
 		if ( ! $this->isTypeCorrect($type)) {
 			throw new Exception('Unknown files collection type "' . $type . '".');
@@ -472,7 +502,7 @@ class Compiler
 	/**
 	 * @throws Exception
 	 */
-	public function filterExists(string $name, string $type): bool
+	public function filterExists(string $type, string $name): bool
 	{
 		if ( ! $this->isTypeCorrect($type)) {
 			throw new Exception('Unknown filter type "' . $type . '".');
@@ -500,7 +530,10 @@ class Compiler
 			return;
 		}
 
-		$code = $this->loadCssJsFiles($collection->getType(), $collection->getFiles(), $collection->getFilters());
+		$code = $this->loadFilesContent(
+			$collection->getType(), $collection->getFiles(), $collection->getFilters()
+		);
+
 		file_put_contents($filePath, $code);
 	}
 
@@ -511,7 +544,7 @@ class Compiler
 	}
 
 
-	private function loadCssJsFiles(string $type, array $files, array $filters): string
+	private function loadFilesContent(string $type, array $files, array $filters): string
 	{
 		$output = '';
 		$filesCount = count($files);
@@ -527,7 +560,7 @@ class Compiler
 			$fileContent = file_get_contents($file);
 
 			foreach ($filters as $filter) {
-				if ( ! $this->filterExists($filter, $type)) {
+				if ( ! $this->filterExists($type, $filter)) {
 					throw new Exception('Undefined ' . strtoupper($type) .' filter "' . $filter . '".');
 				}
 				$filter = $this->filters[$type][$filter];

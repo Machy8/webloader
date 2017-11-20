@@ -45,14 +45,14 @@ class Engine
 
 	public function addCssFilter(string $name, callable $filter, bool $forEachFile = NULL): Engine
 	{
-		$this->getCompiler()->addCssFilter($name, $filter, $forEachFile);
+		$this->getCompiler()->addFilter(Engine::CSS, $name, $filter, $forEachFile);
 		return $this;
 	}
 
 
 	public function addJsFilter(string $name, callable $filter, bool $forEachFile = NULL): Engine
 	{
-		$this->getCompiler()->addJsFilter($name, $filter, $forEachFile);
+		$this->getCompiler()->addFilter(Engine::JS, $name, $filter, $forEachFile);
 		return $this;
 	}
 
@@ -66,7 +66,7 @@ class Engine
 
 	public function createCssFilesCollection(string $name): FilesCollection
 	{
-		return $this->getCompiler()->createCssFilesCollection($name);
+		return $this->getCompiler()->createFilesCollection(Engine::CSS, $name);
 	}
 
 
@@ -106,7 +106,7 @@ class Engine
 
 	public function createJsFilesCollection(string $name): FilesCollection
 	{
-		return $this->getCompiler()->createJsFilesCollection($name);
+		return $this->getCompiler()->createFilesCollection(Engine::JS, $name);
 	}
 
 
