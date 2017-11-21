@@ -157,14 +157,14 @@ class FilesCollectionRender
 	}
 
 
-	public function selectCollection(string $collectionName): FilesCollectionRender
+	public function selectCollection(string $collectionName = NULL): FilesCollectionRender
 	{
 		$this->selectedCollectionName = $collectionName;
 		return $this;
 	}
 
 
-	public function setPrefix(string $prefix): FilesCollectionRender
+	public function setPrefix(string $prefix = NULL): FilesCollectionRender
 	{
 		$this->selectedPrefix = $prefix;
 		return $this;
