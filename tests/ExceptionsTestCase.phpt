@@ -104,6 +104,22 @@ final class ExceptionsTestCase extends AbstractTestCase
 	}
 
 
+	public function testMissingFilesCollectionsContainerConfigurationFileException()
+	{
+		Assert::exception(function () {
+			$this->getWebLoader()->createFilesCollectionsContainersFromConfig('path/to/config.neon');
+		}, Exception::class, 'Files collections containers configuration file "path/to/config.neon" not found.');
+	}
+
+
+	public function testMissingFilesCollectionConfigurationFileException()
+	{
+		Assert::exception(function () {
+			$this->getWebLoader()->createFilesCollectionsFromConfig('path/to/config.neon');
+		}, Exception::class, 'Files collections configuration file "path/to/config.neon" not found.');
+	}
+
+
 	public function testNullFilesCollectionsContainerException()
 	{
 		Assert::exception(function () {
@@ -177,22 +193,6 @@ final class ExceptionsTestCase extends AbstractTestCase
 				])
 				->getFilesCollectionRender();
 		}, Exception::class, 'Unknown configuration section "csFilters" in files collection "test".');
-	}
-
-
-	public function testMissingFilesCollectionsContainerConfigurationFileException()
-	{
-		Assert::exception(function () {
-			$this->getWebLoader()->createFilesCollectionsContainersFromConfig('path/to/config.neon');
-		}, Exception::class, 'Files collections containers configuration file "path/to/config.neon" not found.');
-	}
-
-
-	public function testMissingFilesCollectionConfigurationFileException()
-	{
-		Assert::exception(function () {
-			$this->getWebLoader()->createFilesCollectionsFromConfig('path/to/config.neon');
-		}, Exception::class, 'Files collections configuration file "path/to/config.neon" not found.');
 	}
 
 
