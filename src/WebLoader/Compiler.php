@@ -531,7 +531,7 @@ class Compiler
 		}
 
 		$code = $this->loadFilesContent(
-			$collection->getType(), $collection->getFiles(), $collection->getFilters()
+			$filePath, $collection->getType(), $collection->getFiles(), $collection->getFilters()
 		);
 
 		file_put_contents($filePath, $code);
@@ -544,7 +544,7 @@ class Compiler
 	}
 
 
-	private function loadFilesContent(string $type, array $files, array $filters): string
+	private function loadFilesContent(string $collectionPath, string $type, array $files, array $filters): string
 	{
 		$output = '';
 		$filesCount = count($files);
@@ -581,7 +581,7 @@ class Compiler
 		}
 
 		foreach ($oncePerCollectionFilters as $filter) {
-			$output = $filter['callback']($output);
+			$output = $filter['callback']($output, $collectionPath);
 		}
 
 		return $output;
