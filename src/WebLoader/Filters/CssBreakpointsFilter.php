@@ -26,6 +26,16 @@ class CssBreakpointsFilter
 	 */
 	private $breakpoints;
 
+	/**
+	 * @var bool
+	 */
+	private $cacheEnabled = TRUE;
+
+	/**
+	 * @var callable[]
+	 */
+	private $outputFilesFilters = [];
+
 
 	public function __construct(array $breakpoints)
 	{
@@ -43,10 +53,15 @@ class CssBreakpointsFilter
 		$outputDir = $pathInfo['dirname'];
 		$usedMediaQueries = [];
 		preg_match_all(self::MEDIA_QUERIES_REGULAR_EXPRESSION, $code, $mediaQueries, PREG_SET_ORDER);
-		bdump($mediaQueries);
+
 		foreach ($this->breakpoints as $filePrefix => $breakpoints) {
 			$fileContent = '';
 			$mediaQueriesCount = count($mediaQueries);
+			$outputFilePath = $outputDir . '/' . $filePrefix . '.' . $fileName;
+
+			if (file_exists($outputFilePath) && $this->cacheEnabled) {
+				continue;
+			}
 
 			for($i = 0; $i < $mediaQueriesCount; $i++) {
 				$mediaQuery = $mediaQueries[$i];
@@ -62,14 +77,17 @@ class CssBreakpointsFilter
 						)
 					)
 				) {
-					bdump($minWidthMatch['unit']);
 					$fileContent .= $mediaQuery[0];
 					$usedMediaQueries[] = $mediaQuery;
 					$mediaQueries[$i] = NULL;
 				}
 			}
 
-			file_put_contents($outputDir . '/' . $filePrefix . '.' . $fileName, $fileContent);
+			foreach ($this->outputFilesFilters as $outputFilesFilter) {
+				$fileContent = $outputFilesFilter($fileContent);
+			}
+
+			file_put_contents($outputFilePath, $fileContent);
 		}
 
 		// Override default generated file with content without min-width breakpoints
@@ -84,4 +102,19 @@ class CssBreakpointsFilter
 
 		return $defaultFileContent;
 	}
+
+
+	public function disableCache(): CssBreakpointsFilter
+	{
+		$this->cacheEnabled = FALSE;
+		return $this;
+	}
+
+
+	public function addOutputFilesFilter(callable $filter): CssBreakpointsFilter
+	{
+		$this->outputFilesFilters[] = $filter;
+		return $this;
+	}
+
 }
