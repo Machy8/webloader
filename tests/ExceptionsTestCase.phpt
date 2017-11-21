@@ -196,6 +196,14 @@ final class ExceptionsTestCase extends AbstractTestCase
 	}
 
 
+	public function testWrongDocumentRootException()
+	{
+		Assert::exception(function () {
+			$this->getWebLoader()->setDocumentRoot('path/to/some/dir');
+		}, Exception::class, 'Given document root "path/to/some/dir" doesn\'t exists or is not a directory.');
+	}
+
+
 	public function testWrongOutputDirException()
 	{
 		Assert::exception(function () {
