@@ -52,7 +52,7 @@ class FilesCollectionRender
 	/**
 	 * @var string
 	 */
-	private $selectedFileName;
+	private $selectedPrefix;
 
 
 	public function __construct(Compiler $compiler)
@@ -164,9 +164,9 @@ class FilesCollectionRender
 	}
 
 
-	public function selectFile(string $fileName): FilesCollectionRender
+	public function setPrefix(string $prefix): FilesCollectionRender
 	{
-		$this->selectedFileName = $fileName;
+		$this->selectedPrefix = $prefix;
 		return $this;
 	}
 
@@ -260,6 +260,10 @@ class FilesCollectionRender
 
 	private function getCollectionBasePath(string $collectionName, string $type): string
 	{
+		if ($this->selectedPrefix) {
+			$collectionName = $this->selectedPrefix . '.' . $collectionName;
+		}
+
 		$basePath = '/' . $collectionName . '.' . $type;
 
 		if ($this->basePath) {
