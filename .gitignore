@@ -1,5 +1,6 @@
 vendor/
 .idea/
-webtemp/
+/webtemp/
+/tests/webtemp/actual/
 index.php
 composer.lock

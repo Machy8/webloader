@@ -1,0 +1,15 @@
+@media (min-width: 380px) {
+    .header {
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+        flex-direction: row;
+        border-bottom: 0; } }@media (min-width: 380px) {
+    .header-logo {
+        margin-bottom: 0; } }@media only screen and (min-width: 30em) {
+    .wallpaper {
+        top: -4%;
+        left: -15%;
+        width: 13%;
+        height: 120%; }
+}

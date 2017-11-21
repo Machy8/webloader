@@ -15,6 +15,7 @@ namespace WebLoader\Tests;
 
 require_once 'bootstrap.php';
 
+use WebLoader\Filters\CssBreakpointsFilter;
 use WebLoader\Filters\CssUrlFilter;
 
 
@@ -42,6 +43,42 @@ final class FiltersTestCase extends AbstractTestCase
 		$webLoader->getFilesCollectionRender()->css($collectionName);
 
 		$this->matchCssFile($collectionName);
+	}
+
+
+	public function testCssBreakpointsFilter()
+	{
+		$collectionName = 'test-css-breakpoints-filter';
+		$webLoader = $this->getWebLoader();
+
+		$webLoader->addCssFilter('cssBreakpointsFilter', function (string $code, string $collectionPath) {
+			$breakpoints = [
+				'medium' => [
+					'px' => 640,
+					'em' => 40
+				],
+				'large' => [
+					'px' => 1024,
+					'em' => 64
+				],
+				'extra-large' => ['*']
+			];
+
+			$filter = new CssBreakpointsFilter($breakpoints);
+
+			return $filter->filter($code, $collectionPath);
+		});
+
+		$webLoader->createCssFilesCollection($collectionName)
+			->setFiles(['%cssFixtures%/style-d.css'])
+			->setFilters(['cssBreakpointsFilter']);
+
+		$webLoader->getFilesCollectionRender()->css($collectionName);
+
+		$this->matchCssFile($collectionName);
+		$this->matchCssFile('medium.' . $collectionName);
+		$this->matchCssFile('large.' .$collectionName);
+		$this->matchCssFile('extra-large.' .$collectionName);
 	}
 
 }
