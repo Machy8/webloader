@@ -12,7 +12,9 @@ h1, h2, h3, h4, h5, h6, .header, .header a, .tag {
 
 a {
     color: #444444; }
-
+@media (min-width: 1440px) {
+    body {
+        font-size: 126%; } }
 .header {
     padding: 1rem;
     z-index: 1;

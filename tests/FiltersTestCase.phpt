@@ -54,19 +54,18 @@ final class FiltersTestCase extends AbstractTestCase
 		$webLoader->addCssFilter('cssBreakpointsFilter', function (string $code, string $collectionPath) {
 			$breakpoints = [
 				'medium' => [
-					'px' => 640,
-					'em' => 40
+					'px' => [640, 1023],
+					'em' => [40, 63]
 				],
 				'large' => [
-					'px' => 1024,
-					'em' => 64
+					'px' => [1024, 1119],
+					'em' => [64, 87]
 				],
 				'extra-large' => ['*']
 			];
 
 			$filter = new CssBreakpointsFilter($breakpoints);
-
-			return $filter->filter($code, $collectionPath);
+			return $filter->disableCache()->filter($code, $collectionPath);
 		});
 
 		$webLoader->createCssFilesCollection($collectionName)

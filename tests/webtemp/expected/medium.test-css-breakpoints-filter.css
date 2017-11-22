@@ -1,12 +1,25 @@
-@media (min-width: 380px) {
+@media (min-width: 640px) {
     .header {
-        -webkit-box-orient: horizontal;
-        -webkit-box-direction: normal;
-        -ms-flex-direction: row;
-        flex-direction: row;
-        border-bottom: 0; } }@media (min-width: 380px) {
-    .header-logo {
-        margin-bottom: 0; } }@media only screen and (min-width: 30em) {
+        padding: 0 2rem; } }@media (min-width: 641px) {
+    .header-logo-img {
+        width: 60px;
+        height: 60px; } }@media (min-width: 640px) {
+    .wallpaper {
+        min-height: 700px;
+        min-width: 1024px; } }@media (min-width: 640px) {
+    .blog-link {
+        margin-top: 2rem;
+        margin-right: 2rem; } }@media (min-width: 640px) {
+    .about-photo {
+        max-width: 70%; } }@media (min-width: 640px) {
+    .about-title {
+        margin-top: 2rem;
+        font-size: 190%; } }@media (min-width: 640px) {
+    .about {
+        margin-top: 0; } }@media (min-width: 640px) {
+    .wallpaper {
+        min-height: 700px;
+        min-width: 1024px; } }@media only screen and (min-width: 45em) {
     .wallpaper {
         top: -4%;
         left: -15%;
