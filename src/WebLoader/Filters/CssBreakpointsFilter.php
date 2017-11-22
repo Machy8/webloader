@@ -18,7 +18,7 @@ class CssBreakpointsFilter
 {
 
 	CONST
-		MEDIA_QUERIES_REGULAR_EXPRESSION = '~@media\b (?<parameters>[^{]+){(?<css>(?!@media)[^{}]+{[^{]*)}~',
+		MEDIA_QUERIES_REGULAR_EXPRESSION = '~@media(?<parameters>[^{]+){(?:[^{}]*{[^{}]*})+[^}]+}~',
 		MIN_WIDTH_REGULAR_EXPRESSION = '~\(min-width\s*:\s*(?<value>\d+)\s*(?<unit>\S+)\)~';
 
 	/**
@@ -52,6 +52,7 @@ class CssBreakpointsFilter
 		$fileName = $pathInfo['basename'];
 		$outputDir = $pathInfo['dirname'];
 		$usedMediaQueries = [];
+		$previousBreakpoints = NULL;
 		preg_match_all(self::MEDIA_QUERIES_REGULAR_EXPRESSION, $code, $mediaQueries, PREG_SET_ORDER);
 
 		foreach ($this->breakpoints as $filePrefix => $breakpoints) {
@@ -60,6 +61,7 @@ class CssBreakpointsFilter
 			$outputFilePath = $outputDir . '/' . $filePrefix . '.' . $fileName;
 
 			if (file_exists($outputFilePath) && $this->cacheEnabled) {
+				$previousBreakpoints = $breakpoints;
 				continue;
 			}
 
@@ -70,16 +72,20 @@ class CssBreakpointsFilter
 					continue;
 				}
 
-				if (preg_match(self::MIN_WIDTH_REGULAR_EXPRESSION, $mediaQuery['parameters'], $minWidthMatch)
-					&& (in_array('*', $breakpoints)
-						|| (array_key_exists($minWidthMatch['unit'], $breakpoints)
-							&& (int) $minWidthMatch['value'] < $breakpoints[$minWidthMatch['unit']]
-						)
-					)
-				) {
-					$fileContent .= $mediaQuery[0];
-					$usedMediaQueries[] = $mediaQuery;
-					$mediaQueries[$i] = NULL;
+				if (preg_match(self::MIN_WIDTH_REGULAR_EXPRESSION, $mediaQuery['parameters'], $minWidthMatch)) {
+					$minWidthUnit = $minWidthMatch['unit'];
+					$minWidthValue = $minWidthMatch['value'];
+
+					if (in_array('*', $breakpoints) && $previousBreakpoints
+						&& (int) $minWidthValue > $previousBreakpoints[$minWidthUnit][1]
+						|| array_key_exists($minWidthUnit, $breakpoints)
+							&& (int) $minWidthValue >= $breakpoints[$minWidthUnit][0]
+							&& (int) $minWidthValue <= $breakpoints[$minWidthUnit][1]
+					) {
+						$fileContent .= $mediaQuery[0];
+						$usedMediaQueries[] = $mediaQuery;
+						$mediaQueries[$i] = NULL;
+					}
 				}
 			}
 
@@ -88,6 +94,7 @@ class CssBreakpointsFilter
 			}
 
 			file_put_contents($outputFilePath, $fileContent);
+			$previousBreakpoints = $breakpoints;
 		}
 
 		// Override default generated file with content without min-width breakpoints
