@@ -581,7 +581,11 @@ class Compiler
 		}
 
 		foreach ($oncePerCollectionFilters as $filter) {
-			$output = $filter['callback']($output, $collectionPath);
+			$filterOutput = $filter['callback']($output, $collectionPath);
+
+			if ($filterOutput !== NULL) {
+				$output = $filterOutput;
+			}
 		}
 
 		return $output;
