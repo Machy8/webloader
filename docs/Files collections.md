@@ -58,13 +58,13 @@ core:
     jsFiles:
         - path/to/jquery.js
         - path/to/anotherLibrary.js
-
-    jsOutputElementAttributes:
-		async: TRUE
         
     jsFilters:
         - urlFilter
         - minifier
+
+    jsOutputElementAttributes:
+        async: TRUE
 
     cssFilters:
         - minifier
@@ -74,5 +74,5 @@ core:
         - path/to/anotherStyle.css
         
     cssOutputElementAttributes:
-		amp-custom: TRUE
+        amp-custom: TRUE
 ````
