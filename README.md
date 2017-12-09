@@ -32,7 +32,7 @@ my-bundle:
         - path/to/style-b.css
 ````
 
-Next step is to init webloader, set the output dir path and tell him to create bundles from **bundle.neon**.
+Next step is to init Web Loader, set the output dir path and tell him to create bundles from **bundle.neon**.
 ````PHP
 $webloader = new \WebLoader\Engine('path/to/webtemp');
 $webloader->createFilesCollectionsFromConfig('path/to/bundle.neon');
@@ -51,20 +51,20 @@ $webloader->createFilesCollectionsFromConfig('path/to/bundle.neon');
 echo $webloader->getFilesCollectionRender()->css('my-bundle');
 ````
 
-The output on will be similiar to the following code
+The output will be similiar to the following code:
 ````html
 <link type="text/css" rel="stylesheet" href="/path/to/webtemp/my-bundle.css?v=1512829634">
 ````
 
 ## Quick start (for Nette Framework)
-For Nette framework it is very similar. First of all, register Web Loader extension.
+For the Nette Framework it is very similar. First of all, register Web Loader extension.
 
 ````yaml
 extensions:
     webloader: WebLoader\Bridges\Nette\WebLoaderExtension
 ````
 
-Next step is to add webloader section with my-bundle collection configuration inside.
+Next step is to add Web Loader section with my-bundle collection configuration inside.
 ````yaml
 webloader:
     my-bundle:
@@ -87,7 +87,7 @@ public function __construct(\WebLoader\Engine $engine)
 }
 ````
 
-and set template parameters (for example in the **beforeRender** method)
+and set template parameters (for example in the **beforeRender** method).
 ````PHP
 public function beforeRender()
 {
