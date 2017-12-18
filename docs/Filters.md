@@ -65,7 +65,7 @@ This filter extracts css from output files and creates new files with defined pr
 ````PHP
 $webloader->addCssFilter('cssBreakpointsFilter', function ($code, $collectionPath) use ($cssMinifier) {
     $breakpoints = [
-        'medium' => ['px' => [768, 1023]], // For breakpoints between 640px to 1023px
+        'medium' => ['px' => [768, 1023]], // For breakpoints between 640px up to 1023px
         'large' => ['*'] // For every other breakpoints
     ];
 
