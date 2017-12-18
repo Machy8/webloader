@@ -46,10 +46,10 @@ $webloader
     ->setFilters(['minifier']);
 ````
 
-##Default filters
+## Default filters
 There are two filters that comes with webloader.
 
-###Url filter
+### Url filter
 This filter modifies url in css files according to output directory for correct assets loading. Is recommended to run it for each file separatelly.
 
 ````PHP
@@ -59,13 +59,13 @@ $webloader->addCssFilter('urlFilter', function ($code, $filePath) use ($outputDi
 }, TRUE);
 ````
 
-###Breakpoints filter
+### Breakpoints filter
 This filter extracts css from output files and creates new files with defined prefixes and put the correct css inside. Is recommended to run it for the whole collection. You can add filter for each file that is generated in the Breakpoints filter.
 
 ````PHP
 $webloader->addCssFilter('cssBreakpointsFilter', function ($code, $collectionPath) use ($cssMinifier) {
     $breakpoints = [
-        'medium' => ['px' => [640, 1023]], // For breakpoints between 640px to 1023px
+        'medium' => ['px' => [768, 1023]], // For breakpoints between 640px to 1023px
         'large' => ['*'] // For every other breakpoints
     ];
 
@@ -75,4 +75,10 @@ $webloader->addCssFilter('cssBreakpointsFilter', function ($code, $collectionPat
     });
     return $filter->filter($code, $collectionPath);
 });
+````
+Rendering then looks like this:
+````PHP
+$webloaderFilesCollectionRender->css('myCss');
+$webloaderFilesCollectionRender->setPrefix('medium')->css('myCss', ['media' => 'screen and (min-width: 768px)']);
+$webloaderFilesCollectionRender->setPrefix('large')->css('myCss', ['media' => 'screen and (min-width: 1024px)']);
 ````
