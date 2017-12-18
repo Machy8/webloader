@@ -20,7 +20,7 @@ if ( ! $webLoader->getCompiler()->filterExists(Engine::JS, 'minifier') {
 ````
 
 **Usage (configuration in a NEON file)**
-````
+````YAML
 myCollection:
     cssFiles:
         - somefile.css
@@ -34,7 +34,7 @@ myCollection:
 ````
 
 **Usage (in pure PHP)**
-````
+````PHP
 $webloader
     ->createCssFilesCollection('myCollection')
     ->setFiles(['somefile.css'])
@@ -44,4 +44,35 @@ $webloader
     ->createJsFilesCollection('myCollection')
     ->setFiles(['somefile.js'])
     ->setFilters(['minifier']);
+````
+
+##Default filters
+There are two filters that comes with webloader.
+
+###Url filter
+This filter modifies url in css files according to output directory for correct assets loading. Is recommended to run it for each file separatelly.
+
+````PHP
+$webloader->addCssFilter('urlFilter', function ($code, $filePath) use ($outputDir, $documentRoot) {
+    $filter = new CssUrlFilter($outputDir, $documentRoot);
+    return $filter->filter($code, $filePath);
+}, TRUE);
+````
+
+###Breakpoints filter
+This filter extracts css from output files and creates new files with defined prefixes and put the correct css inside. Is recommended to run it for the whole collection. You can add filter for each file that is generated in the Breakpoints filter.
+
+````PHP
+$webloader->addCssFilter('cssBreakpointsFilter', function ($code, $collectionPath) use ($cssMinifier) {
+    $breakpoints = [
+        'medium' => ['px' => [640, 1023]], // For breakpoints between 640px to 1023px
+        'large' => ['*'] // For every other breakpoints
+    ];
+
+    $filter = new CssBreakpointsFilter($breakpoints);
+    $filter->addOutputFilesFilter(function ($code) use ($cssMinifier) {
+        return $cssMinifier->run($code);
+    });
+    return $filter->filter($code, $collectionPath);
+});
 ````
