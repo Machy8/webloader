@@ -67,10 +67,11 @@ extensions:
 Next step is to add Web Loader section with my-bundle collection configuration inside.
 ````yaml
 webloader:
-    my-bundle:
-        cssFiles:
-            - path/to/style-a.css
-            - path/to/style-b.css
+    filesCollections:
+        my-bundle:
+            cssFiles:
+                - path/to/style-a.css
+                - path/to/style-b.css
 ````
 
 In your presenter, inject the engine...
