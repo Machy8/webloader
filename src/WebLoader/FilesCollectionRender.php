@@ -216,6 +216,8 @@ class FilesCollectionRender
 			$tag .= '</script>';
 		}
 
+		$this->selectedPrefix = NULL;
+
 		return $tag;
 	}
 
