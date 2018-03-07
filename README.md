@@ -21,65 +21,60 @@
  composer require machy8/webloader
 ```
 
-## Examples:
+## Quick start
+Let's say we have two css files (**styla-a.css** and **style-b.css**) and we want to bundle them into one file which name will be **my-bundle**. This bundle will be stored in a **webtemp dir** (must be accessible from a browser).
 
-**Typical:**
-```PHP
-$webloader = \WebLoader\Engine;
-$webloader->addJsFilter('minifier', function(string $code) {
-        // Minify
-        return $code;
-    })
-    ->addPathsPlaceholders([
-        'jsDir' => 'path/to/js/dir'
-    ]);
-    
-$webloader->createJsCollection('homepage')
-    ->setFiles([
-        '%jsDir%/script.js'
-    ])
-    ->setFilters([
-        'minifier'
-    ]);
-    
-echo $webloader->getFilesCollectionRender()->js('homepage', ['async' => TRUE]);
-```
-
-**Nette framework:**
-
-Configuration file
-````YAML
-extensions:
-    webloader: WebLoader\Bridges\Nette\WebLoaderExtension
-    
-webloader:
-    outputDir: path/to/webtemp
-    filesCollections:
-        critical:
-            cssFiles:
-                - path/to/file.css
-            cssLoadContent: TRUE
-
-        homepage:
-            cssFiles:
-                - path/to/file.css
-            cssFilters:
-                - urlFilter
-
-            jsFiles:
-                - path/to/file.js
-
-    filesCollectionsContainers:
-        homepage:
-            cssCollections:
-                - critical
-                - homepage
-
-            jsCollections:
-                - homepage
+The recommended way to configure Web Loader is through neon configuration files. The first step is to create a bundle.neon.
+````yaml
+my-bundle:
+    cssFiles:
+        - path/to/style-a.css
+        - path/to/style-b.css
 ````
 
-Presenter
+Next step is to init Web Loader, set the output dir path and tell him to create bundles from **bundle.neon**.
+````PHP
+$webloader = new \WebLoader\Engine('path/to/webtemp');
+$webloader->createFilesCollectionsFromConfig('path/to/bundle.neon');
+````
+
+The last step is to call files collections render to render css files collection named my-bundle.
+````PHP
+echo $webloader->getFilesCollectionRender()->css('my-bundle');
+````
+
+The PHP file after the last edit will looks like this:
+````PHP
+$webloader = new \WebLoader\Engine('path/to/output/dir');
+$webloader->createFilesCollectionsFromConfig('path/to/bundle.neon');
+
+echo $webloader->getFilesCollectionRender()->css('my-bundle');
+````
+
+The output will be similiar to the following code:
+````html
+<link type="text/css" rel="stylesheet" href="/path/to/webtemp/my-bundle.css?v=1512829634">
+````
+
+## Quick start (for Nette Framework)
+For the Nette Framework it is very similar. First of all, register Web Loader extension.
+
+````yaml
+extensions:
+    webloader: WebLoader\Bridges\Nette\WebLoaderExtension
+````
+
+Next step is to add Web Loader section with my-bundle collection configuration inside.
+````yaml
+webloader:
+    filesCollections:
+        my-bundle:
+            cssFiles:
+                - path/to/style-a.css
+                - path/to/style-b.css
+````
+
+In your presenter, inject the engine...
 ````PHP
 /**
  * @var Engine
@@ -91,66 +86,19 @@ public function __construct(\WebLoader\Engine $engine)
 {
     $this->webLoader = $engine;
 }
+````
 
-
+and set template parameters (for example in the **beforeRender** method).
+````PHP
 public function beforeRender()
 {
-    $this->webLoader
-        ->addCssFilter('urlFilter', function(string $code, string $file) {
-            $filter = \WebLoader\Filters\CssUrlFilter('path/to/webtemp');
-            return $filter->filter($code, $file);
-        }, TRUE)
-        
-        ->addJsFilter('minify', function(string $code) {
-            $closureCompiler = new \GoogleClosureCompiler\Compiler;
-            $response = $closureCompiler->setJsCode($code)->compile();
-
-            if ($response && $response->isWithoutErrors()) {
-                 return $response->getCompiledCode();
-            }
-
-            return $code;
-        });
-       
     $this->template->setParameters([
-        'webloaderContainersRender' => $this->webLoader->getFilesCollectionsContainerRender()->selectContainer('homepage')
+        'webloaderFilesCollectionRender' => $this->webLoader->getFilesCollectionRender()
     ]);
 }
 ````
 
+The last step is to call the render in a latte template.
 ````LATTE
-{$webloaderContainersRender->css()|noescape}
-{$webloaderContainersRender->js()|noescape}
-````
-
-## Output examples:
-````html
-<!-- $render->css('style') -->
-<link type="text/css" rel="stylesheet" href="style.css?v=1508834107">
-
-<!-- $render->css('style', [], TRUE) -->
-<style type="text/css">
- /* Code */
-</style>
-
-<!-- $render->cssPreload('style') -->
-<link rel="preload" href="style.css?v=1508834107" as="style">
-
-<!-- $render->cssPrefetch('style') -->
-<link rel="prefetch" href="style.css?v=1508834107">
-
-
-<!-- $render->js('script') -->
-<script type="text/javascript" src="script.js?v=1508834107"></script>
-
-<!-- $render->js('script', [], TRUE) -->
-<script type="text/javascript"> 
- // Code
-</script>
-
-<!-- $render->jsPreload('script') -->
-<link rel="preload" href="script.css?v=1508834107" as="script">
-
-<!-- $render->jsPrefetch('script') -->
-<link rel="prefetch" href="script.css?v=1508834107">
+{$webloaderFilesCollectionRender->css('my-bundle')|noescape}
 ````
