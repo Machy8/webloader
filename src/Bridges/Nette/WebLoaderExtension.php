@@ -89,16 +89,18 @@ class WebLoaderExtension extends CompilerExtension
 
 	private function setupWebLoader()
 	{
+		$arguments = [$this->config['outputDir']];
+
+		if ($this->config['documentRoot']) {
+			$arguments[] = $this->config['documentRoot'];
+		}
+
 		$webLoader = $this->builder->addDefinition($this->prefix(self::ENGINE_PREFIX))
 			->setFactory(self::ENGINE_CLASSNAME)
-			->setArguments([$this->config['outputDir']]);
+			->setArguments($arguments);
 
 		if ($this->config['disableCache']) {
 			$webLoader->addSetup('disableCache');
-		}
-
-		if ($this->config['documentRoot']) {
-			$webLoader->addSetup('setDocumentRoot', [$this->config['documentRoot']]);
 		}
 
 		if ($this->config['filesCollections']) {
