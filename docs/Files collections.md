@@ -45,10 +45,10 @@ echo $render->cssPreload('core');
 
 echo $render->css('core');
 
-// can be array of strings or string results in => <link rel="preload" as="script" href="core.css?v=1520929395">
+// can be array of strings or string results in => <link rel="preload" as="script" href="core.js?v=1520929395">
 echo $render->jsPrefetch('core');
 
-// can be array of strings or string results in => <link rel="prefetch" as="script" href="core.css?v=1520929395">
+// can be array of strings or string results in => <link rel="prefetch" as="script" href="core.js?v=1520929395">
 echo $render->jsPreload('core');
 
 echo $render->js('core');
