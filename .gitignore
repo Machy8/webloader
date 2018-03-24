@@ -4,3 +4,4 @@ vendor/
 /tests/webtemp/actual/
 index.php
 composer.lock
+docker-compose.yml
