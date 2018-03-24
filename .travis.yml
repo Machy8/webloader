@@ -11,11 +11,11 @@ install:
   - composer install --no-interaction --prefer-source
 
 script:
-  - vendor/bin/tester -p phpdbg tests -s --coverage ./coverage.xml --coverage-src ./src
+  - vendor/bin/tester -p phpdbg tests/nette-tester -s --coverage ./coverage.xml --coverage-src ./src
 
 after_success:
     - wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar
-    - php coveralls.phar --verbose --config tests/.coveralls.yml
+    - php coveralls.phar --verbose --config tests/nette-tester.coveralls.yml
 
 services:
   - redis-server
