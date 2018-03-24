@@ -1,0 +1,149 @@
+body {
+    font-family: Georgia, serif;
+    font-size: 100%; }
+
+
+h1, h2, h3, h4, h5, h6, .header, .header a, .tag {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #444444;
+    line-height: 1; }
+
+a {
+    color: #444444; }
+
+.header {
+    padding: 1rem;
+    z-index: 1;
+    border-bottom: 1px solid #eee;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column; }
+@media (min-width: 380px) {
+    .header {
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+        flex-direction: row;
+        border-bottom: 0; } }
+
+.header-image {
+    max-height: 150px; }
+.header-logo {
+    margin-bottom: 1rem; }
+@media (min-width: 380px) {
+    .header-logo {
+        margin-bottom: 0; } }
+.header-logo-img {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #EEEEEE; }
+
+
+.header nav a {
+    font-weight: bold;
+    margin-right: 1rem; }
+.header nav a:last-of-type {
+    margin-right: 0; }
+
+body {
+    background-color: #222222; }
+@media only screen and (min-width: 30em) {
+    .wallpaper {
+        top: -4%;
+        left: -15%;
+        width: 13%;
+        height: 120%; }
+}
+.wallpaper {
+    min-width: 640px;
+    min-height: 560px;
+    height: 100vh; }
+
+
+
+.blog-link {
+    font-weight: bold;
+    color: #FFFFFF;
+    font-size: 120%;
+    margin-top: 1rem;
+    margin-right: 1rem;
+    font-family: sans-serif;
+    text-decoration: none;
+    z-index: 1; }
+
+
+.about-photo {
+    max-width: 60%;
+    border: 5px solid #FFFFFF;
+    max-height: 300px; }
+
+
+
+.about-text {
+    max-width: 500px;
+    line-height: 1.5; }
+.about-text a {
+    color: #FFFFFF; }
+
+.about-title, .about .icon {
+    color: #0077BE; }
+
+.about-icons a {
+    text-decoration: none;
+    display: inline-block;
+    font-size: 170%;
+    margin-right: 1rem; }
+.about-icons a:last-of-type {
+    margin-right: 0; }
+
+.about-title {
+    font-size: 180%;
+    margin-top: 1rem; }
+
+
+
+.about, .about-title, .about .icon {
+    color: #FFFFFF; }
+
+.about {
+    margin-top: 1rem; }
+
+
+.container {
+    min-height: 560px; }
+
+
+.main-inner {
+    margin-bottom: 0; }
+
+body {
+    background-color: #222222; }
+
+.wallpaper {
+    min-width: 640px;
+    min-height: 560px;
+    height: 100vh; }
+
+
+
+@media only screen and (max-width: 40em) {
+    .wallpaper {
+        top: -4%;
+        left: -1235%;
+        width: 143%;
+        height: 1520%; }
+}
+@media only screen and (min-height: 40em) {
+    .wallpaper {
+        top: -4%;
+        left: -1255%;
+        width: 11320%; }
+}
+@media only screen and (max-height: 40em) {
+    .wallpaper {
+        top: 4%;
+        left: 159%;
+        width: 139%;
+        height: 10920%; }
+}

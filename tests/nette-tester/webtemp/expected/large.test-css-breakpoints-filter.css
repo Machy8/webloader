@@ -1,0 +1,22 @@
+@media (min-width: 1024px) {
+    body {
+        font-size: 125%; } }@media (min-width: 1025px) {
+    .header-logo-img {
+        width: 70px;
+        height: 70px; } }@media (min-width: 1024px) {
+    .wallpaper {
+        top: -5%;
+        left: -5%;
+        width: 110%;
+        height: 110%; } }@media (min-width: 1024px) {
+    .about-photo {
+        max-width: 80%; } }@media (min-width: 1024px) {
+    .about-title {
+        font-size: 200%; } }@media (min-width : 1024px) {
+    .container {
+        min-height: 700px; } }@media (min-width: 1024px) {
+    .wallpaper {
+        top: -5%;
+        left: -5%;
+        width: 110%;
+        height: 110%; } }
