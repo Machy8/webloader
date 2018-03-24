@@ -120,7 +120,7 @@ class Engine
 	public function getCompiler(): Compiler
 	{
 		if ( ! $this->compiler) {
-			$this->compiler = new Compiler;
+			$this->compiler = new Compiler();
 		}
 
 		return $this->compiler;
@@ -168,6 +168,5 @@ class Engine
 		$this->getCompiler()->setPathPlaceholderDelimiter($delimiter);
 		return $this;
 	}
-
 
 }

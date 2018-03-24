@@ -47,7 +47,7 @@ class CssUrlFilter
 		$pathInfo = str_replace($this->documentRoot, '', pathinfo($filePath)['dirname']);
 		$pathInfo = trim($pathInfo, '/');
 
-		return preg_replace_callback(self::URL_REGEXP, function ($urlMatch) use ($pathInfo){
+		return preg_replace_callback(self::URL_REGEXP, function ($urlMatch) use ($pathInfo) {
 			$cssUrl = $urlMatch['url'];
 
 			if (preg_match(self::ABSOLUTE_PATH_REGEXP, $cssUrl)) {

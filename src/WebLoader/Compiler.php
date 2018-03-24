@@ -84,7 +84,7 @@ class Compiler
 	}
 
 
-	public function addFilter(string $type, string $name, callable $filter, bool $forEachFile = NULL)
+	public function addFilter(string $type, string $name, callable $filter, bool $forEachFile = NULL): Compiler
 	{
 		if ($this->filterExists($type, $name)) {
 			throw new Exception(strtoupper($type) . ' filter "' . $name . '" already exists.');
@@ -187,7 +187,7 @@ class Compiler
 			throw new Exception('Files collections container "' . $name . '" already exists.');
 		}
 
-		return $this->filesCollectionsContainers[$name] = new FilesCollectionsContainer;
+		return $this->filesCollectionsContainers[$name] = new FilesCollectionsContainer();
 	}
 
 
@@ -480,9 +480,6 @@ class Compiler
 	}
 
 
-	/**
-	 * @throws Exception
-	 */
 	public function filesCollectionExists(string $type, string $name): bool
 	{
 		if ( ! $this->isTypeCorrect($type)) {
@@ -499,9 +496,6 @@ class Compiler
 	}
 
 
-	/**
-	 * @throws Exception
-	 */
 	public function filterExists(string $type, string $name): bool
 	{
 		if ( ! $this->isTypeCorrect($type)) {

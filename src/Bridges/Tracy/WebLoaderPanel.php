@@ -35,9 +35,6 @@ class WebLoaderPanel implements IBarPanel
 	}
 
 
-	/**
-	 * @return string
-	 */
 	public function getPanel(): string
 	{
 		ob_start();

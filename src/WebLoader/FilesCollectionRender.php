@@ -292,9 +292,6 @@ class FilesCollectionRender
 	}
 
 
-	/**
-	 * @throws Exception
-	 */
 	private function getSelectedCollection(string $type, string $collectionName = NULL): FilesCollection
 	{
 		if ( ! $collectionName && ! $this->selectedCollectionName) {

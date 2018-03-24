@@ -17,7 +17,7 @@ namespace WebLoader\Filters;
 class CssBreakpointsFilter
 {
 
-	CONST
+	const
 		MEDIA_QUERIES_REGULAR_EXPRESSION = '~@media(?<parameters>[^{]+){(?:[^{}]*{[^{}]*})+[^}]+}~',
 		MIN_WIDTH_REGULAR_EXPRESSION = '~\(min-width\s*:\s*(?<value>\d+)\s*(?<unit>\S+)\)~';
 
@@ -43,10 +43,8 @@ class CssBreakpointsFilter
 	}
 
 
-	/**
-	 * @param string $code
-	 */
-	public function filter(string $code, $collectionPath)
+
+	public function filter(string $code, string $collectionPath): string
 	{
 		$pathInfo = pathinfo($collectionPath);
 		$fileName = $pathInfo['basename'];
