@@ -28,7 +28,8 @@
 		}
 	},
 	"scripts": {
-		"phpstan": "phpstan analyse --level max src"
+		"nette-tester-tests": "tester -p phpdbg tests/nette-tester -s --coverage ./coverage.xml --coverage-src ./src",
+		"phpstan-analysis": "phpstan analyse --level max src"
 	},
 	"minimum-stability": "dev",
 	"prefer-stable" : true
