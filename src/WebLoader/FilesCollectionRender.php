@@ -79,7 +79,7 @@ class FilesCollectionRender
 		} else {
 			$element = self::LINK_ELEMENT;
 			$attributes['rel'] = 'stylesheet';
-			$attributes['href'] = $this->addVersionTobasePath($basePath);
+			$attributes['href'] = $this->addVersionToBasePath($basePath);
 		}
 
 		return $this->generateElement($element, $attributes, $filePathParameter);
