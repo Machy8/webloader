@@ -12,7 +12,6 @@ install:
   - composer install --no-interaction --prefer-source
 
 script:
-  - composer easy-coding-standard
   - composer phpstan-analysis
   - composer nette-tester-tests
 

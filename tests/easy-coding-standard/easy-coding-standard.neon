@@ -1,0 +1,110 @@
+parameters:
+	indentation: tab
+
+checkers:
+	# Classes
+	- PHP_CodeSniffer\Standards\Generic\Sniffs\Classes\DuplicateClassNameSniff
+	- PHP_CodeSniffer\Standards\PEAR\Sniffs\Classes\ClassDeclarationSniff
+	- PHP_CodeSniffer\Standards\PSR2\Sniffs\Classes\PropertyDeclarationSniff
+	- PHP_CodeSniffer\Standards\Squiz\Sniffs\Classes\ValidClassNameSniff
+	- PHP_CodeSniffer\Standards\Squiz\Sniffs\Classes\LowercaseClassKeywordsSniff
+	- PHP_CodeSniffer\Standards\Squiz\Sniffs\Scope\MemberVarScopeSniff
+	- PHP_CodeSniffer\Standards\Squiz\Sniffs\Scope\MethodScopeSniff
+	- PHP_CodeSniffer\Standards\Squiz\Sniffs\Scope\StaticThisUsageSniff
+	# - SlevomatCodingStandard\Sniffs\Classes\ClassConstantVisibilitySniff
+	- SlevomatCodingStandard\Sniffs\Classes\UnusedPrivateElementsSniff
+
+	# Namespaces
+	- SlevomatCodingStandard\Sniffs\Namespaces\AlphabeticallySortedUsesSniff
+	- SlevomatCodingStandard\Sniffs\Namespaces\DisallowGroupUseSniff
+	- SlevomatCodingStandard\Sniffs\Namespaces\UseFromSameNamespaceSniff
+	- SlevomatCodingStandard\Sniffs\Namespaces\MultipleUsesPerLineSniff
+
+	SlevomatCodingStandard\Sniffs\Namespaces\UnusedUsesSniff:
+		searchAnnotations: TRUE
+
+	# PHP
+	- PHP_CodeSniffer\Standards\Generic\Sniffs\PHP\DisallowShortOpenTagSniff
+	PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff:
+		lineLimit: 120
+		absoluteLineLimit: 120
+	SlevomatCodingStandard\Sniffs\TypeHints\DeclareStrictTypesSniff:
+		newlinesCountBetweenOpenTagAndDeclare: 2
+		newlinesCountAfterDeclare: 2
+		spacesCountAroundEqualsSign: 1
+
+	# Functions
+	- PHP_CodeSniffer\Standards\Squiz\Sniffs\Functions\FunctionDeclarationSniff
+	- PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\UselessOverridingMethodSniff
+	- PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\UnnecessaryFinalModifierSniff
+	PHP_CodeSniffer\Standards\Squiz\Sniffs\Functions\FunctionDeclarationArgumentSpacingSniff:
+		equalsSpacing: 1
+	- PHP_CodeSniffer\Standards\Squiz\Sniffs\Functions\MultiLineFunctionDeclarationSniff
+
+	# Metrics
+	- PHP_CodeSniffer\Standards\Generic\Sniffs\Metrics\CyclomaticComplexitySniff
+	PHP_CodeSniffer\Standards\Generic\Sniffs\Metrics\NestingLevelSniff:
+		nestingLevel: 3
+		absoluteNestingLevel: 6
+
+	# Code analysis
+	- PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\JumbledIncrementerSniff
+	- PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\UnconditionalIfStatementSniff
+	- PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\EmptyStatementSniff
+	- PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\UselessOverridingMethodSniff
+	- PHP_CodeSniffer\Standards\Generic\Sniffs\PHP\NoSilencedErrorsSniff
+	- PHP_CodeSniffer\Standards\Generic\Sniffs\Strings\UnnecessaryStringConcatSniff
+	- PHP_CodeSniffer\Standards\Squiz\Sniffs\PHP\DisallowSizeFunctionsInLoopsSniff
+	- PHP_CodeSniffer\Standards\Squiz\Sniffs\PHP\GlobalKeywordSniff
+	- PHP_CodeSniffer\Standards\Squiz\Sniffs\PHP\InnerFunctionsSniff
+	- PHP_CodeSniffer\Standards\Squiz\Sniffs\WhiteSpace\PropertyLabelSpacingSniff
+	- PHP_CodeSniffer\Standards\Squiz\Sniffs\WhiteSpace\SemicolonSpacingSniff
+
+	# Naming conventions
+	- PHP_CodeSniffer\Standards\Generic\Sniffs\PHP\UpperCaseConstantSniff
+	PHP_CodeSniffer\Standards\Generic\Sniffs\NamingConventions\CamelCapsFunctionNameSniff:
+		strict: false
+
+	# Files
+	- PHP_CodeSniffer\Standards\Generic\Sniffs\Files\ByteOrderMarkSniff
+	- PHP_CodeSniffer\Standards\Generic\Sniffs\Files\OneClassPerFileSniff
+	- PHP_CodeSniffer\Standards\Generic\Sniffs\Files\OneInterfacePerFileSniff
+	- PHP_CodeSniffer\Standards\Generic\Sniffs\Files\EndFileNewlineSniff
+
+	# White Space
+	- PHP_CodeSniffer\Standards\Generic\Sniffs\WhiteSpace\DisallowSpaceIndentSniff
+	- PHP_CodeSniffer\Standards\Squiz\Sniffs\WhiteSpace\LogicalOperatorSpacingSniff
+	- PHP_CodeSniffer\Standards\Squiz\Sniffs\WhiteSpace\OperatorSpacingSniff
+	- PHP_CodeSniffer\Standards\Squiz\Sniffs\WhiteSpace\MemberVarSpacingSniff
+	- SlevomatCodingStandard\Sniffs\Types\EmptyLinesAroundTypeBracesSniff
+	PHP_CodeSniffer\Standards\Squiz\Sniffs\WhiteSpace\SuperfluousWhitespaceSniff:
+		ignoreBlankLines: false
+	PHP_CodeSniffer\Standards\PEAR\Sniffs\WhiteSpace\ScopeIndentSniff:
+		tabIndent: true
+	PHP_CodeSniffer\Standards\Squiz\Sniffs\WhiteSpace\OperatorSpacingSniff:
+		ignoreNewlines: true
+
+	# Control structures
+	- PHP_CodeSniffer\Standards\Generic\Sniffs\ControlStructures\InlineControlStructureSniff
+	- PHP_CodeSniffer\Standards\Squiz\Sniffs\WhiteSpace\ScopeClosingBraceSniff
+	- PHP_CodeSniffer\Standards\Generic\Sniffs\Formatting\SpaceAfterCastSniff
+	- PHP_CodeSniffer\Standards\PSR2\Sniffs\ControlStructures\ElseIfDeclarationSniff
+	- PHP_CodeSniffer\Standards\Squiz\Sniffs\ControlStructures\ForEachLoopDeclarationSniff
+	- PHP_CodeSniffer\Standards\Squiz\Sniffs\ControlStructures\ForLoopDeclarationSniff
+	- PHP_CodeSniffer\Standards\Squiz\Sniffs\ControlStructures\LowercaseDeclarationSniff
+	- PHP_CodeSniffer\Standards\Generic\Sniffs\Formatting\DisallowMultipleStatementsSniff
+	- SlevomatCodingStandard\Sniffs\ControlStructures\AssignmentInConditionSniff
+	- SlevomatCodingStandard\Sniffs\ControlStructures\DisallowEqualOperatorsSniff
+	- SlevomatCodingStandard\Sniffs\ControlStructures\DisallowYodaComparisonSniff
+	- SlevomatCodingStandard\Sniffs\ControlStructures\NewWithParenthesesSniff
+
+
+	# Exceptions
+	- SlevomatCodingStandard\Sniffs\Exceptions\DeadCatchSniff
+	- SlevomatCodingStandard\Sniffs\Exceptions\ReferenceThrowableOnlySniff
+
+	# Typehints
+	- SlevomatCodingStandard\Sniffs\TypeHints\LongTypeHintsSniff
+	#- SlevomatCodingStandard\Sniffs\TypeHints\NullableTypeForNullDefaultValueSniff
+	- SlevomatCodingStandard\Sniffs\TypeHints\ParameterTypeHintSpacingSniff
+	- SlevomatCodingStandard\Sniffs\TypeHints\ReturnTypeHintSpacingSniff
