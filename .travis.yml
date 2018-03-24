@@ -12,7 +12,8 @@ install:
   - composer install --no-interaction --prefer-source
 
 script:
-  - vendor/bin/tester -p phpdbg tests/nette-tester -s --coverage ./coverage.xml --coverage-src ./src
+  - composer phpstan-analysis
+  - composer nette-tester-tests
 
 after_success:
     - wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar
