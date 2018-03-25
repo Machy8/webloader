@@ -78,17 +78,6 @@ class Compiler
 	private $version;
 
 
-	/**
-	 * Use addFilter
-	 * @deprecated
-	 */
-	public function addCssFilter(string $name, callable $filter, ?bool $forEachFile = NULL): Compiler
-	{
-		$this->addFilter(Engine::CSS, $name, $filter, $forEachFile);
-		return $this;
-	}
-
-
 	public function addFilter(string $type, string $name, callable $filter, ?bool $forEachFile = NULL): Compiler
 	{
 		if ($this->filterExists($type, $name)) {
@@ -100,17 +89,6 @@ class Compiler
 			'forEachFile' => (bool) $forEachFile
 		];
 
-		return $this;
-	}
-
-
-	/**
-	 * Use add filter
-	 * @deprecated
-	 */
-	public function addJsFilter(string $name, callable $filter, ?bool $forEachFile = NULL): Compiler
-	{
-		$this->addFilter(Engine::JS, $name, $filter, $forEachFile);
 		return $this;
 	}
 
@@ -139,30 +117,10 @@ class Compiler
 	}
 
 
-	/**
-	 * Use compileFilesCollection
-	 * @deprecated
-	 */
-	public function compileCssFilesCollection(string $name)
-	{
-		$this->compileFilesCollectionByType(Engine::CSS, $name);
-	}
-
-
 	public function compileFilesCollectionByType(string $type, string $name)
 	{
 		$collection = $this->getFilesCollection($type, $name);
 		$this->compileSingleFilesCollection($collection);
-	}
-
-
-	/**
-	 * Use compileFilesCollection
-	 * @deprecated
-	 */
-	public function compileJsFilesCollection(string $name)
-	{
-		$this->compileFilesCollectionByType(Engine::JS, $name);
 	}
 
 
@@ -173,16 +131,6 @@ class Compiler
 		}
 
 		return $this->filesCollections[$type][$name] = new FilesCollection($name, $type);
-	}
-
-
-	/**
-	 * Use createFilesCollection
-	 * @deprecated
-	 */
-	public function createCssFilesCollection(string $name): FilesCollection
-	{
-		return $this->createFilesCollection(Engine::CSS, $name);
 	}
 
 
@@ -350,16 +298,6 @@ class Compiler
 	}
 
 
-	/**
-	 * Use createFilesCollection
-	 * @deprecated
-	 */
-	public function createJsFilesCollection(string $name): FilesCollection
-	{
-		return $this->createFilesCollection(Engine::JS, $name);
-	}
-
-
 	public function disableCache(): Compiler
 	{
 		$this->cacheEnabled = FALSE;
@@ -520,6 +458,7 @@ class Compiler
 	public function setRemoteFilesLoadingTimeout(int $time): Compiler
 	{
 		$this->remoteFilesLoadingTimeout = $time;
+		return $this;
 	}
 
 
