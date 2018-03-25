@@ -17,7 +17,7 @@ namespace WebLoader;
 class FilesCollection
 {
 
-	const
+	public const
 		CONFIG_SECTION_CSS_FILES = Engine::CSS . 'Files',
 		CONFIG_SECTION_CSS_FILTERS = Engine::CSS . 'Filters',
 		CONFIG_SECTION_CSS_LOAD_CONTENT = Engine::CSS . 'LoadContent',
