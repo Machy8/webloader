@@ -21,7 +21,7 @@ use WebLoader\Compiler;
 class WebLoaderPanel implements IBarPanel
 {
 
-	const TEMPLATES_DIR = __DIR__ . '/templates';
+	private const TEMPLATES_DIR = __DIR__ . '/templates';
 
 	/**
 	 * @var Compiler
