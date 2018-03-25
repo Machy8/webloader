@@ -17,22 +17,20 @@ namespace WebLoader;
 class FilesCollectionRender
 {
 
-	const
+	private const
 		LINK_ELEMENT = 'link',
 		SCRIPT_ELEMENT = 'script',
-		STYLE_ELEMENT = 'style';
+		STYLE_ELEMENT = 'style',
 
-	const
 		LINK_PREFETCH = 'prefetch',
 		LINK_PRELOAD = 'preload',
 		LINK_PRELOAD_AS_CSS = 'style',
-		LINK_PRELOAD_AS_JS = 'script';
+		LINK_PRELOAD_AS_JS = 'script',
 
-	const
 		SCRIPT_TYPE_ATTRIBUTE = 'text/javascript',
-		STYLE_TYPE_ATTRIBUTE = 'text/css';
+		STYLE_TYPE_ATTRIBUTE = 'text/css',
 
-	const VERSION_MARK = '?v=';
+		VERSION_MARK = '?v=';
 
 	/**
 	 * @var Compiler
