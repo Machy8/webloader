@@ -25,7 +25,7 @@ use WebLoader\Filters\CssUrlFilter;
 final class FiltersTestCase extends AbstractTestCase
 {
 
-	public function testCssUrlFilter()
+	public function testCssUrlFilter(): void
 	{
 		$collectionName = 'test-css-url-filter';
 		$webLoader = $this->getWebLoader();
@@ -46,7 +46,7 @@ final class FiltersTestCase extends AbstractTestCase
 	}
 
 
-	public function testCssBreakpointsFilter()
+	public function testCssBreakpointsFilter(): void
 	{
 		$collectionName = 'test-css-breakpoints-filter';
 		$webLoader = $this->getWebLoader();
