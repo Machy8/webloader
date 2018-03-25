@@ -20,13 +20,12 @@ use Nette\DI\ContainerBuilder;
 class WebLoaderExtension extends CompilerExtension
 {
 
-	const
+	private const
 		ENGINE_CLASSNAME = 'WebLoader\Engine',
-		ENGINE_PREFIX = 'engine';
+		ENGINE_PREFIX = 'engine',
 
-	const TRACY_CLASSNAME = 'Tracy\Debugger';
+		TRACY_CLASSNAME = 'Tracy\Debugger',
 
-	const
 		TRACY_PANEL_CLASSNAME = 'WebLoader\Bridges\Tracy\WebLoaderPanel',
 		TRACY_PANEL_PREFIX = 'tracyPanel';
 
