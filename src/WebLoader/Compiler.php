@@ -19,7 +19,7 @@ use Nette\Neon\Neon;
 class Compiler
 {
 
-	const LOCK_FILE_NAME = 'webloader.lock';
+	private const LOCK_FILE_NAME = 'webloader.lock';
 
 	/**
 	 * @var bool
