@@ -6,10 +6,5 @@ services:
         build: .
         volumes:
             - .:/var/www/html:delegated
-        networks:
-          - proxy-server
-
-networks:
-    proxy-server:
-        external:
-            name: proxy-server
+        ports:
+            - "84:82"
