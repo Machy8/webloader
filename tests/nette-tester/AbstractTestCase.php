@@ -79,28 +79,28 @@ abstract class AbstractTestCase extends TestCase
 	}
 
 
-	protected function matchCssFile(string $actual, string $expected = NULL)
+	protected function matchCssFile(string $actual, string $expected = NULL): void
 	{
 		$expected = $expected ?? $actual;
 		$this->matchFile($expected, $actual, Engine::CSS);
 	}
 
 
-	protected function matchHtmlFile(string $actual, string $expected = NULL)
+	protected function matchHtmlFile(string $actual, string $expected = NULL): void
 	{
 		$expected = $expected ?? $actual;
 		$this->matchFile($expected, $actual, 'html');
 	}
 
 
-	protected function matchJsFile(string $actual, string $expected = NULL)
+	protected function matchJsFile(string $actual, string $expected = NULL): void
 	{
 		$expected = $expected ?? $actual;
 		$this->matchFile($expected, $actual, Engine::JS);
 	}
 
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 		$this->webloader = new Engine(self::ACTUAL_DIR);
@@ -124,7 +124,7 @@ abstract class AbstractTestCase extends TestCase
 	}
 
 
-	private function matchFile(string $expected, string $actual, string $extension)
+	private function matchFile(string $expected, string $actual, string $extension): void
 	{
 		Assert::matchFile(
 			self::EXPECTED_DIR . '/' . $expected . '.' . $extension,
