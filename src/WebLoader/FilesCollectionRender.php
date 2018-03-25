@@ -192,7 +192,6 @@ class FilesCollectionRender
 	private function generateElement(string $element, array $attributes, string $filePath = NULL): string
 	{
 		$tag = '<' . $element;
-		$isScriptElement = $element === self::SCRIPT_ELEMENT;
 
 		foreach ($attributes as $attribute => $value) {
 			$tag .= ' ' . $attribute;
@@ -206,14 +205,10 @@ class FilesCollectionRender
 
 		if ($filePath) {
 			$tag .= $this->getFileContent($filePath);
-
-			if ($element === self::STYLE_ELEMENT) {
-				$tag .= '</style>';
-			}
 		}
 
-		if ($isScriptElement) {
-			$tag .= '</script>';
+		if ($element !== self::LINK_ELEMENT) {
+			$tag .= '</' . $element . '>';
 		}
 
 		$this->selectedPrefix = NULL;
