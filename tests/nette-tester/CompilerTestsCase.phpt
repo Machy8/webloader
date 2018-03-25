@@ -27,7 +27,7 @@ use GoogleClosureCompiler\Compiler;
 final class CompilerTestsCase extends AbstractTestCase
 {
 
-	public function testCssCollectionLinkElement()
+	public function testCssCollectionLinkElement(): void
 	{
 		$collectionName = 'test-css-files-collection-link-element';
 		$this->createCssCollection($collectionName)->setFilters(['empty']);
@@ -45,7 +45,7 @@ final class CompilerTestsCase extends AbstractTestCase
 	}
 
 
-	public function testCssCollectionStyleElement()
+	public function testCssCollectionStyleElement(): void
 	{
 		$collectionName = 'test-css-files-collection-style-element';
 		$this->createCssCollection($collectionName);
@@ -59,7 +59,7 @@ final class CompilerTestsCase extends AbstractTestCase
 	}
 
 
-	public function testJsCollectionScriptElement()
+	public function testJsCollectionScriptElement(): void
 	{
 		$collectionName = 'test-js-files-collection-script-element';
 		$this->createJsCollection($collectionName);
@@ -74,7 +74,7 @@ final class CompilerTestsCase extends AbstractTestCase
 	}
 
 
-	public function testJsCollectionScriptElementWithContent()
+	public function testJsCollectionScriptElementWithContent(): void
 	{
 		$collectionName = 'test-js-files-collection-script-element-with-content';
 		$this->createJsCollection($collectionName);
@@ -88,7 +88,7 @@ final class CompilerTestsCase extends AbstractTestCase
 	}
 
 
-	public function testFilesCollectionsFromConfig()
+	public function testFilesCollectionsFromConfig(): void
 	{
 		$collectionNameA = 'test-files-collections-from-config-a';
 		$collectionNameB = 'test-files-collections-from-config-b';
@@ -136,7 +136,7 @@ final class CompilerTestsCase extends AbstractTestCase
 	}
 
 
-	public function testFilesCollectionsContainerFromConfig()
+	public function testFilesCollectionsContainerFromConfig(): void
 	{
 		$collectionNameA = 'test-files-collections-container-from-config-a';
 		$collectionNameB = 'test-files-collections-container-from-config-b';
@@ -192,7 +192,7 @@ final class CompilerTestsCase extends AbstractTestCase
 	}
 
 
-	public function testRemoteFilesLoading()
+	public function testRemoteFilesLoading(): void
 	{
 		$collectionName = 'test-remote-files-loading';
 
