@@ -107,7 +107,7 @@ class Compiler
 	}
 
 
-	public function compileAllFilesCollections()
+	public function compileAllFilesCollections(): void
 	{
 		foreach ($this->filesCollections as $filesCollectionsType => $filesCollections) {
 			foreach ($filesCollections as $filesCollectionName => $filesCollection) {
@@ -117,7 +117,7 @@ class Compiler
 	}
 
 
-	public function compileFilesCollectionByType(string $type, string $name)
+	public function compileFilesCollectionByType(string $type, string $name): void
 	{
 		$collection = $this->getFilesCollection($type, $name);
 		$this->compileSingleFilesCollection($collection);
@@ -462,7 +462,7 @@ class Compiler
 	}
 
 
-	private function compileSingleFilesCollection(FilesCollection $collection)
+	private function compileSingleFilesCollection(FilesCollection $collection): void
 	{
 		$filePath = $collection->getName() . '.' . $collection->getType();
 
