@@ -17,7 +17,7 @@ namespace WebLoader\Filters;
 class CssUrlFilter
 {
 
-	const
+	private const
 		URL_REGEXP = '~url\([\'"]*(?<url>(?!(?:data:|.*//))[^\'"]+)[\'"]*\)~U',
 		ABSOLUTE_PATH_REGEXP = '~^/~U';
 
