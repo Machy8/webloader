@@ -82,14 +82,14 @@ class Compiler
 	 * Use addFilter
 	 * @deprecated
 	 */
-	public function addCssFilter(string $name, callable $filter, bool $forEachFile = NULL): Compiler
+	public function addCssFilter(string $name, callable $filter, ?bool $forEachFile = NULL): Compiler
 	{
 		$this->addFilter(Engine::CSS, $name, $filter, $forEachFile);
 		return $this;
 	}
 
 
-	public function addFilter(string $type, string $name, callable $filter, bool $forEachFile = NULL): Compiler
+	public function addFilter(string $type, string $name, callable $filter, ?bool $forEachFile = NULL): Compiler
 	{
 		if ($this->filterExists($type, $name)) {
 			throw new Exception(strtoupper($type) . ' filter "' . $name . '" already exists.');
@@ -108,7 +108,7 @@ class Compiler
 	 * Use add filter
 	 * @deprecated
 	 */
-	public function addJsFilter(string $name, callable $filter, bool $forEachFile = NULL): Compiler
+	public function addJsFilter(string $name, callable $filter, ?bool $forEachFile = NULL): Compiler
 	{
 		$this->addFilter(Engine::JS, $name, $filter, $forEachFile);
 		return $this;
