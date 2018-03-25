@@ -25,7 +25,7 @@ use WebLoader\Exception;
 final class ExceptionsTestCase extends AbstractTestCase
 {
 
-	public function testDuplicatedCssFilesCollectionException()
+	public function testDuplicatedCssFilesCollectionException(): void
 	{
 		Assert::exception(function () {
 			$this->getWebLoader()->createCssFilesCollection('test');
@@ -34,7 +34,7 @@ final class ExceptionsTestCase extends AbstractTestCase
 	}
 
 
-	public function testDuplicatedJsFilesCollectionException()
+	public function testDuplicatedJsFilesCollectionException(): void
 	{
 		Assert::exception(function () {
 			$this->getWebLoader()->createJsFilesCollection('test');
@@ -43,7 +43,7 @@ final class ExceptionsTestCase extends AbstractTestCase
 	}
 
 
-	public function testDuplicatedFilesCollectionsContainerException()
+	public function testDuplicatedFilesCollectionsContainerException(): void
 	{
 		Assert::exception(function () {
 			$this->getWebLoader()->createFilesCollectionsContainer('test');
@@ -52,7 +52,7 @@ final class ExceptionsTestCase extends AbstractTestCase
 	}
 
 
-	public function testDuplicatedCssFilterException()
+	public function testDuplicatedCssFilterException(): void
 	{
 		Assert::exception(function () {
 			$this->getWebLoader()
@@ -66,7 +66,7 @@ final class ExceptionsTestCase extends AbstractTestCase
 	}
 
 
-	public function testDuplicatedJsFilterException()
+	public function testDuplicatedJsFilterException(): void
 	{
 		Assert::exception(function () {
 			$this->getWebLoader()
@@ -80,7 +80,7 @@ final class ExceptionsTestCase extends AbstractTestCase
 	}
 
 
-	public function testDuplicatedPlaceholderException()
+	public function testDuplicatedPlaceholderException(): void
 	{
 		Assert::exception(function () {
 			$this->getWebLoader()
@@ -94,7 +94,7 @@ final class ExceptionsTestCase extends AbstractTestCase
 	}
 
 
-	public function testFileNotFoundException()
+	public function testFileNotFoundException(): void
 	{
 		Assert::exception(function () {
 			$webLoader = $this->getWebLoader();
@@ -104,7 +104,7 @@ final class ExceptionsTestCase extends AbstractTestCase
 	}
 
 
-	public function testMissingFilesCollectionsContainerConfigurationFileException()
+	public function testMissingFilesCollectionsContainerConfigurationFileException(): void
 	{
 		Assert::exception(function () {
 			$this->getWebLoader()->createFilesCollectionsContainersFromConfig('path/to/config.neon');
@@ -112,7 +112,7 @@ final class ExceptionsTestCase extends AbstractTestCase
 	}
 
 
-	public function testMissingFilesCollectionConfigurationFileException()
+	public function testMissingFilesCollectionConfigurationFileException(): void
 	{
 		Assert::exception(function () {
 			$this->getWebLoader()->createFilesCollectionsFromConfig('path/to/config.neon');
@@ -120,7 +120,7 @@ final class ExceptionsTestCase extends AbstractTestCase
 	}
 
 
-	public function testNullFilesCollectionsContainerException()
+	public function testNullFilesCollectionsContainerException(): void
 	{
 		Assert::exception(function () {
 			$this->getWebLoader()->getFilesCollectionsContainerRender()->css();
@@ -128,7 +128,7 @@ final class ExceptionsTestCase extends AbstractTestCase
 	}
 
 
-	public function testNullFilesCollectionException()
+	public function testNullFilesCollectionException(): void
 	{
 		Assert::exception(function () {
 			$this->getWebLoader()->getFilesCollectionRender()->jsPrefetch();
@@ -136,7 +136,7 @@ final class ExceptionsTestCase extends AbstractTestCase
 	}
 
 
-	public function testUndefinedFilesCollectionsContainerException()
+	public function testUndefinedFilesCollectionsContainerException(): void
 	{
 		Assert::exception(function () {
 			$this->getWebLoader()->getFilesCollectionsContainerRender()->selectContainer('test')->css();
@@ -144,7 +144,7 @@ final class ExceptionsTestCase extends AbstractTestCase
 	}
 
 
-	public function testUndefinedFilesCollectionException()
+	public function testUndefinedFilesCollectionException(): void
 	{
 		Assert::exception(function () {
 			$this->getWebLoader()->getFilesCollectionRender()->selectCollection('test')->css();
@@ -152,7 +152,7 @@ final class ExceptionsTestCase extends AbstractTestCase
 	}
 
 
-	public function testUndefinedFilterException()
+	public function testUndefinedFilterException(): void
 	{
 		Assert::exception(function () {
 			$webLoader = $this->getWebLoader();
@@ -164,7 +164,7 @@ final class ExceptionsTestCase extends AbstractTestCase
 	}
 
 
-	public function testUnknownFilesCollectionsContainerSection()
+	public function testUnknownFilesCollectionsContainerSection(): void
 	{
 		Assert::exception(function () {
 			$this->getWebLoader()
@@ -180,7 +180,7 @@ final class ExceptionsTestCase extends AbstractTestCase
 	}
 
 
-	public function testUnknownFilesCollectionSection()
+	public function testUnknownFilesCollectionSection(): void
 	{
 		Assert::exception(function () {
 			$this->getWebLoader()
@@ -196,7 +196,7 @@ final class ExceptionsTestCase extends AbstractTestCase
 	}
 
 
-	public function testWrongDocumentRootException()
+	public function testWrongDocumentRootException(): void
 	{
 		Assert::exception(function () {
 			$this->getWebLoader()->setDocumentRoot('path/to/some/dir');
@@ -204,7 +204,7 @@ final class ExceptionsTestCase extends AbstractTestCase
 	}
 
 
-	public function testWrongOutputDirException()
+	public function testWrongOutputDirException(): void
 	{
 		Assert::exception(function () {
 			$this->getWebLoader()->setOutputDir('path/to/some/dir');
@@ -212,7 +212,7 @@ final class ExceptionsTestCase extends AbstractTestCase
 	}
 
 
-	public function testRemoteFileCouldNotBeLoadedException()
+	public function testRemoteFileCouldNotBeLoadedException(): void
 	{
 		Assert::exception(function (){
 			$this->getWebLoader()
