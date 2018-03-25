@@ -17,7 +17,7 @@ namespace WebLoader;
 class Engine
 {
 
-	const
+	public const
 		CSS = 'css',
 		JS = 'js';
 
