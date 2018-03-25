@@ -43,14 +43,14 @@ class Engine
 	}
 
 
-	public function addCssFilter(string $name, callable $filter, bool $forEachFile = NULL): Engine
+	public function addCssFilter(string $name, callable $filter, ?bool $forEachFile = NULL): Engine
 	{
 		$this->getCompiler()->addFilter(Engine::CSS, $name, $filter, $forEachFile);
 		return $this;
 	}
 
 
-	public function addJsFilter(string $name, callable $filter, bool $forEachFile = NULL): Engine
+	public function addJsFilter(string $name, callable $filter, ?bool $forEachFile = NULL): Engine
 	{
 		$this->getCompiler()->addFilter(Engine::JS, $name, $filter, $forEachFile);
 		return $this;
