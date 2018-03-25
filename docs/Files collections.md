@@ -1,6 +1,8 @@
 # Files collections
 - Two types: **CSS** and **JS** collections
 - Two ways to create them: calling appropriate method or define them in configuration file
+- You can load local (path to file) and remote (url) files. The timeout for loading remote files can be set by
+the `setRemoteFilesLoadingTimeout` in the compiler class. Default timeout is `15 s`.
 
 ## Calling appropriate methods
 
