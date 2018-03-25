@@ -60,7 +60,7 @@ class FilesCollectionRender
 	}
 
 
-	public function css(string $collectionName = NULL, array $attributes = [], bool $loadContent = FALSE): string
+	public function css(?string $collectionName = NULL, array $attributes = [], bool $loadContent = FALSE): string
 	{
 		$collection = $this->getSelectedCollection(Engine::CSS, $collectionName);
 		$collectionName = $collection->getName();
@@ -112,7 +112,7 @@ class FilesCollectionRender
 	}
 
 
-	public function js(string $collectionName = NULL, array $attributes = [], bool $loadContent = FALSE): string
+	public function js(?string $collectionName = NULL, array $attributes = [], bool $loadContent = FALSE): string
 	{
 		$collection = $this->getSelectedCollection(Engine::JS, $collectionName);
 		$collectionName = $collection->getName();
@@ -155,14 +155,14 @@ class FilesCollectionRender
 	}
 
 
-	public function selectCollection(string $collectionName = NULL): FilesCollectionRender
+	public function selectCollection(?string $collectionName = NULL): FilesCollectionRender
 	{
 		$this->selectedCollectionName = $collectionName;
 		return $this;
 	}
 
 
-	public function setPrefix(string $prefix = NULL): FilesCollectionRender
+	public function setPrefix(?string $prefix = NULL): FilesCollectionRender
 	{
 		$this->selectedPrefix = $prefix;
 		return $this;
@@ -187,7 +187,7 @@ class FilesCollectionRender
 	}
 
 
-	private function generateElement(string $element, array $attributes, string $filePath = NULL): string
+	private function generateElement(string $element, array $attributes, ?string $filePath = NULL): string
 	{
 		$tag = '<' . $element;
 
@@ -222,7 +222,7 @@ class FilesCollectionRender
 		$collectionsNames = NULL,
 		string $collectionsType,
 		string $rel,
-		string $as = NULL
+		?string $as = NULL
 	): string {
 		$tags = '';
 		$attributes['rel'] = $rel;
@@ -285,7 +285,7 @@ class FilesCollectionRender
 	}
 
 
-	private function getSelectedCollection(string $type, string $collectionName = NULL): FilesCollection
+	private function getSelectedCollection(string $type, ?string $collectionName = NULL): FilesCollection
 	{
 		if ( ! $collectionName && ! $this->selectedCollectionName) {
 			throw new Exception('Trying to call files collection render on NULL.');
