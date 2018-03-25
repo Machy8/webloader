@@ -1,0 +1,6 @@
+test-remote-files-loading:
+	jsFiles:
+		- https://example.com/xyz.js
+
+	cssFiles:
+		- https://necolas.github.io/normalize.css/8.0.0/normalize.css

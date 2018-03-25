@@ -191,6 +191,17 @@ final class CompilerTestsCase extends AbstractTestCase
 		$this->matchJsFile($collectionNameB);
 	}
 
+
+	public function testRemoteFilesLoading()
+	{
+		$collectionName = 'test-remote-files-loading';
+
+		$collection = $this->getWebLoader()->createFilesCollectionsFromConfig('%configsDir%/webloader.remote.collections.neon');
+		$collection->getFilesCollectionRender()->css($collectionName);
+
+		$this->matchCssFile($collectionName);
+	}
+
 }
 
 (new CompilerTestsCase())->run();

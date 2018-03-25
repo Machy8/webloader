@@ -211,6 +211,17 @@ final class ExceptionsTestCase extends AbstractTestCase
 		}, Exception::class, 'Given output dir "path/to/some/dir" doesn\'t exists or is not a directory.');
 	}
 
+
+	public function testRemoteFileCouldNotBeLoadedException()
+	{
+		Assert::exception(function (){
+			$this->getWebLoader()
+				->createFilesCollectionsFromConfig('%configsDir%/webloader.remote.collections.neon')
+				->getFilesCollectionRender()
+				->js('test-remote-files-loading');
+		}, Exception::class, 'Remote file "https://example.com/xyz.js" could not be loaded.');
+	}
+
 }
 
 (new ExceptionsTestCase())->run();
