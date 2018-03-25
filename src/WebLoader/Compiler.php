@@ -68,6 +68,11 @@ class Compiler
 	private $pathsPlaceholders = [];
 
 	/**
+	 * @var int
+	 */
+	private $remoteFilesLoadingTimeout = 15;
+
+	/**
 	 * @var string
 	 */
 	private $version;
@@ -512,6 +517,12 @@ class Compiler
 	}
 
 
+	public function setRemoteFilesLoadingTimeout(int $time): Compiler
+	{
+		$this->remoteFilesLoadingTimeout = $time;
+	}
+
+
 	private function compileSingleFilesCollection(FilesCollection $collection)
 	{
 		$filePath = $collection->getName() . '.' . $collection->getType();
@@ -545,22 +556,37 @@ class Compiler
 		$oncePerCollectionFilters = [];
 
 		for ($i = 0; $i < $filesCount; $i++) {
-			$file = $this->replacePathsPlaceholders($files[$i]);
+			$filePath = $this->replacePathsPlaceholders($files[$i]);
+			$filePathIsUrl = filter_var($filePath, FILTER_VALIDATE_URL);
 
-			if ( ! file_exists($file)) {
-				throw new Exception('File "' . $file . '" not found.');
+			if ($filePathIsUrl) {
+				$context = stream_context_create(['http' => [
+					'timeout' => $this->remoteFilesLoadingTimeout
+				]]);
+				$fileContent = @file_get_contents($filePath, FALSE, $context);
+
+				if ($fileContent === FALSE) {
+					throw new Exception('Remote file "' . $filePath . '" could not be loaded.');
+				}
+
+			} else {
+				if (file_exists($filePath)) {
+					$fileContent = file_get_contents($filePath);
+
+				} else {
+					throw new Exception('File "' . $filePath . '" not found.');
+				}
 			}
-
-			$fileContent = file_get_contents($file);
 
 			foreach ($filters as $filter) {
 				if ( ! $this->filterExists($type, $filter)) {
 					throw new Exception('Undefined ' . strtoupper($type) .' filter "' . $filter . '".');
 				}
+
 				$filter = $this->filters[$type][$filter];
 
 				if ($filter['forEachFile']) {
-					$fileContent = $filter['callback']($fileContent, $file);
+					$fileContent = $filter['callback']($fileContent, $filePath);
 
 				} else {
 					$oncePerCollectionFilters[] = $filter;
