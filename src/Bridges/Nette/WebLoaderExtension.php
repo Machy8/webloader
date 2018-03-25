@@ -54,7 +54,7 @@ class WebLoaderExtension extends CompilerExtension
 	private $builder;
 
 
-	public function loadConfiguration()
+	public function loadConfiguration(): void
 	{
 		$this->config = $this->getConfig($this->defaults);
 		$this->builder = $this->getContainerBuilder();
@@ -64,7 +64,7 @@ class WebLoaderExtension extends CompilerExtension
 	}
 
 
-	public function afterCompile(\Nette\PhpGenerator\ClassType $classType)
+	public function afterCompile(\Nette\PhpGenerator\ClassType $classType): void
 	{
 		if ($this->config['debugger'] !== TRUE || ! class_exists(self::TRACY_CLASSNAME)) {
 			return;
@@ -77,7 +77,7 @@ class WebLoaderExtension extends CompilerExtension
 	}
 
 
-	private function setupTracyPanel()
+	private function setupTracyPanel(): void
 	{
 		if ($this->config['debugger'] === TRUE) {
 			$this->builder->addDefinition($this->prefix(self::TRACY_PANEL_PREFIX))
@@ -86,7 +86,7 @@ class WebLoaderExtension extends CompilerExtension
 	}
 
 
-	private function setupWebLoader()
+	private function setupWebLoader(): void
 	{
 		$arguments = [$this->config['outputDir']];
 
