@@ -105,6 +105,6 @@ checkers:
 
 	# Typehints
 	- SlevomatCodingStandard\Sniffs\TypeHints\LongTypeHintsSniff
-	#- SlevomatCodingStandard\Sniffs\TypeHints\NullableTypeForNullDefaultValueSniff
+	- SlevomatCodingStandard\Sniffs\TypeHints\NullableTypeForNullDefaultValueSniff
 	- SlevomatCodingStandard\Sniffs\TypeHints\ParameterTypeHintSpacingSniff
 	- SlevomatCodingStandard\Sniffs\TypeHints\ReturnTypeHintSpacingSniff
