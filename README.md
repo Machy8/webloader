@@ -10,8 +10,9 @@
 - Files **[collections](https://github.com/Machy8/webloader/blob/master/docs/Files%20collections.md)** and **[containers](https://github.com/Machy8/webloader/blob/master/docs/Files%20collections%20containers.md)**: makes assets organizing incredibly simple
 - **[Filters](https://github.com/Machy8/webloader/blob/master/docs/Filters.md)**: callable in two different ways
 - **[Path placeholders](https://github.com/Machy8/webloader/blob/master/docs/Placeholders.md)**: reusable paths to files, less writing
-- Allows you to load remote and local files
+- Allows you to load **remote** and **local** files
 - If you have some critical css, you can load it directly into the page with minimal configuration required
+- **Prepared for read only deployment** - webloader is able to compile all files collections at once
 - **[Debugger bar](https://github.com/Machy8/webloader/blob/master/docs/Tracy%20bridge.md)** for [Tracy](https://tracy.nette.org/cs/)
 
 ## Requirements
