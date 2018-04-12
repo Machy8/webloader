@@ -27,6 +27,13 @@
  composer require machy8/webloader
 ```
 
+## Docs
+- [Files collections](https://github.com/Machy8/webloader/blob/master/docs/Files%20collections.md)
+- [Files collections containers](https://github.com/Machy8/webloader/blob/master/docs/Files%20collections%20containers.md)
+- [Filters](https://github.com/Machy8/webloader/blob/master/docs/Filters.md)
+- [Placeholders](https://github.com/Machy8/webloader/blob/master/docs/Placeholders.md)
+- [Tracy bridge](https://github.com/Machy8/webloader/blob/master/docs/Tracy%20bridge.md)
+
 ## Quick start
 Let's say we have two css files (**styla-a.css** and **style-b.css**) and we want to bundle them into one file which name will be **my-bundle**. This bundle will be stored in a **webtemp dir** (must be accessible from a browser).
 
