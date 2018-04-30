@@ -6,3 +6,11 @@
 $panel = new \WebLoader\Bridges\Tracy\WebLoaderPanel;
 $panel->setWebLoader($webLoader->getCompiler());
 ````
+
+**Nette framework**
+Debugger can be switched of by adding `debugger: FALSE` into the webloader configuration section.
+
+````
+webloader:
+  debugger: FALSE
+````
