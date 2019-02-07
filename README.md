@@ -1,10 +1,19 @@
-<p align="center">
+<h1 align="center">
  <img src="https://github.com/Machy8/webloader/blob/master/logo.png" alt="">
-</p>
-
-[![Build Status](https://travis-ci.org/Machy8/webloader.svg?branch=master)](https://travis-ci.org/Machy8/webloader)
-[![Coverage Status](https://coveralls.io/repos/github/Machy8/webloader/badge.svg?branch=master)](https://coveralls.io/github/Machy8/webloader?branch=master)
-[![Packagist](https://img.shields.io/packagist/dm/machy8/webloader.svg)](https://github.com/Machy8/webloader)
+ <br>
+ <a href="https://travis-ci.org/Machy8/webloader">
+   <img src="https://travis-ci.org/Machy8/webloader.svg?branch=master" alt="">
+ </a>
+ <a href="https://coveralls.io/github/Machy8/webloader?branch=master">
+   <img src="https://coveralls.io/repos/github/Machy8/webloader/badge.svg?branch=master" alt="">
+ </a>
+ <a href="https://github.com/Machy8/webloader">
+   <img src="https://img.shields.io/packagist/dm/machy8/webloader.svg" alt="">
+ </a>
+ <a href="https://packagist.org/packages/machy8/webloader">
+   <img src="https://img.shields.io/packagist/dt/machy8/webloader.svg?style=flat" alt="">
+ </a>
+</h1>
 
 📦 Simple, easy to use, php bundler for javascript and css.
 
