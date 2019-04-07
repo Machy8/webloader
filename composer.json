@@ -5,7 +5,7 @@
 	"license": "BSD-3-Clause",
 	"require": {
 		"php": ">=7.1",
-		"nette/neon": "^2.4"
+		"nette/neon": "^2.4|^3.0"
 	},
 	"require-dev": {
 		"tracy/tracy": "^2.4",
