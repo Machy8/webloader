@@ -29,7 +29,7 @@
 
 ## Requirements
 - PHP 7.1+
-- If you use Nette Framework - v2.3+
+- If you use Nette Framework - v2.4+
 
 ## Installation
 ```
