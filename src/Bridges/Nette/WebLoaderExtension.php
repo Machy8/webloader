@@ -15,6 +15,7 @@ namespace WebLoader\Bridges\Nette;
 
 use Nette\DI\CompilerExtension;
 use Nette\DI\ContainerBuilder;
+use Nette\DI\Helpers;
 
 
 class WebLoaderExtension extends CompilerExtension
@@ -56,8 +57,10 @@ class WebLoaderExtension extends CompilerExtension
 
 	public function loadConfiguration(): void
 	{
-		$this->config = $this->getConfig($this->defaults);
 		$this->builder = $this->getContainerBuilder();
+
+		$this->config = $this->validateConfig($this->defaults);
+		$this->config = Helpers::expand($this->config, $this->builder->parameters);
 
 		$this->setupTracyPanel();
 		$this->setupWebLoader();
