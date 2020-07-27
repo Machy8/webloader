@@ -77,6 +77,7 @@ class FilesCollectionRender
 		} else {
 			$element = self::LINK_ELEMENT;
 			$attributes['rel'] = 'stylesheet';
+			$basePath = $this->compiler->getHostUrl() . $basePath;
 			$attributes['href'] = $this->addVersionToBasePath($basePath);
 		}
 
@@ -126,6 +127,7 @@ class FilesCollectionRender
 			$filePathParameter = $this->getCollectionFilePath($basePath);
 
 		} else {
+			$basePath = $this->compiler->getHostUrl() . $basePath;
 			$attributes['src'] = $this->addVersionToBasePath($basePath);
 		}
 
@@ -245,6 +247,7 @@ class FilesCollectionRender
 
 		foreach ($collectionsNames as $collectionName) {
 			$basePath = $this->getCollectionBasePath($collectionName, $collectionsType);
+			$basePath = $this->compiler->getHostUrl() . $basePath;
 			$attributes['href'] = $this->addVersionToBasePath($basePath);
 			$tags .= $this->generateElement(self::LINK_ELEMENT, $attributes);
 		}
