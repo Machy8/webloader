@@ -41,9 +41,10 @@ class WebLoaderExtension extends CompilerExtension
 	protected $defaults = [
 		'debugger' => '%debugMode%',
 		'disableCache' => FALSE,
-		'documentRoot' => NULL,
+		'documentRoot' => '/',
 		'filesCollections' => [],
 		'filesCollectionsContainers' => [],
+        'hostUrl' => NULL,
 		'outputDir' => NULL,
 		'pathPlaceholderDelimiter' => '#',
 		'pathsPlaceholders' => []
@@ -91,11 +92,11 @@ class WebLoaderExtension extends CompilerExtension
 
 	private function setupWebLoader(): void
 	{
-		$arguments = [$this->config['outputDir']];
-
-		if ($this->config['documentRoot']) {
-			$arguments[] = $this->config['documentRoot'];
-		}
+		$arguments = [
+		    $this->config['outputDir'],
+            $this->config['documentRoot'],
+            $this->config['hostUrl']
+        ];
 
 		$webLoader = $this->builder->addDefinition($this->prefix(self::ENGINE_PREFIX))
 			->setFactory(self::ENGINE_CLASSNAME)
