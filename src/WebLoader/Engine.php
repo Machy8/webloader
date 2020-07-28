@@ -40,9 +40,9 @@ class Engine
 	public function __construct(string $outputDir, string $documentRoot = '/', ?string $hostUrl = NULL)
 	{
 		$this->getCompiler()
-            ->setOutputDir($outputDir)
-            ->setDocumentRoot($documentRoot)
-            ->setHostUrl($hostUrl);
+			->setOutputDir($outputDir)
+			->setDocumentRoot($documentRoot)
+			->setHostUrl($hostUrl);
 	}
 
 
