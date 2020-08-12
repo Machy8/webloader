@@ -32,6 +32,11 @@ class Compiler
 	private $documentRoot;
 
 	/**
+	 * @var string|null
+	 */
+	private $hostUrl = NULL;
+
+	/**
 	 * @var FilesCollection[][]
 	 */
 	private $filesCollections = [
@@ -311,6 +316,12 @@ class Compiler
 	}
 
 
+	public function getHostUrl(): ?string
+	{
+		return $this->hostUrl;
+	}
+
+
 	public function getFilesCollection(string $type, string $name): FilesCollection
 	{
 		if ( ! $this->filesCollectionExists($type, $name)) {
@@ -397,6 +408,13 @@ class Compiler
 		}
 
 		$this->documentRoot = rtrim($path, '/');
+		return $this;
+	}
+
+
+	public function setHostUrl(?string $hostUrl): Compiler
+	{
+		$this->hostUrl = rtrim($hostUrl, '/');
 		return $this;
 	}
 
