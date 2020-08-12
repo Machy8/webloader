@@ -7,4 +7,4 @@ services:
         volumes:
             - .:/var/www/html:delegated
         ports:
-            - "84:82"
+            - "84:80"
