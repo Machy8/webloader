@@ -37,12 +37,12 @@ class Engine
 	private $filesCollectionsContainerRender;
 
 
-	public function __construct(string $outputDir, string $documentRoot = '/', ?string $hostUrl = NULL)
+	public function __construct(string $outputDir, string $documentRoot = '/', ?string $publicPathPrefix = NULL)
 	{
 		$this->getCompiler()
 			->setOutputDir($outputDir)
 			->setDocumentRoot($documentRoot)
-			->setHostUrl($hostUrl);
+			->setPublicPathPrefix($publicPathPrefix);
 	}
 
 

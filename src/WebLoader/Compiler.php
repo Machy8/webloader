@@ -34,7 +34,7 @@ class Compiler
 	/**
 	 * @var string|null
 	 */
-	private $hostUrl = NULL;
+	private $publicPathPrefix = NULL;
 
 	/**
 	 * @var FilesCollection[][]
@@ -316,9 +316,9 @@ class Compiler
 	}
 
 
-	public function getHostUrl(): ?string
+	public function getPublicPathPrefix(): ?string
 	{
-		return $this->hostUrl;
+		return $this->publicPathPrefix;
 	}
 
 
@@ -412,13 +412,6 @@ class Compiler
 	}
 
 
-	public function setHostUrl(?string $hostUrl): Compiler
-	{
-		$this->hostUrl = $hostUrl === null ? null : rtrim($hostUrl, '/');
-		return $this;
-	}
-
-
 	public function setOutputDir(string $path): Compiler
 	{
 		if ( ! is_dir($path)) {
@@ -437,6 +430,12 @@ class Compiler
 	public function setPathPlaceholderDelimiter(string $delimiter): Compiler
 	{
 		$this->pathPlaceholderDelimiter = $delimiter;
+		return $this;
+	}
+
+	public function setPublicPathPrefix(?string $publicPathPrefix): Compiler
+	{
+		$this->publicPathPrefix = $publicPathPrefix === null ? null : rtrim($publicPathPrefix, '/');
 		return $this;
 	}
 

@@ -44,10 +44,10 @@ class WebLoaderExtension extends CompilerExtension
 		'documentRoot' => '/',
 		'filesCollections' => [],
 		'filesCollectionsContainers' => [],
-		'hostUrl' => NULL,
 		'outputDir' => NULL,
 		'pathPlaceholderDelimiter' => '#',
-		'pathsPlaceholders' => []
+		'pathsPlaceholders' => [],
+		'publicPathPrefix' => NULL
 	];
 
 	/**
@@ -95,7 +95,7 @@ class WebLoaderExtension extends CompilerExtension
 		$arguments = [
 			$this->config['outputDir'],
 			$this->config['documentRoot'],
-			$this->config['hostUrl']
+			$this->config['publicPathPrefix']
 		];
 
 		$webLoader = $this->builder->addDefinition($this->prefix(self::ENGINE_PREFIX))
