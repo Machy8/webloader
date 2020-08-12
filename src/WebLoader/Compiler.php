@@ -414,7 +414,7 @@ class Compiler
 
 	public function setHostUrl(?string $hostUrl): Compiler
 	{
-		$this->hostUrl = rtrim($hostUrl, '/');
+		$this->hostUrl = $hostUrl === null ? null : rtrim($hostUrl, '/');
 		return $this;
 	}
 
