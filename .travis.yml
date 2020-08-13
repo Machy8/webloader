@@ -21,4 +21,4 @@ after_success:
     - php coveralls.phar --verbose --config tests/nette-tester.coveralls.yml
 
 services:
-    - redis-server
+    - redis
