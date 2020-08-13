@@ -435,7 +435,7 @@ class Compiler
 
 	public function setPublicPathPrefix(?string $publicPathPrefix): Compiler
 	{
-		$this->publicPathPrefix = $publicPathPrefix === null ? null : rtrim($publicPathPrefix, '/');
+		$this->publicPathPrefix = $publicPathPrefix === NULL ? NULL : rtrim($publicPathPrefix, '/');
 		return $this;
 	}
 
