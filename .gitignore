@@ -3,6 +3,5 @@ vendor/
 /webtemp/
 /tests/nette-tester/webtemp/actual/
 /tests/nette-tester/output/
-index.php
 composer.lock
 docker-compose.yml
