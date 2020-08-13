@@ -5,3 +5,4 @@ vendor/
 /tests/nette-tester/output/
 composer.lock
 docker-compose.yml
+coverage.xml
