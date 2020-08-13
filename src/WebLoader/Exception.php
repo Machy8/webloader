@@ -9,12 +9,10 @@
  *
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace WebLoader;
 
-
 class Exception extends \Exception
 {
-
 }

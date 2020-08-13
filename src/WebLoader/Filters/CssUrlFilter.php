@@ -9,62 +9,59 @@
  *
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace WebLoader\Filters;
 
-
 class CssUrlFilter
 {
+    private const
+        URL_REGEXP = '~url\([\'"]*(?<url>(?!(?:data:|.*//))[^\'"]+)[\'"]*\)~U',
+        ABSOLUTE_PATH_REGEXP = '~^/~U';
 
-	private const
-		URL_REGEXP = '~url\([\'"]*(?<url>(?!(?:data:|.*//))[^\'"]+)[\'"]*\)~U',
-		ABSOLUTE_PATH_REGEXP = '~^/~U';
+    /**
+     * @var string
+     */
+    private $documentRoot;
 
-	/**
-	 * @var string
-	 */
-	private $documentRoot;
-
-	/**
-	 * @var string
-	 */
-	private $relativePathToOutputDir;
-
-
-	public function __construct(string $outputDirPath, string $documentRoot = '/')
-	{
-		$documentRoot = trim($documentRoot, '/');
-		$outputDirPath = str_replace($documentRoot, '', trim($outputDirPath, '/'));
-		$this->documentRoot = $documentRoot;
-		$this->relativePathToOutputDir = '/' . str_repeat('../', substr_count($outputDirPath, '/'));
-	}
+    /**
+     * @var string
+     */
+    private $relativePathToOutputDir;
 
 
-	public function filter(string $code, string $filePath): string
-	{
-		$filePath = ltrim($filePath, '/');
-		$pathInfo = str_replace($this->documentRoot, '', pathinfo($filePath)['dirname']);
-		$pathInfo = trim($pathInfo, '/');
+    public function __construct(string $outputDirPath, string $documentRoot = '/')
+    {
+        $documentRoot = trim($documentRoot, '/');
+        $outputDirPath = str_replace($documentRoot, '', trim($outputDirPath, '/'));
+        $this->documentRoot = $documentRoot;
+        $this->relativePathToOutputDir = '/' . str_repeat('../', substr_count($outputDirPath, '/'));
+    }
 
-		return preg_replace_callback(self::URL_REGEXP, function ($urlMatch) use ($pathInfo) {
-			$cssUrl = $urlMatch['url'];
 
-			if (preg_match(self::ABSOLUTE_PATH_REGEXP, $cssUrl)) {
-				return $urlMatch[0];
-			}
+    public function filter(string $code, string $filePath): string
+    {
+        $filePath = ltrim($filePath, '/');
+        $pathInfo = str_replace($this->documentRoot, '', pathinfo($filePath)['dirname']);
+        $pathInfo = trim($pathInfo, '/');
 
-			$pathInfo = preg_replace('~(/?[^/]+){' . substr_count($cssUrl, '../') . '}$~', '', $pathInfo);
-			$url = "url('" . $this->relativePathToOutputDir;
+        return preg_replace_callback(self::URL_REGEXP, function ($urlMatch) use ($pathInfo) {
+            $cssUrl = $urlMatch['url'];
 
-			if ($pathInfo) {
-				$url .= $pathInfo . '/';
-			}
+            if (preg_match(self::ABSOLUTE_PATH_REGEXP, $cssUrl)) {
+                return $urlMatch[0];
+            }
 
-			$url .= str_replace('../', '', ltrim($cssUrl, '/')) . "')";
+            $pathInfo = preg_replace('~(/?[^/]+){' . substr_count($cssUrl, '../') . '}$~', '', $pathInfo);
+            $url = "url('" . $this->relativePathToOutputDir;
 
-			return $url;
-		}, $code);
-	}
+            if ($pathInfo) {
+                $url .= $pathInfo . '/';
+            }
 
+            $url .= str_replace('../', '', ltrim($cssUrl, '/')) . "')";
+
+            return $url;
+        }, $code);
+    }
 }

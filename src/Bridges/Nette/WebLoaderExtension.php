@@ -9,7 +9,7 @@
  *
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace WebLoader\Bridges\Nette;
 
@@ -17,112 +17,110 @@ use Nette\DI\CompilerExtension;
 use Nette\DI\ContainerBuilder;
 use Nette\DI\Helpers;
 
-
 class WebLoaderExtension extends CompilerExtension
 {
+    private const
+        ENGINE_CLASSNAME = 'WebLoader\Engine',
+        ENGINE_PREFIX = 'engine',
 
-	private const
-		ENGINE_CLASSNAME = 'WebLoader\Engine',
-		ENGINE_PREFIX = 'engine',
+        TRACY_CLASSNAME = 'Tracy\Debugger',
 
-		TRACY_CLASSNAME = 'Tracy\Debugger',
+        TRACY_PANEL_CLASSNAME = 'WebLoader\Bridges\Tracy\WebLoaderPanel',
+        TRACY_PANEL_PREFIX = 'tracyPanel';
 
-		TRACY_PANEL_CLASSNAME = 'WebLoader\Bridges\Tracy\WebLoaderPanel',
-		TRACY_PANEL_PREFIX = 'tracyPanel';
+    /**
+     * @var array
+     */
+    protected $config;
 
-	/**
-	 * @var array
-	 */
-	protected $config;
+    /**
+     * @var array
+     */
+    protected $defaults = [
+        'debugger' => '%debugMode%',
+        'disableCache' => false,
+        'documentRoot' => '/',
+        'filesCollections' => [],
+        'filesCollectionsContainers' => [],
+        'outputDir' => null,
+        'pathPlaceholderDelimiter' => '#',
+        'pathsPlaceholders' => [],
+        'publicPathPrefix' => null
+    ];
 
-	/**
-	 * @var array
-	 */
-	protected $defaults = [
-		'debugger' => '%debugMode%',
-		'disableCache' => FALSE,
-		'documentRoot' => '/',
-		'filesCollections' => [],
-		'filesCollectionsContainers' => [],
-		'outputDir' => NULL,
-		'pathPlaceholderDelimiter' => '#',
-		'pathsPlaceholders' => [],
-		'publicPathPrefix' => NULL
-	];
-
-	/**
-	 * @var ContainerBuilder
-	 */
-	private $builder;
-
-
-	public function loadConfiguration(): void
-	{
-		$this->builder = $this->getContainerBuilder();
-
-		$this->config = $this->validateConfig($this->defaults);
-		$this->config = Helpers::expand($this->config, $this->builder->parameters);
-
-		$this->setupTracyPanel();
-		$this->setupWebLoader();
-	}
+    /**
+     * @var ContainerBuilder
+     */
+    private $builder;
 
 
-	public function afterCompile(\Nette\PhpGenerator\ClassType $classType): void
-	{
-		if ($this->config['debugger'] !== TRUE || ! class_exists(self::TRACY_CLASSNAME)) {
-			return;
-		}
+    public function loadConfiguration(): void
+    {
+        $this->builder = $this->getContainerBuilder();
 
-		$classType->getMethod('initialize')->addBody(
-			'$this->getByType("' . self::TRACY_PANEL_CLASSNAME
-			. '")->setWebLoader($this->getByType("' . self::ENGINE_CLASSNAME . '")->getCompiler());'
-		);
-	}
+        $this->config = $this->validateConfig($this->defaults);
+        $this->config = Helpers::expand($this->config, $this->builder->parameters);
 
-
-	private function setupTracyPanel(): void
-	{
-		if ($this->config['debugger'] === TRUE) {
-			$this->builder->addDefinition($this->prefix(self::TRACY_PANEL_PREFIX))
-				->setFactory(self::TRACY_PANEL_CLASSNAME);
-		}
-	}
+        $this->setupTracyPanel();
+        $this->setupWebLoader();
+    }
 
 
-	private function setupWebLoader(): void
-	{
-		$arguments = [
-			$this->config['outputDir'],
-			$this->config['documentRoot'],
-			$this->config['publicPathPrefix']
-		];
+    public function afterCompile(\Nette\PhpGenerator\ClassType $classType): void
+    {
+        if ($this->config['debugger'] !== true || !class_exists(self::TRACY_CLASSNAME)) {
+            return;
+        }
 
-		$webLoader = $this->builder->addDefinition($this->prefix(self::ENGINE_PREFIX))
-			->setFactory(self::ENGINE_CLASSNAME)
-			->setArguments($arguments);
+        $classType->getMethod('initialize')->addBody(
+            '$this->getByType("' . self::TRACY_PANEL_CLASSNAME
+            . '")->setWebLoader($this->getByType("' . self::ENGINE_CLASSNAME . '")->getCompiler());'
+        );
+    }
 
-		if ($this->config['disableCache']) {
-			$webLoader->addSetup('disableCache');
-		}
 
-		if ($this->config['filesCollections']) {
-			$webLoader->addSetup('createFilesCollectionsFromArray', [$this->config['filesCollections']]);
-		}
+    private function setupTracyPanel(): void
+    {
+        if ($this->config['debugger'] === true) {
+            $this->builder->addDefinition($this->prefix(self::TRACY_PANEL_PREFIX))
+                ->setFactory(self::TRACY_PANEL_CLASSNAME);
+        }
+    }
 
-		if ($this->config['filesCollectionsContainers']) {
-			$webLoader->addSetup(
-				'createFilesCollectionsContainersFromArray', [$this->config['filesCollectionsContainers']]
-			);
-		}
 
-		if ($this->config['pathPlaceholderDelimiter']) {
-			$webLoader->addSetup('setPathPlaceholderDelimiter', [$this->config['pathPlaceholderDelimiter']]);
-		}
+    private function setupWebLoader(): void
+    {
+        $arguments = [
+            $this->config['outputDir'],
+            $this->config['documentRoot'],
+            $this->config['publicPathPrefix']
+        ];
 
-		if ($this->config['pathsPlaceholders']) {
-			$webLoader->addSetup('addPathsPlaceholders', [$this->config['pathsPlaceholders']]);
-		}
-	}
+        $webLoader = $this->builder->addDefinition($this->prefix(self::ENGINE_PREFIX))
+            ->setFactory(self::ENGINE_CLASSNAME)
+            ->setArguments($arguments);
 
+        if ($this->config['disableCache']) {
+            $webLoader->addSetup('disableCache');
+        }
+
+        if ($this->config['filesCollections']) {
+            $webLoader->addSetup('createFilesCollectionsFromArray', [$this->config['filesCollections']]);
+        }
+
+        if ($this->config['filesCollectionsContainers']) {
+            $webLoader->addSetup(
+                'createFilesCollectionsContainersFromArray',
+                [$this->config['filesCollectionsContainers']]
+            );
+        }
+
+        if ($this->config['pathPlaceholderDelimiter']) {
+            $webLoader->addSetup('setPathPlaceholderDelimiter', [$this->config['pathPlaceholderDelimiter']]);
+        }
+
+        if ($this->config['pathsPlaceholders']) {
+            $webLoader->addSetup('addPathsPlaceholders', [$this->config['pathsPlaceholders']]);
+        }
+    }
 }
