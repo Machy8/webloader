@@ -1,8 +1,9 @@
 language: php
 
 php:
-    - 7.1
     - 7.2
+    - 7.3
+    - 7.4
 
 before_install:
     - composer self-update
@@ -11,9 +12,9 @@ install:
     - composer install --no-interaction --prefer-source
 
 script:
-    - composer easy-coding-standard
-    - composer phpstan-analysis
-    - composer nette-tester-tests
+    - composer cs:check
+    - composer phpstan:check
+    - composer tests
 
 after_success:
     - wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar
