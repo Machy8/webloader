@@ -1,6 +1,6 @@
 FROM php:7.2
 
-LABEL Machy8 <8machy@seznam.cz>
+LABEL maintainer="8machy@seznam.cz"
 
 ENV PATH "/composer/vendor/bin:$PATH"
 ENV COMPOSER_ALLOW_SUPERUSER 1
