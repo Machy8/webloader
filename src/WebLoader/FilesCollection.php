@@ -15,15 +15,14 @@ namespace WebLoader;
 
 class FilesCollection
 {
-    public const
-        CONFIG_SECTION_CSS_FILES = Engine::CSS . 'Files',
-        CONFIG_SECTION_CSS_FILTERS = Engine::CSS . 'Filters',
-        CONFIG_SECTION_CSS_LOAD_CONTENT = Engine::CSS . 'LoadContent',
-        CONFIG_SECTION_CSS_OUTPUT_ELEMENT_ATTRIBUTES = Engine::CSS . 'OutputElementAttributes',
-        CONFIG_SECTION_JS_FILES = Engine::JS . 'Files',
-        CONFIG_SECTION_JS_FILTERS = Engine::JS . 'Filters',
-        CONFIG_SECTION_JS_LOAD_CONTENT = Engine::JS . 'LoadContent',
-        CONFIG_SECTION_JS_OUTPUT_ELEMENT_ATTRIBUTES = Engine::JS . 'OutputElementAttributes';
+    public const CONFIG_SECTION_CSS_FILES = Engine::CSS . 'Files';
+    public const CONFIG_SECTION_CSS_FILTERS = Engine::CSS . 'Filters';
+    public const CONFIG_SECTION_CSS_LOAD_CONTENT = Engine::CSS . 'LoadContent';
+    public const CONFIG_SECTION_CSS_OUTPUT_ELEMENT_ATTRIBUTES = Engine::CSS . 'OutputElementAttributes';
+    public const CONFIG_SECTION_JS_FILES = Engine::JS . 'Files';
+    public const CONFIG_SECTION_JS_FILTERS = Engine::JS . 'Filters';
+    public const CONFIG_SECTION_JS_LOAD_CONTENT = Engine::JS . 'LoadContent';
+    public const CONFIG_SECTION_JS_OUTPUT_ELEMENT_ATTRIBUTES = Engine::JS . 'OutputElementAttributes';
 
     /**
      * @var array

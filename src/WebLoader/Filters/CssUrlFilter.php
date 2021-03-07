@@ -15,9 +15,8 @@ namespace WebLoader\Filters;
 
 class CssUrlFilter
 {
-    private const
-        URL_REGEXP = '~url\([\'"]*(?<url>(?!(?:data:|.*//))[^\'"]+)[\'"]*\)~U',
-        ABSOLUTE_PATH_REGEXP = '~^/~U';
+    private const URL_REGEXP = '~url\([\'"]*(?<url>(?!(?:data:|.*//))[^\'"]+)[\'"]*\)~U';
+    private const ABSOLUTE_PATH_REGEXP = '~^/~U';
 
     /**
      * @var string
@@ -39,7 +38,7 @@ class CssUrlFilter
     }
 
 
-    public function filter(string $code, string $filePath): string
+    public function filter(string $code, string $filePath): ?string
     {
         $filePath = ltrim($filePath, '/');
         $pathInfo = str_replace($this->documentRoot, '', pathinfo($filePath)['dirname']);

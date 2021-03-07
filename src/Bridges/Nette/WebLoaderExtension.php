@@ -19,14 +19,13 @@ use Nette\DI\Helpers;
 
 class WebLoaderExtension extends CompilerExtension
 {
-    private const
-        ENGINE_CLASSNAME = 'WebLoader\Engine',
-        ENGINE_PREFIX = 'engine',
+    private const ENGINE_CLASSNAME = 'WebLoader\Engine';
+    private const ENGINE_PREFIX = 'engine';
 
-        TRACY_CLASSNAME = 'Tracy\Debugger',
+    private const TRACY_CLASSNAME = 'Tracy\Debugger';
 
-        TRACY_PANEL_CLASSNAME = 'WebLoader\Bridges\Tracy\WebLoaderPanel',
-        TRACY_PANEL_PREFIX = 'tracyPanel';
+    private const TRACY_PANEL_CLASSNAME = 'WebLoader\Bridges\Tracy\WebLoaderPanel';
+    private const TRACY_PANEL_PREFIX = 'tracyPanel';
 
     /**
      * @var array

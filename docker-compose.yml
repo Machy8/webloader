@@ -1,6 +1,6 @@
 version: "3"
 services:
-    webloader:
+    server:
         container_name: webloader
         working_dir: /var/www/html
         build: .

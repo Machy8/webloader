@@ -15,24 +15,23 @@ namespace WebLoader;
 
 class Engine
 {
-    public const
-        CSS = 'css',
-        JS = 'js';
+    public const CSS = 'css';
+    public const JS = 'js';
 
     /**
      * @var Compiler
      */
-    private $compiler;
+    private $compiler = null;
 
     /**
      * @var FilesCollectionRender
      */
-    private $filesCollectionRender;
+    private $filesCollectionRender = null;
 
     /**
      * @var FilesCollectionsContainerRender
      */
-    private $filesCollectionsContainerRender;
+    private $filesCollectionsContainerRender = null;
 
 
     public function __construct(string $outputDir, string $documentRoot = '/', ?string $publicPathPrefix = null)
@@ -120,7 +119,7 @@ class Engine
 
     public function getCompiler(): Compiler
     {
-        if (!$this->compiler) {
+        if ($this->compiler === null) {
             $this->compiler = new Compiler();
         }
 
@@ -130,7 +129,7 @@ class Engine
 
     public function getFilesCollectionRender(): FilesCollectionRender
     {
-        if (!$this->filesCollectionRender) {
+        if ($this->filesCollectionRender === null) {
             $this->filesCollectionRender = new FilesCollectionRender($this->getCompiler());
         }
 
@@ -140,7 +139,7 @@ class Engine
 
     public function getFilesCollectionsContainerRender(): FilesCollectionsContainerRender
     {
-        if (!$this->filesCollectionsContainerRender) {
+        if ($this->filesCollectionsContainerRender === null) {
             $this->filesCollectionsContainerRender = new FilesCollectionsContainerRender(
                 $this->getFilesCollectionRender()
             );
