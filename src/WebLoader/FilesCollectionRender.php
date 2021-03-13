@@ -15,20 +15,19 @@ namespace WebLoader;
 
 class FilesCollectionRender
 {
-    private const
-        LINK_ELEMENT = 'link',
-        SCRIPT_ELEMENT = 'script',
-        STYLE_ELEMENT = 'style',
+    private const LINK_ELEMENT = 'link';
+    private const SCRIPT_ELEMENT = 'script';
+    private const STYLE_ELEMENT = 'style';
 
-        LINK_PREFETCH = 'prefetch',
-        LINK_PRELOAD = 'preload',
-        LINK_PRELOAD_AS_CSS = 'style',
-        LINK_PRELOAD_AS_JS = 'script',
+    private const LINK_PREFETCH = 'prefetch';
+    private const LINK_PRELOAD = 'preload';
+    private const LINK_PRELOAD_AS_CSS = 'style';
+    private const LINK_PRELOAD_AS_JS = 'script';
 
-        SCRIPT_TYPE_ATTRIBUTE = 'text/javascript',
-        STYLE_TYPE_ATTRIBUTE = 'text/css',
+    private const SCRIPT_TYPE_ATTRIBUTE = 'text/javascript';
+    private const STYLE_TYPE_ATTRIBUTE = 'text/css';
 
-        VERSION_MARK = '?v=';
+    private const VERSION_MARK = '?v=';
 
     /**
      * @var Compiler
@@ -88,7 +87,7 @@ class FilesCollectionRender
      */
     public function cssPrefetch($collectionsNames = null): string
     {
-        return $this->generateMetaLinkElements($collectionsNames, Engine::CSS, self::LINK_PREFETCH);
+        return $this->generateMetaLinkElements(Engine::CSS, self::LINK_PREFETCH, $collectionsNames);
     }
 
 
@@ -99,9 +98,9 @@ class FilesCollectionRender
     public function cssPreload($collectionsNames = null): string
     {
         return $this->generateMetaLinkElements(
-            $collectionsNames,
             Engine::CSS,
             self::LINK_PRELOAD,
+            $collectionsNames,
             self::LINK_PRELOAD_AS_CSS
         );
     }
@@ -140,7 +139,7 @@ class FilesCollectionRender
      */
     public function jsPrefetch($collectionsNames = null): string
     {
-        return $this->generateMetaLinkElements($collectionsNames, Engine::JS, self::LINK_PREFETCH);
+        return $this->generateMetaLinkElements(Engine::JS, self::LINK_PREFETCH, $collectionsNames);
     }
 
 
@@ -151,9 +150,9 @@ class FilesCollectionRender
     public function jsPreload($collectionsNames = null): string
     {
         return $this->generateMetaLinkElements(
-            $collectionsNames,
             Engine::JS,
             self::LINK_PRELOAD,
+            $collectionsNames,
             self::LINK_PRELOAD_AS_JS
         );
     }
@@ -223,9 +222,9 @@ class FilesCollectionRender
      * @param array|string|NULL $collectionsNames
      */
     private function generateMetaLinkElements(
-        $collectionsNames = null,
         string $collectionsType,
         string $rel,
+        $collectionsNames = null,
         ?string $as = null
     ): string {
         $tags = '';

@@ -15,9 +15,8 @@ namespace WebLoader;
 
 class FilesCollectionsContainer
 {
-    public const
-        CONFIG_SECTION_CSS_COLLECTIONS = Engine::CSS . 'Collections',
-        CONFIG_SECTION_JS_COLLECTIONS = Engine::JS . 'Collections';
+    public const CONFIG_SECTION_CSS_COLLECTIONS = Engine::CSS . 'Collections';
+    public const CONFIG_SECTION_JS_COLLECTIONS = Engine::JS . 'Collections';
 
     /**
      * @var string[]

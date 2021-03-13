@@ -3,4 +3,3 @@ parameters:
 		- ../nette-tester/AbstractTestCase.php
 	ignoreErrors:
 		- '#Property [a-zA-Z0-9\\_]+::\$[a-zA-Z0-9_]+ \([\S]+\) does not accept [\S\|]+\.#'
-		- '#Argument of an invalid type array\|string\|null supplied for foreach, only iterables are supported.#'

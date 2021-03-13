@@ -15,9 +15,8 @@ namespace WebLoader\Filters;
 
 class CssBreakpointsFilter
 {
-    private const
-        MEDIA_QUERIES_REGULAR_EXPRESSION = '~@media(?<parameters>[^{]+){(?:[^{}]*{[^{}]*})+[^}]+}~',
-        MIN_WIDTH_REGULAR_EXPRESSION = '~\(min-width\s*:\s*(?<value>\d+)\s*(?<unit>\S+)\)~';
+    private const MEDIA_QUERIES_REGULAR_EXPRESSION = '~@media(?<parameters>[^{]+){(?:[^{}]*{[^{}]*})+[^}]+}~';
+    private const MIN_WIDTH_REGULAR_EXPRESSION = '~\(min-width\s*:\s*(?<value>\d+)\s*(?<unit>\S+)\)~';
 
     /**
      * @var array

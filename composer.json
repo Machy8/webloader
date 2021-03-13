@@ -4,17 +4,18 @@
 	"keywords": ["webloader", "module-bundler", "javascript", "css", "frontend", "build-tool"],
 	"license": "BSD-3-Clause",
 	"require": {
-		"php": ">=7.2",
+		"php": ">=8.0",
 		"nette/neon": "^2.4|^3.0"
 	},
 	"require-dev": {
-		"tracy/tracy": "^2.7",
-		"nette/tester": "^2.3",
+		"tracy/tracy": "^2.8",
+		"nette/tester": "^2.4",
 		"tubalmartin/cssmin": "^4.1",
 		"machy8/google-closure-compiler": "^1.0",
 		"phpstan/phpstan": "^0.12",
-		"symplify/easy-coding-standard": "^8.2",
-		"migrify/config-transformer": "^0.3.26"
+		"symplify/easy-coding-standard": "^9.2",
+		"symplify/config-transformer": "^9.2",
+		"nette/di": "^3.0"
 	},
 	"suggest": {
 		"machy8/google-closure-compiler": "PHP client for the Google Closure Compiler API in one file",
@@ -26,13 +27,13 @@
 	},
 	"extra": {
 		"branch-alias": {
-			"dev-master": "1.4-dev"
+			"dev-master": "2.0-dev"
 		}
 	},
 	"scripts": {
-		"cs:check": "vendor/bin/ecs check src --set psr12",
-		"cs:fix": "vendor/bin/ecs check src --set psr12 --fix",
-		"phpstan:check": "phpstan analyse -c tests/phpstan/phpstan.neon -l max src tests/nette-tester",
+		"cs:check": "vendor/bin/ecs check src -c tests/coding-standard/ecs.php",
+		"cs:fix": "vendor/bin/ecs check src -c tests/coding-standard/ecs.php",
+		"phpstan:check": "phpstan analyse -c tests/phpstan/phpstan.neon -l 5 src tests/nette-tester",
 		"tester:check": "tester -p phpdbg tests/nette-tester -s --coverage ./coverage.xml --coverage-src ./src"
 	},
 	"minimum-stability": "dev",
