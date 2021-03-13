@@ -28,7 +28,7 @@
 - **[Debugger bar](https://github.com/Machy8/webloader/blob/master/docs/Tracy%20bridge.md)** for [Tracy](https://tracy.nette.org/cs/)
 
 ## Requirements
-- PHP 7.2+
+- PHP 8.0+
 - If you use Nette Framework - v2.4+
 
 ## Installation
