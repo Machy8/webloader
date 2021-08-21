@@ -114,9 +114,7 @@ and set template parameters (for example in the **beforeRender** method).
 ````PHP
 public function beforeRender()
 {
-    $this->template->setParameters([
-        'webloaderFilesCollectionRender' => $this->webLoader->getFilesCollectionRender()
-    ]);
+    $this->template->webloaderFilesCollectionRender = $this->webLoader->getFilesCollectionRender();
 }
 ````
 
