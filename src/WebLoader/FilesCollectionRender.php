@@ -24,9 +24,6 @@ class FilesCollectionRender
     private const LINK_PRELOAD_AS_CSS = 'style';
     private const LINK_PRELOAD_AS_JS = 'script';
 
-    private const SCRIPT_TYPE_ATTRIBUTE = 'text/javascript';
-    private const STYLE_TYPE_ATTRIBUTE = 'text/css';
-
     private const VERSION_MARK = '?v=';
 
     /**
@@ -63,7 +60,6 @@ class FilesCollectionRender
         $collectionName = $collection->getName();
         $this->compiler->compileFilesCollectionByType(Engine::CSS, $collectionName);
         $attributes = array_merge($attributes, $collection->getOutputElementAttributes());
-        $attributes['type'] = self::STYLE_TYPE_ATTRIBUTE;
         $element = self::STYLE_ELEMENT;
         $basePath = $this->getCollectionBasePath($collectionName, Engine::CSS);
         $filePathParameter = null;
@@ -118,7 +114,6 @@ class FilesCollectionRender
         $collectionName = $collection->getName();
         $this->compiler->compileFilesCollectionByType(Engine::JS, $collectionName);
         $attributes = array_merge($attributes, $collection->getOutputElementAttributes());
-        $attributes['type'] = self::SCRIPT_TYPE_ATTRIBUTE;
         $basePath = $this->getCollectionBasePath($collectionName, Engine::JS);
         $filePathParameter = null;
 
