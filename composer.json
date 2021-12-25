@@ -34,7 +34,7 @@
 		"cs:check": "vendor/bin/ecs check src -c tests/coding-standard/ecs.php",
 		"cs:fix": "vendor/bin/ecs check src -c tests/coding-standard/ecs.php",
 		"phpstan:check": "phpstan analyse -c tests/phpstan/phpstan.neon -l 5 src tests/nette-tester",
-		"tester:check": "tester -p phpdbg tests/nette-tester -s --coverage ./coverage.xml --coverage-src ./src"
+		"tester:check": "tester -p phpdbg tests/nette-tester -s --coverage ./lcov.info --coverage-src ./src"
 	},
 	"minimum-stability": "dev",
 	"prefer-stable" : true
