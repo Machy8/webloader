@@ -12,9 +12,9 @@
 		"nette/tester": "^2.4",
 		"tubalmartin/cssmin": "^4.1",
 		"machy8/google-closure-compiler": "^1.0",
-		"phpstan/phpstan": "^0.12",
-		"symplify/easy-coding-standard": "^9.2",
-		"symplify/config-transformer": "^9.2",
+		"phpstan/phpstan": "^1.2",
+		"symplify/easy-coding-standard": "^10.0",
+		"symplify/config-transformer": "^10.0",
 		"nette/di": "^3.0"
 	},
 	"suggest": {
